@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "6047164836",
+    "firebase_url": "https://change-8124a.firebaseio.com",
+    "project_id": "change-8124a",
+    "storage_bucket": "change-8124a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6047164836:android:1921193e524f6443",
+        "android_client_info": {
+          "package_name": "com.example.tongan.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6047164836-p1gc7nn6tbeqh5sce0ion0nq2dn4s3l7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tongan.myapplication",
+            "certificate_hash": "d74bb280078e6c7ddd6d8b5a1ba1ed487d3fe962"
+          }
+        },
+        {
+          "client_id": "6047164836-qf51cvsj79fuvn2iob4dj6gvl3uhlb2c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBgtNGiKWPwIWcra4OxQEz37XdkPJjc04"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6047164836-qf51cvsj79fuvn2iob4dj6gvl3uhlb2c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
