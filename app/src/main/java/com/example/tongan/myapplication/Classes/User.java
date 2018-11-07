@@ -2,29 +2,33 @@ package com.example.tongan.myapplication.Classes;
 
 public class User {
 
-    private String UserName;
+    private String firstName;
+    private String lastName;
     private String Email;
     private String Password;
 
     public User (){}
 
-    public User(String UserName, String Password) {
-        this.UserName = UserName;
-        this.Password = Password;
-    }
-
-    public User(String UserName, String Email, String Password) {
-        this.UserName = UserName;
+    public User(String firstName, String lastName, String Email, String Password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.Email = Email;
         this.Password = Password;
     }
 
-    public String getUserName() {
-        return UserName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setUserName(String userName) {
-        UserName = userName;
+    public void setFirstName(String firstName) {
+        firstName = firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        firstName = lastName;
     }
 
     public String getEmail() {
