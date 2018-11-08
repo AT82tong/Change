@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Text;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -57,16 +60,17 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                boolean isValidInputs = isValidInputs();
+                signUpNewUserAndAddToDatabase();
 
-                if (isValidInputs) {
-                    signUpNewUserAndAddToDatabase(firstName, lastName, email, password);
-                }
             }
         });
     }
 
-    public void signUpNewUserAndAddToDatabase(final String firstName, final String lastName, final String email, final String password) {
+    public void signUpNewUserAndAddToDatabase() {
+        if (!validateInputs()) {
+            return;
+        }
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -76,6 +80,7 @@ public class SignUpActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                             Log.d(TAG, "createUserWithEmail:success");
                             addUserInformationToDatabase(firstName, lastName, email, password);
+                            openHomePage();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -97,46 +102,45 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
-    public boolean isValidInputs() {
-
+    public boolean validateInputs() {
+        boolean valid = true;
         firstName = firstNameText.getText().toString();
         lastName = lastNameText.getText().toString();
         email = emailText.getText().toString();
         password = passwordText.getText().toString();
 
-        if (firstName.equals("")) {
+        if (TextUtils.isEmpty(firstName)) {
             firstNameLayout.setError("First name cannot be empty");
+            valid = false;
         } else {
             firstNameLayout.setErrorEnabled(false);
         }
 
-        if (lastName.equals("")) {
+        if (TextUtils.isEmpty(lastName)) {
             lastNameLayout.setError("Last name cannot be empty");
+            valid = false;
         } else {
             lastNameLayout.setErrorEnabled(false);
         }
 
-        if (email.equals("")) {
+        if (TextUtils.isEmpty(email)) {
             emailLayout.setError("Email cannot be empty");
+            valid = false;
         } else {
             emailLayout.setErrorEnabled(false);
         }
 
-        if (password.equals("")) {
+        if (TextUtils.isEmpty(password)) {
             passwordLayout.setError("Password cannot be empty");
+            valid = false;
         } else {
             passwordLayout.setErrorEnabled(false);
         }
 
-        if (firstName.equals("") || lastName.equals("") || email.equals("") || password.equals("")) {
-            return false;
-        } else {
-            return true;
-        }
+        return valid;
     }
 
     public void init() {
-
         mAuth = FirebaseAuth.getInstance();
 
         firstNameLayout = findViewById(R.id.signup_firstName_layout);
@@ -149,10 +153,16 @@ public class SignUpActivity extends AppCompatActivity {
         lastNameText = findViewById(R.id.signup_lastName_text);
         emailText = findViewById(R.id.signup_email_text);
         passwordText = findViewById(R.id.signup_password_text);
+
     }
 
     public void openLoginPage() {
         Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    public void openHomePage() {
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
     }
 
