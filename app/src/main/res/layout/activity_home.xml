@@ -16,4 +16,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="Home"></android.support.v7.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="239dp"
+        android:text="Home page"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
