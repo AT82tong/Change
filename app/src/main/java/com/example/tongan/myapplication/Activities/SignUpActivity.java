@@ -162,7 +162,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void openHomePage() {
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
