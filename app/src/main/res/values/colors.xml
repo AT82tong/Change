@@ -8,8 +8,8 @@
     <color name="solidCircle">#80FFFFFF</color>
     <color name="circleBorder">#50FFFFFF</color>
     <color name="followerBg">#65DCE5</color>
-    <color name="ratingBg">#49BEFF</color>
 
     <color name="white">#FFFFFF</color>
     <color name="grey">#E5E5E5</color>
+    <color name="summerSky">#49BEFF</color>
 </resources>
