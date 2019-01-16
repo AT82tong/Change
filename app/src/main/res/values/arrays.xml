@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category">
+        <item>All</item>
+        <item>Vehicle</item>
+        <item>AT</item>
+        <item>Love</item>
+        <item>Kenny</item>
+        <item>O3O</item>
+    </string-array>
+</resources>

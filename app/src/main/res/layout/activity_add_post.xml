@@ -1,11 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/service_image"
+        android:layout_width="259dp"
+        android:layout_height="149dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@drawable/profile_icon" />
+
     <TextView
+        android:id="@+id/upload_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="add post"
-        android:layout_centerInParent="true"
-        android:textSize="32dp"/>
+        android:layout_below="@+id/service_image"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textColor="#5b8abf"
+        android:textSize="15sp"
+        android:text="Upload Image" />
+
+    <TextView
+        android:id="@+id/service_name_view"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/upload_image"
+        android:layout_marginStart="30dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#5b8abf"
+        android:text="Service Name: " />
+
+    <EditText
+        android:id="@+id/service_name_input"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:textSize="15sp"
+        android:layout_toEndOf="@+id/service_name_view"
+        android:hint="Service title, eg. Tire rotation"
+        android:layout_below="@+id/upload_image"
+        android:inputType="text"
+        android:lines="1" />
+
+    <TextView
+        android:id="@+id/service_price_view"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/service_name_view"
+        android:layout_marginStart="30dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#5b8abf"
+        android:text="Price: " />
+
+    <EditText
+        android:id="@+id/service_price_input"
+        android:layout_width="270dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/service_name_input"
+        android:layout_toEndOf="@id/service_price_view"
+        android:hint="Price"
+        android:inputType="numberDecimal"
+        android:lines="1"
+        android:maxLines="1"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/service_category_view"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/service_price_view"
+        android:layout_marginStart="30dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#5b8abf"
+        android:text="Category: " />
+
+    <Spinner
+        android:id="@+id/service_category_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_toEndOf="@id/service_category_view"
+        android:layout_below="@id/service_price_input"
+        android:layout_marginLeft="30dp"
+        android:entries="@array/category" />
+
+    <TextView
+        android:id="@+id/service_description_view"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/service_category_view"
+        android:layout_marginStart="30dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#5b8abf"
+        android:text="Description: " />
+
+    <EditText
+        android:id="@+id/service_description_input"
+        android:layout_width="320dp"
+        android:layout_height="30dp"
+        android:layout_alignStart="@+id/service_price_view"
+        android:layout_below="@+id/service_description_view"
+        android:hint="Add details about the service you want"
+        android:lines="5"
+        android:maxLines="5"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/service_address_view"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/service_description_input"
+        android:layout_marginStart="30dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#5b8abf"
+        android:text="Address: " />
+
+    <EditText
+        android:id="@+id/service_address_input"
+        android:layout_width="320dp"
+        android:layout_height="30dp"
+        android:layout_alignStart="@+id/service_price_view"
+        android:layout_below="@+id/service_address_view"
+        android:hint="(Optional) Add address about the service you want"
+        android:lines="5"
+        android:maxLines="5"
+        android:textSize="15sp" />
+
 </RelativeLayout>
