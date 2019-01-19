@@ -134,7 +134,7 @@
             <EditText
                 android:id="@+id/service_address_input"
                 android:layout_width="320dp"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/service_price_view"
                 android:layout_below="@+id/service_address_view"
                 android:hint="(Optional) Add address about the service you want"
@@ -147,7 +147,6 @@
 
     <LinearLayout
         android:layout_width="330dp"
-        android:weightSum="2"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
@@ -162,7 +161,8 @@
             android:textColor="#365170"
             android:background="#cfe0f2"
             android:textStyle="bold"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"/>
 
         <Button
             android:id="@+id/cancel_btn"
