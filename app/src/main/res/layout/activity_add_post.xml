@@ -3,87 +3,123 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/service_image"
-        android:layout_width="259dp"
-        android:layout_height="149dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        app:srcCompat="@drawable/profile_icon" />
-
-    <TextView
-        android:id="@+id/upload_image"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/post_service_banner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/service_image"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:textColor="#5b8abf"
-        android:textSize="15sp"
-        android:text="Upload Image" />
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/text_post_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Post Service"
+            android:textSize="28sp"
+            android:gravity="center"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/post_service_cancel"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/cancel_bottom"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/post_service_banner" />
+
+    <RelativeLayout
+        android:id="@+id/service_image_RL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/post_service_banner">
+
+        <ImageView
+            android:id="@+id/service_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            app:srcCompat="@drawable/profile_icon" />
+
+        <TextView
+            android:id="@+id/upload_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/service_image"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:textColor="#5b8abf"
+            android:textSize="15sp"
+            android:text="Upload Image" />
+
+    </RelativeLayout>
+
 
     <ScrollView
-        android:layout_width="320dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="10dp"
         android:id="@+id/info_area_new_post"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/upload_image">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/service_image_RL"
+        android:layout_above="@id/post_service_submit_btn">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
-            <TextView
-                android:id="@+id/service_name_view"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentStart="true"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#5b8abf"
-                android:text="Service Name: " />
 
             <EditText
                 android:id="@+id/service_name_input"
-                android:layout_width="200dp"
-                android:layout_height="30dp"
-                android:textSize="15sp"
-                android:layout_toEndOf="@+id/service_name_view"
-                android:hint="Service title, eg. Tire rotation"
-                android:inputType="text"
-                android:lines="1" />
-
-            <TextView
-                android:id="@+id/service_price_view"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/service_name_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#5b8abf"
-                android:text="Price: " />
+                android:hint="Service Title"
+                android:inputType="text"
+                android:gravity="top"
+                android:singleLine="true"/>
 
             <EditText
                 android:id="@+id/service_price_input"
-                android:layout_width="270dp"
-                android:layout_height="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/service_name_input"
-                android:layout_toEndOf="@id/service_price_view"
                 android:hint="Price"
                 android:inputType="numberDecimal"
-                android:lines="1"
-                android:maxLines="1"
-                android:textSize="15sp" />
+                android:textSize="18sp"
+                android:gravity="top"
+                android:singleLine="true"/>
+
+            <EditText
+                android:id="@+id/service_description_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Add details about the service you want"
+                android:layout_below="@+id/service_price_input"
+                android:lines="5"
+                android:maxLines="5"
+                android:textSize="18sp"
+                android:gravity="top"
+                android:singleLine="false"
+                android:inputType="textCapSentences|textMultiLine"/>
 
             <TextView
                 android:id="@+id/service_category_view"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/service_price_view"
+                android:layout_below="@+id/service_description_input"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#5b8abf"
@@ -94,86 +130,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_toEndOf="@id/service_category_view"
-                android:layout_below="@id/service_price_input"
+                android:layout_below="@id/service_description_input"
                 android:layout_marginLeft="30dp"
                 android:entries="@array/category" />
 
-            <TextView
-                android:id="@+id/service_description_view"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/service_category_view"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#5b8abf"
-                android:text="Description: " />
-
-            <EditText
-                android:id="@+id/service_description_input"
-                android:layout_width="320dp"
-                android:layout_height="30dp"
-                android:layout_alignStart="@+id/service_price_view"
-                android:layout_below="@+id/service_description_view"
-                android:hint="Add details about the service you want"
-                android:lines="5"
-                android:maxLines="5"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/service_address_view"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/service_description_input"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#5b8abf"
-                android:text="Address: " />
 
             <EditText
                 android:id="@+id/service_address_input"
-                android:layout_width="320dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/service_price_view"
-                android:layout_below="@+id/service_address_view"
-                android:hint="(Optional) Add address about the service you want"
-                android:lines="5"
-                android:maxLines="5"
-                android:textSize="15sp" />
+                android:layout_below="@+id/service_category_view"
+                android:hint="Address"
+                android:textSize="18sp"
+                android:gravity="top" />
+
         </RelativeLayout>
 
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="330dp"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
+
+    <Button
+        android:id="@+id/post_service_submit_btn"
         android:layout_height="wrap_content"
-        android:layout_below="@id/info_area_new_post"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:text="@string/submit"
+        android:textColor="#365170"
+        android:textStyle="bold"
+        android:background="@color/summerSky"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"/>
 
-        <Button
-            android:id="@+id/post_submit_btn"
-            android:layout_width="1dp"
-            android:layout_height="50dp"
-            android:text="SUBMIT"
-            android:textColor="#365170"
-            android:background="#cfe0f2"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp"/>
-
-        <Button
-            android:id="@+id/cancel_btn"
-            android:layout_width="1dp"
-            android:layout_weight="1"
-            android:layout_height="50dp"
-            android:textColor="#365170"
-            android:textStyle="bold"
-            android:background="#cfe0f2"
-            android:text="CANCEL" />
-
-    </LinearLayout>
 
 </RelativeLayout>
