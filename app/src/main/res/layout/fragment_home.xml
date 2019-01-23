@@ -59,11 +59,13 @@
                 android:layout_marginStart="20dp">
 
                 <ImageView
+                    android:id="@+id/homepage_service_maintenance"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/service_maintenance" />
 
                 <ImageView
+                    android:id="@+id/homepage_service_automobile"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginTop="30dp"
@@ -79,11 +81,13 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/homepage_service_cleaning"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/service_cleaning"/>
 
                 <ImageView
+                    android:id="@+id/homepage_service_home"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/service_home"
@@ -100,11 +104,13 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/homepage_service_tutor"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/service_tutor"/>
 
                 <ImageView
+                    android:id="@+id/homepage_service_gardening"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/service_gardening"
@@ -121,14 +127,16 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/homepage_service_moving"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/service_moving"/>
 
                 <ImageView
+                    android:id="@+id/homepage_service_all_day"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/service_allDay"
+                    android:src="@drawable/service_all_day"
                     android:layout_marginTop="30dp"/>
 
             </LinearLayout>
