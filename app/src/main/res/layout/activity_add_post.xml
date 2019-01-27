@@ -25,7 +25,7 @@
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="6dp"
             android:src="@drawable/cancel_bottom"/>
 
     </RelativeLayout>
@@ -36,41 +36,13 @@
         android:background="@android:color/darker_gray"
         android:layout_below="@id/post_service_banner" />
 
-    <RelativeLayout
-        android:id="@+id/service_image_RL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/post_service_banner">
-
-        <ImageView
-            android:id="@+id/service_image"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
-            android:adjustViewBounds="true"
-            app:srcCompat="@drawable/profile_icon" />
-
-        <TextView
-            android:id="@+id/upload_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/service_image"
-            android:layout_centerHorizontal="true"
-            android:textStyle="bold"
-            android:textColor="#5b8abf"
-            android:textSize="15sp"
-            android:text="Upload Image" />
-
-    </RelativeLayout>
-
 
     <ScrollView
         android:id="@+id/info_area_new_post"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:layout_below="@id/service_image_RL"
+        android:layout_below="@id/post_service_banner"
         android:layout_above="@id/post_service_submit_btn">
 
         <RelativeLayout
@@ -78,7 +50,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp">
-
 
             <EditText
                 android:id="@+id/service_name_input"
@@ -88,18 +59,40 @@
                 android:hint="Service Title"
                 android:inputType="text"
                 android:gravity="top"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:background="@drawable/edit_text_style"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_below="@id/service_name_input" />
+
 
             <EditText
                 android:id="@+id/service_price_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/service_name_input"
+                android:layout_marginTop="10dp"
                 android:hint="Price"
                 android:inputType="numberDecimal"
                 android:textSize="18sp"
                 android:gravity="top"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:background="@drawable/edit_text_style"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_below="@id/service_price_input" />
+
 
             <EditText
                 android:id="@+id/service_description_input"
@@ -112,15 +105,48 @@
                 android:textSize="18sp"
                 android:gravity="top"
                 android:singleLine="false"
-                android:inputType="textCapSentences|textMultiLine"/>
+                android:layout_marginTop="10dp"
+                android:inputType="textCapSentences|textMultiLine"
+                android:background="@drawable/edit_text_style"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_below="@id/service_description_input" />
+
+
+            <EditText
+                android:id="@+id/service_address_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/service_description_input"
+                android:hint="Address"
+                android:textSize="18sp"
+                android:gravity="top"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_style"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_below="@id/service_address_input" />
+
 
             <TextView
                 android:id="@+id/service_category_view"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/service_description_input"
+                android:layout_below="@+id/service_address_input"
                 android:textSize="18sp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
                 android:textStyle="bold"
                 android:textColor="#5b8abf"
                 android:text="Category: " />
@@ -130,19 +156,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_toEndOf="@id/service_category_view"
-                android:layout_below="@id/service_description_input"
+                android:layout_below="@id/service_address_input"
                 android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
                 android:entries="@array/category" />
-
-
-            <EditText
-                android:id="@+id/service_address_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/service_category_view"
-                android:hint="Address"
-                android:textSize="18sp"
-                android:gravity="top" />
 
         </RelativeLayout>
 
@@ -161,6 +178,17 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"/>
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="292dp"
+        android:ems="10"
+        android:inputType="numberDecimal" />
 
 
 </RelativeLayout>
