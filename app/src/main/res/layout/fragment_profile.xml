@@ -7,7 +7,7 @@
         android:id="@+id/Profile_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/grad"
+        android:background="@drawable/grad_light_maya_blue_bottom_aquamarine_top"
         android:paddingBottom="20dp">
 
         <RelativeLayout

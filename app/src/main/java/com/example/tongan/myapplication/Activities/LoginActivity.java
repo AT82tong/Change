@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     String email;
     String password;
 
-    TextView signUpButton;
+    Button signUpButton;
     Button signInButton;
 
     @Override

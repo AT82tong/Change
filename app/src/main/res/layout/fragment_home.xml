@@ -9,13 +9,18 @@
         android:id="@+id/search_box_RL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/summerSky">
+        android:background="@drawable/grad_light_maya_blue_bottom_aquamarine_top">
 
         <android.support.v7.widget.SearchView
             android:id="@+id/searchBox"
-            android:layout_width="match_parent"
+            android:layout_width="392dp"
             android:layout_height="35dp"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/search_box_style" />
 
     </RelativeLayout>
@@ -34,7 +39,7 @@
                 android:id="@+id/firstRL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/mayaBlue">
+                android:background="@color/lightMayaBlue">
 
                 <android.support.v4.view.ViewPager
                     android:id="@+id/homePage_ads"
