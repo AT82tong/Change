@@ -18,7 +18,16 @@ import android.widget.ViewFlipper;
 
 import com.example.tongan.myapplication.Activities.MainActivity;
 import com.example.tongan.myapplication.Adapters.HomePageAdsAdapter;
+import com.example.tongan.myapplication.Classes.User;
+import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,6 +35,8 @@ import java.util.TimerTask;
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomeFragment";
+
+    //private FirebaseFirestore db = FirebaseFirestore.getInstance();
     //private final Context context = this.getActivity();
 
     ViewPager homePageAds;
@@ -34,6 +45,10 @@ public class HomeFragment extends Fragment {
     private int dotsCount;
     private ImageView[] dots;
 
+    private FirebaseAuth fireBaseAuth;
+    private FirebaseUser fireBaseUser;
+
+    private DatabaseHelper db = new DatabaseHelper();
 
     @Nullable
     @Override
@@ -46,6 +61,20 @@ public class HomeFragment extends Fragment {
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new imageAutoSlider(), 5000, 5000);
+
+//        Log.d(TAG, "getCurrentUser: " + FirebaseAuth.getInstance().getCurrentUser());
+//        Log.d(TAG, "getEmail: " + db.getCurrentUserEmail());
+//        Log.d(TAG, "getCurrentUser: " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+//        Log.d(TAG, "getUid: " + FirebaseAuth.getInstance().getUid());
+        User user = db.getUserData(db.getCurrentUserEmail());
+        Log.d(TAG, "firstName: " + user.getFirstName());
+        Log.d(TAG, "lastName: " + user.getLastName());
+        Log.d(TAG, "email: " + user.getEmail());
+        Log.d(TAG, "password: " + user.getPassword());
+
+
+
+
 
 //        sliderDot = (LinearLayout) v.findViewById(R.id.sliderDots);
 //        dotsCount = homePageAdsAdapter.getCount();

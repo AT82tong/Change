@@ -1,6 +1,8 @@
 package com.example.tongan.myapplication.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,10 +24,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.w3c.dom.Text;
 
+import javax.net.ssl.SSLSessionContext;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "Login";
-    private FirebaseAuth mAuth;
+    private FirebaseAuth fireBaseAuth;
 
     TextInputLayout emailLayout;
     TextInputLayout passwordLayout;
@@ -62,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void init() {
-        mAuth = FirebaseAuth.getInstance();
+        fireBaseAuth = FirebaseAuth.getInstance();
 
         emailLayout = findViewById(R.id.login_email_layout);
         passwordLayout = findViewById(R.id.login_password_layout);
@@ -112,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        mAuth.signInWithEmailAndPassword(email, password)
+        fireBaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
