@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.tongan.myapplication.Activities.EditProfileSettingsActivity;
 import com.example.tongan.myapplication.Activities.SignUpActivity;
@@ -29,16 +30,26 @@ public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
 
+    private FirebaseAuth fireBaseAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+    private DatabaseHelper db = new DatabaseHelper();
+
     ImageView settingsImage;
+    TextView profileName;
+    TextView profileFollowers;
+    TextView profileRating;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         settingsImage = view.findViewById(R.id.edit_profile_settings);
 
-        DatabaseHelper db = new DatabaseHelper();
+        init(view);
 
         settingsImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,11 +59,31 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-//        db.getCurrentUserEmail();
-        //getUserDataDB();
 
         return view;
 
+    }
+
+    public void init(View v) {
+
+        profileName = v.findViewById(R.id.profile_name);
+        profileFollowers = v.findViewById(R.id.profile_followers);
+        profileRating = v.findViewById(R.id.profile_rating);
+
+        firebaseFirestore.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                        if (queryDocumentSnapshot.getId().equals(db.getCurrentUserEmail())) {
+                            profileName.setText("" + queryDocumentSnapshot.getData().get("firstName") + " " + queryDocumentSnapshot.getData().get("lastName"));
+                            profileFollowers.setText("" + queryDocumentSnapshot.getData().get("follower"));
+                            profileRating.setText("" + queryDocumentSnapshot.getData().get("rating"));
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -60,19 +91,4 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "ProfileFragment Page");
     }
-
-//    public void getUserDataDB () {
-//        db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        Log.d(TAG, "document: " + document.getId() + " -> " + document.getData());
-//                        Log.d(TAG, "document: " + document.getId() + " -> " + document.getData().get("firstName"));
-//                    }
-//                }
-//            }
-//        });
-//
-//    }
 }

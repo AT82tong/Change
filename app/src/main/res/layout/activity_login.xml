@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@drawable/temp_icon" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/login_email_layout"

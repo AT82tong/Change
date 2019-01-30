@@ -66,16 +66,18 @@ public class HomeFragment extends Fragment {
 //        Log.d(TAG, "getEmail: " + db.getCurrentUserEmail());
 //        Log.d(TAG, "getCurrentUser: " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 //        Log.d(TAG, "getUid: " + FirebaseAuth.getInstance().getUid());
-        User user = db.getUserData(db.getCurrentUserEmail());
-        Log.d(TAG, "firstName: " + user.getFirstName());
-        Log.d(TAG, "lastName: " + user.getLastName());
-        Log.d(TAG, "email: " + user.getEmail());
-        Log.d(TAG, "password: " + user.getPassword());
+
+        //User user = db.getUserData(db.getCurrentUserEmail());
+//        Log.d(TAG, "firstName: " + user.getFirstName());
+//        Log.d(TAG, "lastName: " + user.getLastName());
+//        Log.d(TAG, "email: " + user.getEmail());
+//        db.getUserData(db.getCurrentUserEmail());
+        //Log.d(TAG, "password: " + db.user.getPassword());
 
 
 
 
-
+//-----        DOTS         -----
 //        sliderDot = (LinearLayout) v.findViewById(R.id.sliderDots);
 //        dotsCount = homePageAdsAdapter.getCount();
 //        dots = new ImageView[dotsCount];

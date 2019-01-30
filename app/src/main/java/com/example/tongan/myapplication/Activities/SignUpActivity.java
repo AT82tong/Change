@@ -79,7 +79,7 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                             Log.d(TAG, "createUserWithEmail:success");
-                            addUserInformationToDatabase(firstName, lastName, email, password);
+                            addUserInformationToDatabase(firstName, lastName, email, password, 0, 0.0);
                             openHomePage();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -166,15 +166,15 @@ public class SignUpActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void addUserInformationToDatabase(String firstName, String lastName, String email, String password) {
-        User user = new User(firstName, lastName, email, password);
+    public void addUserInformationToDatabase(String firstName, String lastName, String email, String password, int followers, double ratings) {
+        User user = new User(firstName, lastName, email, password, followers, ratings);
         db.collection("Users").document(email)
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
-                        openLoginPage();
+//                        openLoginPage();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

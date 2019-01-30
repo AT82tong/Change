@@ -6,14 +6,18 @@ public class User {
     private String lastName;
     private String Email;
     private String Password;
+    private int Follower;
+    private double Rating;
 
     public User (){}
 
-    public User(String firstName, String lastName, String Email, String Password) {
+    public User(String firstName, String lastName, String Email, String Password, int followers, double ratings) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.Email = Email;
         this.Password = Password;
+        this.Follower = followers;
+        this.Rating = ratings;
     }
 
     public String getFirstName() {
@@ -21,14 +25,14 @@ public class User {
     }
 
     public void setFirstName(String firstName) {
-        firstName = firstName;
+        this.firstName = firstName;
     }
     public String getLastName() {
         return lastName;
     }
 
     public void setLastName(String lastName) {
-        firstName = lastName;
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -47,4 +51,19 @@ public class User {
         Password = password;
     }
 
+    public int getFollower() {
+        return Follower;
+    }
+
+    public void setFollower(int follower) {
+        Follower = follower;
+    }
+
+    public double getRating() {
+        return Rating;
+    }
+
+    public void setRating(double rating) {
+        Rating = rating;
+    }
 }

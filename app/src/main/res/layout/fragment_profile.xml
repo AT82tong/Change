@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/profile_img"
             android:layout_centerHorizontal="true"
-            android:text="@string/profile_name"
+            android:text=""
             android:textSize="32sp"
             android:textColor="@color/white"
             android:fontFamily="sans-serif-light"
@@ -87,7 +87,7 @@
                     android:fontFamily="sans-serif-light"
                     android:textColor="@color/white"
                     android:textSize="25sp"
-                    android:text="@string/profile_followers"/>
+                    android:text=""/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -126,7 +126,7 @@
                     android:fontFamily="sans-serif-light"
                     android:textColor="@color/white"
                     android:textSize="25sp"
-                    android:text="@string/profile_rating"/>
+                    android:text=""/>
 
                 <TextView
                     android:layout_width="wrap_content"
