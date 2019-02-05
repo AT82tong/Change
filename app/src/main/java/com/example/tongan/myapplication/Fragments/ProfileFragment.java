@@ -26,6 +26,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Map;
+
 public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
@@ -76,9 +81,15 @@ public class ProfileFragment extends Fragment {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                         if (queryDocumentSnapshot.getId().equals(db.getCurrentUserEmail())) {
-                            profileName.setText("" + queryDocumentSnapshot.getData().get("firstName") + " " + queryDocumentSnapshot.getData().get("lastName"));
-                            profileFollowers.setText("" + queryDocumentSnapshot.getData().get("follower"));
-                            profileRating.setText("" + queryDocumentSnapshot.getData().get("rating"));
+
+                            Map<String, Object> map = queryDocumentSnapshot.getData();
+                            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+                            String followers = numberFormat.format(map.get("follower"));
+                            profileName.setText("" + map.get("firstName") + " " + map.get("lastName"));
+                            profileFollowers.setText("" + followers);
+
+                            DecimalFormat value = new DecimalFormat("#.0");
+                            profileRating.setText("" + value.format(map.get("rating")));
                         }
                     }
                 }
