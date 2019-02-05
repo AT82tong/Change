@@ -50,6 +50,12 @@ public class LoginActivity extends AppCompatActivity {
 
         init();
 
+        // auto sign in
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            openHomePage();
+        }
+
+        // else, verify email
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+
         fireBaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -133,5 +140,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 });
+
     }
 }
