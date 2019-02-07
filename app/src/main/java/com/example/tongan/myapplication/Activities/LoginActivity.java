@@ -21,6 +21,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
@@ -43,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     Button signUpButton;
     Button signInButton;
 
+    TextView forgetPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             openHomePage();
         }
 
-        // else, verify email
+        // sign in button clicked
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,13 +67,35 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // sign up button clicked
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openSignUpPage();
             }
         });
+
+        // forget password button clicked
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emailText = findViewById(R.id.login_email_text);
+                email = emailText.getText().toString();
+                if (TextUtils.isEmpty(email)) {
+                    emailLayout.setError("Please enter your email");
+                } else {
+                    emailLayout.setErrorEnabled(false);
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.d(TAG, "Email reset");
+                        }
+                    });
+                }
+            }
+        });
     }
+
 
     public void init() {
         fireBaseAuth = FirebaseAuth.getInstance();
@@ -82,6 +108,8 @@ public class LoginActivity extends AppCompatActivity {
 
         signUpButton = findViewById(R.id.signup_button);
         signInButton = findViewById(R.id.login_button_login);
+
+        forgetPassword = findViewById(R.id.forget_password);
     }
 
     public boolean validateInputs() {
@@ -122,24 +150,26 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-
-        fireBaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
+        fireBaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success");
+                    DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(email);
+                    doc.update("password", password).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
                             openHomePage();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            passwordLayout.setError("Password doesn't match");
-                            //Toast.makeText(LoginActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
                         }
-
-                    }
-                });
-
+                    });
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                    passwordLayout.setError("Password doesn't match");
+                    //Toast.makeText(LoginActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

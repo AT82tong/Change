@@ -71,6 +71,8 @@ public class ProfileFragment extends Fragment {
 
     public void init(View v) {
 
+        Log.d(TAG, "Profile Init");
+
         profileName = v.findViewById(R.id.profile_name);
         profileFollowers = v.findViewById(R.id.profile_followers);
         profileRating = v.findViewById(R.id.profile_rating);
@@ -88,7 +90,7 @@ public class ProfileFragment extends Fragment {
                             profileName.setText("" + map.get("firstName") + " " + map.get("lastName"));
                             profileFollowers.setText("" + followers);
 
-                            DecimalFormat value = new DecimalFormat("#.0");
+                            DecimalFormat value = new DecimalFormat("0.0");
                             profileRating.setText("" + value.format(map.get("rating")));
                         }
                     }

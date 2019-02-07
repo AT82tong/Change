@@ -1,5 +1,6 @@
 package com.example.tongan.myapplication.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,8 @@ public class EditProfileSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 firebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(EditProfileSettingsActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
         });
     }
