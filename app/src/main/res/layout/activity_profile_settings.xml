@@ -8,27 +8,27 @@
         android:id="@+id/profile_settings_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/setting_item_selector"
         android:paddingTop="5dp"
-        android:paddingBottom="10dp"
-        android:background="@drawable/setting_item_selector">
+        android:paddingBottom="10dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Profile"
-            android:textSize="28sp"
             android:gravity="center"
-            android:textColor="@color/black"/>
+            android:hint="Profile"
+            android:textColor="@color/black"
+            android:textSize="28sp" />
 
         <ImageView
             android:id="@+id/settings_back_button"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:adjustViewBounds="true"
             android:layout_marginStart="15dp"
-            android:src="@drawable/back_button"
-            android:clickable="true"/>
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            android:src="@drawable/back_button" />
 
     </RelativeLayout>
 
@@ -36,14 +36,14 @@
         android:id="@+id/banner_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_below="@id/profile_settings_banner" />
+        android:layout_below="@id/profile_settings_banner"
+        android:background="@android:color/darker_gray" />
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:layout_below="@id/banner_divider">
+        android:layout_below="@id/banner_divider"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -53,40 +53,40 @@
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:background="@drawable/setting_item_selector">
+                android:background="@drawable/setting_item_selector"
+                android:clickable="true">
 
                 <ImageView
                     android:id="@+id/setting_profile_image"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginRight="5dp"
                     android:layout_marginLeft="3dp"
-                    android:src="@drawable/settings_profile_picture"
-                    android:background="@drawable/circle" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/circle"
+                    android:src="@drawable/settings_profile_picture" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:layout_toRightOf="@id/setting_profile_image"
-                    android:orientation="vertical"
-                    android:layout_centerInParent="true">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Firstname Lastname"
-                        android:textStyle="bold"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
                         android:text="Click to edit"
-                        android:textSize="16dp"/>
+                        android:textSize="16dp" />
 
                 </LinearLayout>
 
@@ -94,13 +94,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/right_arrow"
                     android:layout_centerInParent="true"
-                    android:paddingRight="10dp"/>
+                    android:paddingRight="10dp"
+                    android:src="@drawable/right_arrow" />
 
             </RelativeLayout>
-
-
 
 
             <TextView
@@ -110,13 +108,13 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/setting_item_selector"
+                android:clickable="true"
                 android:drawableRight="@drawable/right_arrow"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="10dp"
                 android:text="Account Security"
-                android:textSize="16sp"
-                android:clickable="true"/>
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="fill_parent"
@@ -130,13 +128,13 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/setting_item_selector"
+                android:clickable="true"
                 android:drawableRight="@drawable/right_arrow"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="10dp"
                 android:text="Notifications"
-                android:textSize="16sp"
-                android:clickable="true"/>
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="fill_parent"
@@ -149,13 +147,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/setting_item_selector"
+                android:clickable="true"
                 android:drawableRight="@drawable/right_arrow"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="10dp"
                 android:text="Privacy"
-                android:textSize="16sp"
-                android:clickable="true"/>
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="fill_parent"
@@ -168,13 +166,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/setting_item_selector"
+                android:clickable="true"
                 android:drawableRight="@drawable/right_arrow"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="10dp"
                 android:text="General"
-                android:textSize="16sp"
-                android:clickable="true"/>
+                android:textSize="16sp" />
 
             <View
                 android:layout_width="fill_parent"
@@ -188,13 +186,13 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/setting_item_selector"
+                android:clickable="true"
                 android:drawableRight="@drawable/right_arrow"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="10dp"
                 android:text="About"
-                android:textSize="16sp"
-                android:clickable="true"/>
+                android:textSize="16sp" />
 
         </LinearLayout>
 
