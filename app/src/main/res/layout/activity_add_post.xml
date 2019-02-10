@@ -7,7 +7,8 @@
         android:id="@+id/post_service_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="5dp">
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp">
 
         <TextView
             android:id="@+id/text_post_service"
@@ -19,14 +20,14 @@
             android:textColor="@color/black"/>
 
         <ImageView
-            android:id="@+id/post_service_cancel"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"
+            android:id="@+id/post_service_back_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="6dp"
-            android:src="@drawable/cancel_bottom"/>
+            android:adjustViewBounds="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back_button"
+            android:clickable="true"/>
 
     </RelativeLayout>
 
@@ -173,13 +174,9 @@
         android:text="@string/submit"
         android:textColor="#365170"
         android:textStyle="bold"
-        android:background="@color/summerSky"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:background="@drawable/button"
+        android:layout_margin="20dp"
         android:layout_alignParentBottom="true"/>
-
-
 
 
 </RelativeLayout>

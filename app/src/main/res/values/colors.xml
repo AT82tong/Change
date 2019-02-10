@@ -8,6 +8,8 @@
     <color name="followerBg">#65DCE5</color>
 
     <color name="black">#000000</color>
+    <color name="black2">#ffeeeeee</color>
+    <color name="grey_background">#ebebeb</color>
     <color name="white">#FFFFFF</color>
     <color name="grey">#E5E5E5</color>
     <color name="dimGray">#666666</color>
@@ -17,5 +19,6 @@
     <color name="aquamarine">#67EFC8</color>
     <color name="lightMayaBlue">#63C9FF</color>
     <color name="darkMayaBlue">#76b7f0</color>
+    <color name="red">#FC2828</color>
     <color name="luminousVividRed">#FF0000</color>
 </resources>

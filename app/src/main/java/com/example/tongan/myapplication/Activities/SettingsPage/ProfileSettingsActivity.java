@@ -1,16 +1,16 @@
-package com.example.tongan.myapplication.Activities;
+package com.example.tongan.myapplication.Activities.SettingsPage;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
+import com.example.tongan.myapplication.Activities.LoginActivity;
 import com.example.tongan.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class EditProfileSettingsActivity extends AppCompatActivity {
+public class ProfileSettingsActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
 
@@ -28,7 +28,7 @@ public class EditProfileSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 firebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(EditProfileSettingsActivity.this, LoginActivity.class);
+                Intent intent = new Intent(ProfileSettingsActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
