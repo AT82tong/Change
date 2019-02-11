@@ -11,10 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activities.SettingsPage.AccountSettingsActivity"></activity>
         <activity android:name=".Activities.SettingsPage.ProfileSettingsActivity"></activity>
-        <activity android:name=".Activities.MainActivity">
-
-        </activity>
+        <activity android:name=".Activities.SettingsPage.AccountAboutActivity"></activity>
+        <activity android:name=".Activities.SettingsPage.AccountGeneralActivity"></activity>
+        <activity android:name=".Activities.SettingsPage.AccountNotificationsActivity"></activity>
+        <activity android:name=".Activities.SettingsPage.AccountPrivacyActivity"></activity>
+        <activity android:name=".Activities.MainActivity"></activity>
         <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,8 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.SignUpActivity"> </activity>
-        <activity android:name=".Activities.AddPostActivity"> </activity>
+        <activity android:name=".Activities.SignUpActivity"></activity>
+        <activity android:name=".Activities.AddPostActivity"></activity>
     </application>
 
 </manifest>
