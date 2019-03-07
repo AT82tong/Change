@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.tongan.myapplication.R;
+import com.example.tongan.myapplication.profile_setProfilePhoto;
 import com.example.tongan.myapplication.profile_setPublicName;
 
 public class AccountSettingsActivity extends AppCompatActivity {
@@ -46,6 +47,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
 
     public void openProfilePhoto() {
-
+        Intent intent = new Intent(this, profile_setProfilePhoto.class);
+        startActivity(intent);
     }
 }

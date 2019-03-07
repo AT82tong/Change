@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.tongan.myapplication">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Internet Permission -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Photo Permission -->
 
     <application
         android:allowBackup="true"
@@ -11,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".profile_setProfilePhoto"></activity>
         <activity android:name=".profile_setPublicName"></activity>
         <activity android:name=".Activities.SettingsPage.AccountSecurityActivity" />
         <activity android:name=".Activities.SettingsPage.AccountSettingsActivity" />
