@@ -3,7 +3,6 @@ package com.example.tongan.myapplication.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -21,10 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import org.w3c.dom.Text;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -79,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                             Log.d(TAG, "createUserWithEmail:success");
-                            addUserInformationToDatabase(firstName, lastName, email, password, 0, 0.0);
+                            addUserInformationToDatabase(firstName, lastName, email, password, 0, 0.0, firstName + " " + lastName);
                             openHomePage();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -166,8 +162,8 @@ public class SignUpActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void addUserInformationToDatabase(String firstName, String lastName, String email, String password, int followers, double ratings) {
-        User user = new User(firstName, lastName, email, password, followers, ratings);
+    public void addUserInformationToDatabase(String firstName, String lastName, String email, String password, int followers, double ratings, String publicName) {
+        User user = new User(firstName, lastName, email, password, followers, ratings, publicName);
         db.collection("Users").document(email)
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

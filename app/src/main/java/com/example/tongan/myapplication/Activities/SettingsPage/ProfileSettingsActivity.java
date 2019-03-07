@@ -1,18 +1,15 @@
 package com.example.tongan.myapplication.Activities.SettingsPage;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.tongan.myapplication.Activities.AddPostActivity;
 import com.example.tongan.myapplication.Activities.LoginActivity;
-import com.example.tongan.myapplication.Fragments.ProfileFragment;
 import com.example.tongan.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -50,6 +47,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         signOutBtn();
         backBtn();
         settingsBtn();
+        securityBtn();
         privacyBtn();
         notificationsBtn();
         generalBtn();
@@ -84,6 +82,16 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileSettingsActivity.this, AccountSettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void securityBtn() {
+        securityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileSettingsActivity.this, AccountSecurityActivity.class);
                 startActivity(intent);
             }
         });
