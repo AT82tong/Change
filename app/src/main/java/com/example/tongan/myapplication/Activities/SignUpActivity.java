@@ -25,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class SignUpActivity extends AppCompatActivity {
 
     private static final String TAG = "Signup";
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
 
     TextInputLayout firstNameLayout;
@@ -81,11 +81,14 @@ public class SignUpActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
 
-                            if (task.getException().getMessage().equals("The email address is badly formatted.")) {
+                            if (task.getException().getMessage().equals("The email address is already in use by another account.")) {
+                                emailLayout.setError("Email address already in use.");
+                            } else if (task.getException().getMessage().equals("The email address is badly formatted.")) {
                                 emailLayout.setError("Invalid email address");
                             } else {
                                 emailLayout.setErrorEnabled(false);
                             }
+
                             if (password.length() < 6) {
                                 passwordLayout.setError("Password must be at least 6 characters");
                             } else {

@@ -23,6 +23,11 @@ public class DatabaseHelper {
         return fireBaseAuth.getCurrentUser().getEmail();
     }
 
+    public String formatedEmail () {
+        String str = getCurrentUserEmail().substring(0, getCurrentUserEmail().indexOf(".com"));
+        return str.replaceAll("\\.", "_");
+    }
+
 //    public User getUserData (final String email) {
 //        firebaseFirestore.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 //            @Override

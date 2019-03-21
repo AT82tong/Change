@@ -1,14 +1,22 @@
 package com.example.tongan.myapplication.Classes;
 
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+
 public class User {
 
     private String firstName;
     private String lastName;
     private String Email;
     private String Password;
-    private int Follower;
+    private int Followers;
     private double Rating;
     private String publicName;
+    private String profileImageURL;
+    private ArrayList<String> sellNumbers;
+    private ArrayList<String> buyNumbers;
+    private ArrayList<String> additionalImages;
 
     public User (){}
 
@@ -17,9 +25,34 @@ public class User {
         this.lastName = lastName;
         this.Email = Email;
         this.Password = Password;
-        this.Follower = followers;
+        this.Followers = followers;
         this.Rating = ratings;
         this.publicName = publicName;
+
+    }
+
+    public ArrayList<String> getAdditionalImages() {
+        return additionalImages;
+    }
+
+    public void setAdditionalImages(ArrayList<String> additionalImages) {
+        this.additionalImages = additionalImages;
+    }
+
+    public ArrayList<String> getSellNumbers() {
+        return sellNumbers;
+    }
+
+    public void setSellNumbers(ArrayList<String> sellNumbers) {
+        this.sellNumbers = sellNumbers;
+    }
+
+    public ArrayList<String> getBuyNumbers() {
+        return buyNumbers;
+    }
+
+    public void setBuyNumbers(ArrayList<String> buyNumbers) {
+        this.buyNumbers = buyNumbers;
     }
 
     public String getFirstName() {
@@ -55,11 +88,11 @@ public class User {
     }
 
     public int getFollower() {
-        return Follower;
+        return Followers;
     }
 
     public void setFollower(int follower) {
-        Follower = follower;
+        Followers = follower;
     }
 
     public double getRating() {
@@ -76,5 +109,13 @@ public class User {
 
     public void setPublicName(String publicName) {
         this.publicName = publicName;
+    }
+
+    public String getProfileImageURL() {
+        return profileImageURL;
+    }
+
+    public void setProfileImageURL(String profileImageURL) {
+        this.profileImageURL = profileImageURL;
     }
 }

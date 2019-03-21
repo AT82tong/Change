@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "6047164836-sra78u6i390sddgv6ft4t3orinp4087h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tongan.myapplication",
+            "certificate_hash": "88f84e72aacc33b16639dadb17b6dcb85dc4f802"
+          }
+        },
+        {
           "client_id": "6047164836-qf51cvsj79fuvn2iob4dj6gvl3uhlb2c.apps.googleusercontent.com",
           "client_type": 3
         }

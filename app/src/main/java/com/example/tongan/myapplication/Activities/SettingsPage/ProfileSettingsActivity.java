@@ -44,18 +44,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         generalBtn = findViewById(R.id.account_general);
         aboutBtn = findViewById(R.id.account_about);
 
-        signOutBtn();
-        backBtn();
-        settingsBtn();
-        securityBtn();
-        privacyBtn();
-        notificationsBtn();
-        generalBtn();
-        aboutBtn();
 
-    }
-
-    public void signOutBtn() {
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,10 +53,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
 
-    public void backBtn() {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,9 +62,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
-    }
 
-    public void settingsBtn() {
+
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,9 +71,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    public void securityBtn() {
+
         securityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,9 +80,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    public void privacyBtn() {
+
         privacyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,9 +89,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    public void notificationsBtn() {
+
         notificationsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,9 +98,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    public void generalBtn() {
+
         generalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,9 +107,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    public void aboutBtn() {
+
         aboutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
