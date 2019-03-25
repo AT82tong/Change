@@ -25,7 +25,7 @@ public class DatabaseHelper {
 
     public String formatedEmail () {
         String str = getCurrentUserEmail().substring(0, getCurrentUserEmail().indexOf(".com"));
-        return str.replaceAll("\\.", "_");
+        return str.replaceAll("\\.", "/");
     }
 
 //    public User getUserData (final String email) {

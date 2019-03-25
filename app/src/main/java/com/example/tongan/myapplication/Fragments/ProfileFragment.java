@@ -84,10 +84,10 @@ public class ProfileFragment extends Fragment {
                             NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
                             String followers = numberFormat.format(map.get("follower"));
                             profileName.setText(map.get("displayName").toString());
-                            profileFollowers.setText("" + followers);
+                            profileFollowers.setText(followers);
 
                             DecimalFormat value = new DecimalFormat("0.0");
-                            profileRating.setText("" + value.format(map.get("rating")));
+                            profileRating.setText(value.format(map.get("rating")));
                         }
                     }
                 }

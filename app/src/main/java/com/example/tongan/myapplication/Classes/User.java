@@ -11,6 +11,7 @@ public class User {
     private String Password;
     private int Followers;
     private double Rating;
+    private String profileImage;
     private ArrayList<String> sellNumbers;
     private ArrayList<String> buyNumbers;
     private ArrayList<String> images;
@@ -21,6 +22,14 @@ public class User {
         this.Password = Password;
         this.Followers = followers;
         this.Rating = ratings;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public ArrayList<String> getImages() {

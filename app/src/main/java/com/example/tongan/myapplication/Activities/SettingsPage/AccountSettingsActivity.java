@@ -1,7 +1,9 @@
 package com.example.tongan.myapplication.Activities.SettingsPage;
 
+import android.accounts.AccountsException;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -43,10 +45,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -64,7 +68,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
     TextView publicName;
     ImageView profileImage;
     ImageView backButton;
+    private boolean isImageFound = false;
 
+    private Uri imageUri;
     private Uri filePath;
 
     private FirebaseStorage firebaseStorage;
@@ -83,37 +89,29 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         profilePhoto = findViewById(R.id.profile_photo);
         publicName = findViewById(R.id.public_name);
-        profileImage = findViewById(R.id.settings_profile_image);
+        profileImage = findViewById(R.id.profile_image);
         backButton = findViewById(R.id.settings_back_button);
 
+        // load image into profile image
         firebaseFirestore.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                         if (queryDocumentSnapshot.getId().equals(databaseHelper.getCurrentUserEmail())) {
-                            // need to finish
-                            // get the profile image
-                            // find in storage and set it
-
-                            // load profile image
-//                            Glide.with(this).load(image).placeholder(R.drawable.settings_profile_picture).error(R.drawable.settings_profile_picture).listener(new RequestListener<Drawable>() {
-//                                @Override
-//                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-//                                    Log.d(TAG, "Load profile image failed.");
-//                                    return false;
-//                                }
-//
-//                                @Override
-//                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-//                                    return false;
-//                                }
-//                            }).into(profileImage);
+                            Map<String, Object> map = queryDocumentSnapshot.getData();
+                            if (map.get("profileImage") == null) {
+                                profileImage.setImageDrawable(getResources().getDrawable(R.drawable.settings_profile_picture));
+                            } else {
+                                Glide.with(AccountSettingsActivity.this).load(map.get("profileImage").toString()).into(profileImage);
+                            }
+                            break;
                         }
                     }
                 }
             }
         });
+        // ------
 
         profilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,17 +183,20 @@ public class AccountSettingsActivity extends AppCompatActivity {
             String formatedEmail = email.replaceAll("\\.", "/");
 
             // storage image to `Storage` and save URL to database
-            final StorageReference ref = storageReference.child("Image/" + formatedEmail + UUID.randomUUID().toString() + "." + getFileExtension(filePath));
+            final StorageReference ref = storageReference.child("Image/" + formatedEmail + "/ProfileImage" + "." + getFileExtension(filePath));
             ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
                     progressDialog.dismiss();
                     Toast.makeText(AccountSettingsActivity.this, "Successfully Uploaded", Toast.LENGTH_LONG).show();
 
-                    DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
-                    ArrayList<String> images = new ArrayList<>();
-                    images.add(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
-                    doc.update("images", images);
+                    final DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            doc.update("profileImage", uri.toString());
+                        }
+                    });
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
