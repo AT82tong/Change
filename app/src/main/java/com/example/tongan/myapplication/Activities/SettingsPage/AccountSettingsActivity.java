@@ -195,7 +195,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
                     DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
                     ArrayList<String> images = new ArrayList<>();
                     images.add(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
-                    doc.update("Image", images);
+                    doc.update("images", images);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
