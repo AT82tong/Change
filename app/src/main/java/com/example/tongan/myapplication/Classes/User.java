@@ -6,37 +6,31 @@ import java.util.ArrayList;
 
 public class User {
 
-    private String firstName;
-    private String lastName;
+    private String displayName;
     private String Email;
     private String Password;
     private int Followers;
     private double Rating;
-    private String publicName;
-    private String profileImageURL;
     private ArrayList<String> sellNumbers;
     private ArrayList<String> buyNumbers;
-    private ArrayList<String> additionalImages;
+    private ArrayList<String> images;
 
     public User (){}
 
-    public User(String firstName, String lastName, String Email, String Password, int followers, double ratings, String publicName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String displayName, String Email, String Password, int followers, double ratings) {
+        this.displayName = displayName;
         this.Email = Email;
         this.Password = Password;
         this.Followers = followers;
         this.Rating = ratings;
-        this.publicName = publicName;
-
     }
 
-    public ArrayList<String> getAdditionalImages() {
-        return additionalImages;
+    public ArrayList<String> getImages() {
+        return images;
     }
 
-    public void setAdditionalImages(ArrayList<String> additionalImages) {
-        this.additionalImages = additionalImages;
+    public void setImages(ArrayList<String> images) {
+        this.images = images;
     }
 
     public ArrayList<String> getSellNumbers() {
@@ -55,20 +49,12 @@ public class User {
         this.buyNumbers = buyNumbers;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getEmail() {
@@ -103,19 +89,4 @@ public class User {
         Rating = rating;
     }
 
-    public String getPublicName() {
-        return publicName;
-    }
-
-    public void setPublicName(String publicName) {
-        this.publicName = publicName;
-    }
-
-    public String getProfileImageURL() {
-        return profileImageURL;
-    }
-
-    public void setProfileImageURL(String profileImageURL) {
-        this.profileImageURL = profileImageURL;
-    }
 }

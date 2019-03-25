@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -28,21 +29,22 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
 
-    TextInputLayout firstNameLayout;
-    TextInputLayout lastNameLayout;
+    TextInputLayout displaynameLayout;
     TextInputLayout emailLayout;
     TextInputLayout passwordLayout;
+    TextInputLayout confirmPasswordLayout;
 
-    EditText firstNameText;
-    EditText lastNameText;
+    EditText displaynameText;
     EditText emailText;
     EditText passwordText;
+    EditText confirmPasswordText;
     Button signUpButton;
+    Button signUpCancel;
 
-    String firstName;
-    String lastName;
+    String displayName;
     String email;
     String password;
+    String confirmPassword;
 
 
     @Override
@@ -60,6 +62,14 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
+
+        signUpCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLoginPage();
+            }
+        });
+
     }
 
     public void signUpNewUserAndAddToDatabase() {
@@ -75,7 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                             Log.d(TAG, "createUserWithEmail:success");
-                            addUserInformationToDatabase(firstName, lastName, email, password, 0, 0.0, firstName + " " + lastName);
+                            addUserInformationToDatabase(displayName, email, password, 0, 0.0);
                             openHomePage();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -103,23 +113,17 @@ public class SignUpActivity extends AppCompatActivity {
 
     public boolean validateInputs() {
         boolean valid = true;
-        firstName = firstNameText.getText().toString();
-        lastName = lastNameText.getText().toString();
+        boolean isPasswordEmpty = false;
+        displayName = displaynameText.getText().toString();
         email = emailText.getText().toString();
         password = passwordText.getText().toString();
+        confirmPassword = confirmPasswordText.getText().toString();
 
-        if (TextUtils.isEmpty(firstName)) {
-            firstNameLayout.setError("First name cannot be empty");
+        if (TextUtils.isEmpty(displayName)) {
+            displaynameLayout.setError("Display name cannot be empty");
             valid = false;
         } else {
-            firstNameLayout.setErrorEnabled(false);
-        }
-
-        if (TextUtils.isEmpty(lastName)) {
-            lastNameLayout.setError("Last name cannot be empty");
-            valid = false;
-        } else {
-            lastNameLayout.setErrorEnabled(false);
+            displaynameLayout.setErrorEnabled(false);
         }
 
         if (TextUtils.isEmpty(email)) {
@@ -132,8 +136,20 @@ public class SignUpActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(password)) {
             passwordLayout.setError("Password cannot be empty");
             valid = false;
+            isPasswordEmpty = true;
         } else {
             passwordLayout.setErrorEnabled(false);
+        }
+
+        if (!isPasswordEmpty) {
+            if (!password.equals(confirmPassword)) {
+                confirmPasswordLayout.setError("Password does not match");
+                passwordLayout.setError("Password does not match");
+                valid = false;
+            } else {
+                confirmPasswordLayout.setErrorEnabled(false);
+                passwordLayout.setErrorEnabled(false);
+            }
         }
 
         return valid;
@@ -142,16 +158,17 @@ public class SignUpActivity extends AppCompatActivity {
     public void init() {
         mAuth = FirebaseAuth.getInstance();
 
-        firstNameLayout = findViewById(R.id.signup_firstName_layout);
-        lastNameLayout = findViewById(R.id.signup_lastName_layout);
+        displaynameLayout = findViewById(R.id.signup_displayname_layout);
         emailLayout = findViewById(R.id.signup_email_layout);
         passwordLayout = findViewById(R.id.signup_password_layout);
+        confirmPasswordLayout = findViewById(R.id.signup_password_confirm_layout);
         signUpButton = findViewById(R.id.signup_submit);
+        signUpCancel = findViewById(R.id.signup_cancel);
 
-        firstNameText = findViewById(R.id.signup_firstName_text);
-        lastNameText = findViewById(R.id.signup_lastName_text);
+        displaynameText = findViewById(R.id.signup_displayname_text);
         emailText = findViewById(R.id.signup_email_text);
         passwordText = findViewById(R.id.signup_password_text);
+        confirmPasswordText = findViewById(R.id.signup_password_confirm_text);
 
     }
 
@@ -165,8 +182,22 @@ public class SignUpActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void addUserInformationToDatabase(String firstName, String lastName, String email, String password, int followers, double ratings, String publicName) {
-        User user = new User(firstName, lastName, email, password, followers, ratings, publicName);
+    public void addUserInformationToDatabase(String displayName, String email, String password, int followers, double ratings) {
+        User user = new User(displayName, email, password, followers, ratings);
+        // use unique id as document in firestore
+//        db.collection("Users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//            @Override
+//            public void onSuccess(DocumentReference documentReference) {
+//                Log.d(TAG, "DocumentSnapshot successfully written!");
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error writing document", e);
+//                    }
+//                });
+
+        // use email as document in firestore
         db.collection("Users").document(email)
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

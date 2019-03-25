@@ -60,7 +60,7 @@ public class profile_setPublicName extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
-                doc.update("publicName", publicName.getText().toString());
+                doc.update("displayname", publicName.getText().toString());
                 onBackPressed();
             }
         });

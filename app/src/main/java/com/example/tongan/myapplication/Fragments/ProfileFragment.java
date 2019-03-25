@@ -83,7 +83,7 @@ public class ProfileFragment extends Fragment {
                             Map<String, Object> map = queryDocumentSnapshot.getData();
                             NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
                             String followers = numberFormat.format(map.get("follower"));
-                            profileName.setText("" + map.get("firstName") + " " + map.get("lastName"));
+                            profileName.setText(map.get("displayName").toString());
                             profileFollowers.setText("" + followers);
 
                             DecimalFormat value = new DecimalFormat("0.0");
