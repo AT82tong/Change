@@ -32,6 +32,9 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.util.UUID;
 
+
+// NOT USE FOR NOW
+
 public class profile_setProfilePhoto extends AppCompatActivity {
 
     private static final String TAG = "profile_setProfilePhoto";
@@ -53,8 +56,8 @@ public class profile_setProfilePhoto extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_set_profile_photo);
-        overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
+//        setContentView(R.layout.activity_profile_set_profile_photo);
+//        overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_out_bottom);
 
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -105,10 +108,10 @@ public class profile_setProfilePhoto extends AppCompatActivity {
             progressDialog.show();
 
             String email = databaseHelper.getCurrentUserEmail().substring(0, databaseHelper.getCurrentUserEmail().indexOf(".com"));
-            String formatedEmail = email.replaceAll("\\.", "_");
+            String formatedEmail = email.replaceAll("\\.", "/");
 
             // storage image to `Storage` and save URL to database
-            final StorageReference ref = storageReference.child(formatedEmail + "/ProfileImage/" + UUID.randomUUID().toString() + "." + getFileExtension(filePath));
+            final StorageReference ref = storageReference.child("Image/" + formatedEmail + UUID.randomUUID().toString() + "." + getFileExtension(filePath));
             ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {

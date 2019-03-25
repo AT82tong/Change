@@ -38,8 +38,7 @@
             android:textAllCaps="false"
             android:layout_marginRight="15dp"
             android:layout_marginTop="4dp"
-            android:clickable="true"
-            android:background="@drawable/save_button">
+            android:clickable="true">
 
         </Button>
 

@@ -14,9 +14,7 @@ public class User {
     private ArrayList<String> sellNumbers;
     private ArrayList<String> buyNumbers;
     private ArrayList<String> images;
-
     public User (){}
-
     public User(String displayName, String Email, String Password, int followers, double ratings) {
         this.displayName = displayName;
         this.Email = Email;

@@ -184,11 +184,16 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void addUserInformationToDatabase(String displayName, String email, String password, int followers, double ratings) {
         User user = new User(displayName, email, password, followers, ratings);
+
+//        Task<DocumentReference> a = db.collection("Users").add(user);
         // use unique id as document in firestore
 //        db.collection("Users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
 //            @Override
 //            public void onSuccess(DocumentReference documentReference) {
 //                Log.d(TAG, "DocumentSnapshot successfully written!");
+//                String id = documentReference.getId();
+//                DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(id);
+//                doc.update("id", id);
 //            }
 //        }).addOnFailureListener(new OnFailureListener() {
 //                    @Override
