@@ -7,10 +7,10 @@ import java.util.ArrayList;
 public class User {
 
     private String displayName;
-    private String Email;
-    private String Password;
-    private int Followers;
-    private double Rating;
+    private String email;
+    private String password;
+    private int followers;
+    private double rating;
     private String profileImage;
     private ArrayList<String> sellNumbers;
     private ArrayList<String> buyNumbers;
@@ -18,10 +18,10 @@ public class User {
     public User (){}
     public User(String displayName, String Email, String Password, int followers, double ratings) {
         this.displayName = displayName;
-        this.Email = Email;
-        this.Password = Password;
-        this.Followers = followers;
-        this.Rating = ratings;
+        this.email = Email;
+        this.password = Password;
+        this.followers = followers;
+        this.rating = ratings;
     }
 
     public String getProfileImage() {
@@ -65,35 +65,35 @@ public class User {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        email = email;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        password = password;
     }
 
     public int getFollower() {
-        return Followers;
+        return followers;
     }
 
     public void setFollower(int follower) {
-        Followers = follower;
+        followers = follower;
     }
 
     public double getRating() {
-        return Rating;
+        return rating;
     }
 
     public void setRating(double rating) {
-        Rating = rating;
+        rating = rating;
     }
 
 }
