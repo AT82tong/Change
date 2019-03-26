@@ -40,7 +40,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -58,23 +61,27 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AccountSettingsActivity extends AppCompatActivity {
 
     private static final String TAG = "AccountSettingsActivity";
 
     private final int PICK_IMAGE_REQUEST = 71;
 
-    RelativeLayout profilePhoto;
-    TextView publicName;
-    ImageView profileImage;
-    ImageView backButton;
-    private boolean isImageFound = false;
+    RelativeLayout profilePhotoLayout;
+    RelativeLayout profileNameLayout;
 
-    private Uri imageUri;
+    TextView publicName;
+
+    CircleImageView profileImage;
+    ImageView backButton;
+
     private Uri filePath;
 
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
+    private DocumentReference documentReference;
     private DatabaseHelper databaseHelper = new DatabaseHelper();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -87,40 +94,59 @@ public class AccountSettingsActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
 
-        profilePhoto = findViewById(R.id.profile_photo);
+        profilePhotoLayout = findViewById(R.id.profile_photo);
+        profileNameLayout = findViewById(R.id.profile_name);
+
         publicName = findViewById(R.id.public_name);
         profileImage = findViewById(R.id.profile_image);
         backButton = findViewById(R.id.settings_back_button);
 
-        // load image into profile image
-        firebaseFirestore.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        // load image into profile image. on data change
+        documentReference = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                        if (queryDocumentSnapshot.getId().equals(databaseHelper.getCurrentUserEmail())) {
-                            Map<String, Object> map = queryDocumentSnapshot.getData();
-                            if (map.get("profileImage") == null) {
-                                profileImage.setImageDrawable(getResources().getDrawable(R.drawable.settings_profile_picture));
-                            } else {
-                                Glide.with(AccountSettingsActivity.this).load(map.get("profileImage").toString()).into(profileImage);
-                            }
-                            break;
-                        }
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    Map<String, Object> map = documentSnapshot.getData();
+                    publicName.setText(map.get("displayName").toString());
+                    if (map.get("profileImage") == null) {
+                        profileImage.setImageDrawable(getResources().getDrawable(R.drawable.settings_profile_picture));
+                    } else {
+                        Glide.with(getApplicationContext()).load(map.get("profileImage").toString()).into(profileImage);
                     }
                 }
             }
         });
+
+        // load image into profile image
+//        firebaseFirestore.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+//                        if (queryDocumentSnapshot.getId().equals(databaseHelper.getCurrentUserEmail())) {
+//                            Map<String, Object> map = queryDocumentSnapshot.getData();
+//                            if (map.get("profileImage") == null) {
+//                                profileImage.setImageDrawable(getResources().getDrawable(R.drawable.settings_profile_picture));
+//                            } else {
+//                                Glide.with(AccountSettingsActivity.this).load(map.get("profileImage").toString()).into(profileImage);
+//                            }
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
         // ------
 
-        profilePhoto.setOnClickListener(new View.OnClickListener() {
+        profilePhotoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 choosePhoto();
             }
         });
 
-        publicName.setOnClickListener(new View.OnClickListener() {
+        profileNameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editPublicName();
@@ -131,9 +157,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right); }
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
         });
-
     }
 
     public void editPublicName() {
@@ -182,7 +208,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
             String email = databaseHelper.getCurrentUserEmail().substring(0, databaseHelper.getCurrentUserEmail().indexOf(".com"));
             String formatedEmail = email.replaceAll("\\.", "/");
 
-            // storage image to `Storage` and save URL to database
+            // delete original profile image and storage image to `Storage` and save URL to database
+            storageReference.child("Image/" + formatedEmail + "/ProfileImage" + "." + getFileExtension(filePath)).delete();
             final StorageReference ref = storageReference.child("Image/" + formatedEmail + "/ProfileImage" + "." + getFileExtension(filePath));
             ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override

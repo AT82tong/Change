@@ -88,7 +88,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
     public void init() {
         fireBaseAuth = FirebaseAuth.getInstance();
 

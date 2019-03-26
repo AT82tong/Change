@@ -55,16 +55,14 @@ public class profile_setPublicName extends AppCompatActivity {
             }
         });
 
-
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
-                doc.update("displayname", publicName.getText().toString());
+                doc.update("displayName", publicName.getText().toString());
                 onBackPressed();
             }
         });
-
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
