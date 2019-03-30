@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.tongan.myapplication.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
 
 public class AddPostActivity extends AppCompatActivity {
 

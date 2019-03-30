@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Internet Permission -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Photo Permission -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> <!-- Location Permission -->
 
     <application
         android:allowBackup="true"
