@@ -1,4 +1,4 @@
-package com.example.tongan.myapplication;
+package com.example.tongan.myapplication.Activities.SettingsPage.MyProfile;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
+import com.example.tongan.myapplication.R;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 

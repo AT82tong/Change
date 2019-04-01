@@ -1,19 +1,15 @@
-package com.example.tongan.myapplication.Activities.SettingsPage;
+package com.example.tongan.myapplication.Activities.SettingsPage.MyProfile;
 
-import android.accounts.AccountsException;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
@@ -22,44 +18,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
-import com.example.tongan.myapplication.profile_setProfilePhoto;
-import com.example.tongan.myapplication.profile_setPublicName;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -73,6 +47,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     RelativeLayout profileNameLayout;
 
     TextView publicName;
+    TextView documentations;
 
     CircleImageView profileImage;
     ImageView backButton;
@@ -98,6 +73,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         profileNameLayout = findViewById(R.id.profile_name);
 
         publicName = findViewById(R.id.public_name);
+        documentations = findViewById(R.id.documentations);
         profileImage = findViewById(R.id.profile_image);
         backButton = findViewById(R.id.settings_back_button);
 
@@ -149,7 +125,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
         profileNameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editPublicName();
+                openEditPublicName();
+            }
+        });
+
+        documentations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openManageDocumentations();
             }
         });
 
@@ -162,7 +145,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
         });
     }
 
-    public void editPublicName() {
+    public void openManageDocumentations() {
+        Intent intent = new Intent(this, ManageDocumentations.class);
+        startActivity(intent);
+    }
+
+    public void openEditPublicName() {
         Intent intent = new Intent(this, profile_setPublicName.class);
         startActivity(intent);
     }
@@ -205,8 +193,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            String email = databaseHelper.getCurrentUserEmail().substring(0, databaseHelper.getCurrentUserEmail().indexOf(".com"));
-            String formatedEmail = email.replaceAll("\\.", "/");
+            String formatedEmail = databaseHelper.formatedEmail(databaseHelper.getCurrentUserEmail());
 
             // delete original profile image and storage image to `Storage` and save URL to database
             storageReference.child("Image/" + formatedEmail + "/ProfileImage" + "." + getFileExtension(filePath)).delete();

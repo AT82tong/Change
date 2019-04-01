@@ -23,9 +23,8 @@ public class DatabaseHelper {
         return fireBaseAuth.getCurrentUser().getEmail();
     }
 
-    public String formatedEmail () {
-        String str = getCurrentUserEmail().substring(0, getCurrentUserEmail().indexOf(".com"));
-        return str.replaceAll("\\.", "/");
+    public String formatedEmail (String email) {
+        return email.substring(0, getCurrentUserEmail().indexOf(".com")).replaceAll("\\.", "/");
     }
 
 //    public User getUserData (final String email) {
