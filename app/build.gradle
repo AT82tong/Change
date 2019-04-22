@@ -71,6 +71,10 @@ dependencies {
     // circle image view
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
+    // folding cell
+    //implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
+
+
 
 }
 
