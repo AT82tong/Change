@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.SettingsPage.ProfileSettingsActivity;
+import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
+import com.example.tongan.myapplication.Adapters.VerticalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
@@ -45,6 +50,10 @@ public class ProfileFragment extends Fragment {
     TextView profileName;
     TextView profileFollowers;
     TextView profileRating;
+    TextView documentationText;
+
+    RecyclerView documentationsRecyclerView;
+    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
     @Nullable
     @Override
@@ -56,6 +65,10 @@ public class ProfileFragment extends Fragment {
         profileName = view.findViewById(R.id.profile_name);
         profileFollowers = view.findViewById(R.id.profile_followers);
         profileRating = view.findViewById(R.id.profile_rating);
+        documentationText = view.findViewById(R.id.documentationsText);
+
+        documentationsRecyclerView = view.findViewById(R.id.profileDisplayDocumentations);
+        documentationsRecyclerView.setLayoutManager(layoutManager);
 
         // update data
         documentReference = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
@@ -81,6 +94,8 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        loadPhotoFromDatabase();
+
         settingsImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +114,32 @@ public class ProfileFragment extends Fragment {
         }
         Log.d(TAG, "ProfileFragment Page");
     }
+
+    private void initRecyclerView(ArrayList<String> images) {
+        HorizontalDocumentationsRecyclerViewAdapter adapter = new HorizontalDocumentationsRecyclerViewAdapter(getActivity(), images);
+        documentationsRecyclerView.setAdapter(adapter);
+    }
+
+    public void loadPhotoFromDatabase() {
+        DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
+        doc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    Map<String, Object> map = documentSnapshot.getData();
+                    if (map.get("images") != null) {
+                        ArrayList<String> images = new ArrayList<>();
+                        images.addAll((ArrayList<String>)map.get("images"));
+                        initRecyclerView(images);
+                    } else {
+                        documentationsRecyclerView.setVisibility(View.GONE);
+                        documentationText.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+    }
+    // public
 
 
 //        firebaseFirestore.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

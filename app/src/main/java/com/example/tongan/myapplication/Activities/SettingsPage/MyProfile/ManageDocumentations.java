@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.tongan.myapplication.Adapters.DocumentationsRecyclerViewAdapter;
+import com.example.tongan.myapplication.Adapters.VerticalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -57,6 +57,7 @@ public class ManageDocumentations extends AppCompatActivity {
         backBtn = findViewById(R.id.back_button);
         addDocumentations = findViewById(R.id.add_documentations);
 
+        // Load photos from database
         DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
         doc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -145,7 +146,7 @@ public class ManageDocumentations extends AppCompatActivity {
 
     private void initRecyclerView(ArrayList<String> images) {
         RecyclerView recyclerView = findViewById(R.id.documentations_recycler_view);
-        DocumentationsRecyclerViewAdapter adapter = new DocumentationsRecyclerViewAdapter(this, images);
+        VerticalDocumentationsRecyclerViewAdapter adapter = new VerticalDocumentationsRecyclerViewAdapter(this, images);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

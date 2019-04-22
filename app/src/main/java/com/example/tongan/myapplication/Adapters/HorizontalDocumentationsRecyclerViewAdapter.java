@@ -13,14 +13,16 @@ import com.example.tongan.myapplication.R;
 
 import java.util.ArrayList;
 
-public class DocumentationsRecyclerViewAdapter extends RecyclerView.Adapter<DocumentationsRecyclerViewAdapter.ViewHolder> {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class HorizontalDocumentationsRecyclerViewAdapter extends RecyclerView.Adapter<HorizontalDocumentationsRecyclerViewAdapter.ViewHolder> {
 
     public static final String TAG = "documentationsRecyclerViewAdapter";
 
     private ArrayList<String> imageAL = new ArrayList<>();
     private Context context;
 
-    public DocumentationsRecyclerViewAdapter(Context context, ArrayList<String> imageAL) {
+    public HorizontalDocumentationsRecyclerViewAdapter(Context context, ArrayList<String> imageAL) {
         this.imageAL = imageAL;
         this.context = context;
     }
@@ -28,7 +30,7 @@ public class DocumentationsRecyclerViewAdapter extends RecyclerView.Adapter<Docu
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.documentations_recycler_view_list_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.horizontal_documentations_recycler_view_list_item, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -45,11 +47,11 @@ public class DocumentationsRecyclerViewAdapter extends RecyclerView.Adapter<Docu
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView image;
+        CircleImageView image;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.documentations_imageView);
+            image = itemView.findViewById(R.id.profileDocumentationImages);
         }
     }
 }
