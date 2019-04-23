@@ -1,22 +1,19 @@
 package com.example.tongan.myapplication.Activities;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,16 +21,31 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.tongan.myapplication.Classes.PostService;
+import com.example.tongan.myapplication.Helper.DatabaseHelper;
+import com.example.tongan.myapplication.Helper.DecimalDigitsInputFilter;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -45,9 +57,9 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     protected GoogleApiClient googleApiClient;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
     // user location
-    LocationManager locationManager;
-    Location location;
     double longitude;
     double latitude;
 
@@ -72,22 +84,27 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     private TextInputLayout serviceDescriptionTextLayout;
     private TextInputLayout serviceAddressTextLayout;
 
-
     private ImageView backBtn;
     private Button submitButton;
 
     private String serviceTitle;
     private String servicePrice;
-    private StringBuilder serviceDescription;
+    private String serviceDescription;
     private String serviceAddress;
+    private String serviceCategory;
 
-    private StringBuilder sb = new StringBuilder();
+    private String randomID;
+    private ArrayList<String> postNumbers;
+    private DocumentReference documentReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
 
+        final DatabaseHelper databaseHelper = new DatabaseHelper();
+
+        // location
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -95,10 +112,11 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                 .build();
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
+        geocoder = new Geocoder(this, Locale.getDefault());
 
         serviceTitleText = findViewById(R.id.service_title_input);
         servicePriceText = findViewById(R.id.service_price_input);
+        servicePriceText.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(10,2)});
         serviceDescriptionText = findViewById(R.id.service_description_input);
         serviceAddressText = findViewById(R.id.service_address_input);
         serviceCategorySpinner = findViewById(R.id.service_category_spinner);
@@ -111,17 +129,49 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         serviceAddressTextLayout = findViewById(R.id.service_address_inputLayout);
 
 
-        serviceTitle = serviceTitleText.getText().toString();
-        servicePrice = servicePriceText.getText().toString();
-        serviceDescription = sb.append(serviceDescriptionText.getText().toString());
-        serviceAddress = serviceAddressText.getText().toString();
+        // get all postNumbers from current user
+        postNumbers = new ArrayList<>();
+        documentReference = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    Map<String, Object> map = documentSnapshot.getData();
+                    if (null != map.get("postNumbers")) {
+                        for (String postNumber : (ArrayList<String>) map.get("postNumbers")) {
+                            postNumbers.add(postNumber);
+                        }
+                    }
+                }
+            }
+        });
 
+        // address drawable right click
+        serviceAddressText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (serviceAddressText.getRight() - serviceAddressText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        googleApiClient.connect();
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
-                    Toast.makeText(AddPostActivity.this, "fail.",Toast.LENGTH_SHORT).show();
+                    addPostServiceToDatabase(databaseHelper.getCurrentUserEmail(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address);
+                    //Toast.makeText(AddPostActivity.this, "successful.",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -140,12 +190,18 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 
     public boolean validateInputs() {
 
+        serviceTitle = serviceTitleText.getText().toString();
+        servicePrice = servicePriceText.getText().toString();
+        serviceDescription = serviceDescriptionText.getText().toString();
+        serviceAddress = serviceAddressText.getText().toString();
+
+
         boolean isValidated = true;
         if (TextUtils.isEmpty(serviceTitle)) {
             serviceTitleTextLayout.setError("Service title cannot be empty");
             isValidated = false;
         } else {
-            serviceAddressTextLayout.setErrorEnabled(false);
+            serviceTitleTextLayout.setErrorEnabled(false);
         }
 
         if (TextUtils.isEmpty(servicePrice)) {
@@ -168,16 +224,43 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         } else {
             serviceAddressTextLayout.setErrorEnabled(false);
         }
+        Log.d(TAG, "address: " + address);
 
         return isValidated;
     }
 
+    public void addPostServiceToDatabase(final String publisher, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress ) {
+        randomID = UUID.randomUUID().toString();
 
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        PostService postService = new PostService(publisher, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date));
+        // add post service information to PostService database
+        // get the randomID and update postNumbers in User database
+        firebaseFirestore.collection("PostServices").document(randomID)
+                .set(postService)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        postNumbers.add(randomID);
+                        documentReference.update("postNumbers", postNumbers);
+                        Toast.makeText(AddPostActivity.this, "Post Service Successful.",Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Post Service Successful.");
+                        onBackPressed();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error saving to database", e);
+                    }
+                });
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
-        googleApiClient.connect();
+        //googleApiClient.connect();
     }
 
     @Override
@@ -203,8 +286,32 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                                 // Logic to handle location object
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
-                                Log.d(TAG, "longitude: " + longitude);
-                                Log.d(TAG, "latitude: " + latitude);
+                                try {
+                                    addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                address = addresses.get(0).getAddressLine(0);
+                                city = addresses.get(0).getLocality();
+                                state = addresses.get(0).getAdminArea();
+                                country = addresses.get(0).getCountryName();
+                                postalCode = addresses.get(0).getPostalCode();
+                                knownName = addresses.get(0).getFeatureName();
+
+//                                Log.d(TAG, "address: " + address);
+//                                Log.d(TAG, "city: " + city);
+//                                Log.d(TAG, "state: " + state);
+//                                Log.d(TAG, "country: " + country);
+//                                Log.d(TAG, "postalCode: " + postalCode);
+//                                Log.d(TAG, "knownName: " + knownName);
+
+                                if (!country.equals("United States")) {
+                                    serviceAddressTextLayout.setError("Currently support United State only,");
+                                } else {
+                                    serviceAddressText.setText(address);
+                                    serviceAddressTextLayout.setErrorEnabled(false);
+                                }
                             }
                         }
                     });
@@ -218,11 +325,11 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(TAG, "Connection failed: " + connectionResult.getErrorCode());
+        Log.d(TAG, "Connection failed: " + connectionResult.getErrorCode());
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.e(TAG, "Connection suspendedd");
+        Log.d(TAG, "Connection suspendedd");
     }
 }

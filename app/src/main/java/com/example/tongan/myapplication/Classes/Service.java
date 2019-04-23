@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp;
 
 public class Service {
     private String publisher;
-    private String service_name;
+    private String serviceTitle;
     private double price;
     private String category;
     private String description;
@@ -13,15 +13,27 @@ public class Service {
     private double rating;
     private String[] buyers;
     private String service_image;
-    private Timestamp order_time;
+    private String order_time;
+    private String publishTime;
 
-    public Service(){}
+    public Service() {
+    }
 
-    public Service(String publisher, String service_name, double price, String category,
-                   String description, String address, int bought_times, double rating,
-                   String[] buyers, String service_image, Timestamp order_time){
+    public Service(String publisher, String serviceTitle, double price, String category, String description, String address, String publishTime) {
         this.publisher = publisher;
-        this.service_name = service_name;
+        this.serviceTitle = serviceTitle;
+        this.price = price;
+        this.category = category;
+        this.description = description;
+        this.address = address;
+        this.publishTime = publishTime;
+    }
+
+    public Service(String publisher, String serviceTitle, double price, String category,
+                   String description, String address, int bought_times, double rating,
+                   String[] buyers, String service_image, String order_time) {
+        this.publisher = publisher;
+        this.serviceTitle = serviceTitle;
         this.price = price;
         this.category = category;
         this.description = description;
@@ -41,16 +53,32 @@ public class Service {
         return price;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public double getRating() {
         return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public int getBought_times() {
         return bought_times;
     }
 
+    public void setBought_times(int bought_times) {
+        this.bought_times = bought_times;
+    }
+
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getCategory() {
@@ -61,74 +89,65 @@ public class Service {
         return description;
     }
 
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public String getService_image() {
-        return service_image;
-    }
-
-    public String getService_name() {
-        return service_name;
-    }
-
-    public String[] getBuyers() {
-        return buyers;
-    }
-
-    public Timestamp getOrder_time() {
-        return order_time;
+    public String getPublishTime() {
+        return publishTime;
     }
 
     /*
      * Setters
      */
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setBought_times(int bought_times) {
-        this.bought_times = bought_times;
-    }
-
-    public void setBuyers(String[] buyers) {
-        this.buyers = buyers;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setOrder_time(Timestamp order_time) {
-        this.order_time = order_time;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+    public String getPublisher() {
+        return publisher;
     }
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
 
-    public void setRating(double rating) {
-        this.rating = rating;
+    public String getService_image() {
+        return service_image;
     }
 
     public void setService_image(String service_image) {
         this.service_image = service_image;
     }
 
-    public void setService_name(String service_name) {
-        this.service_name = service_name;
+    public String getServiceTitle() {
+        return serviceTitle;
     }
 
+    public void setServiceTitle(String serviceTitle) {
+        this.serviceTitle = serviceTitle;
+    }
+
+    public String[] getBuyers() {
+        return buyers;
+    }
+
+    public void setBuyers(String[] buyers) {
+        this.buyers = buyers;
+    }
+
+    public String getOrder_time() {
+        return order_time;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setOrder_time(String order_time) {
+        this.order_time = order_time;
+    }
+
+    public void setPublishTime(String publishTime) {
+        this.publishTime = publishTime;
+    }
     /*
      * Other methods
      */

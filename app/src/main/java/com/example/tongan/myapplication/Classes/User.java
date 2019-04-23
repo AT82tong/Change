@@ -12,9 +12,10 @@ public class User {
     private int followers;
     private double rating;
     private String profileImage;
-    private ArrayList<String> sellNumbers;
-    private ArrayList<String> buyNumbers;
+    private ArrayList<String> postNumbers;
+    private ArrayList<String> requestNumbers;
     private ArrayList<String> images;
+
     public User (){}
     public User(String displayName, String Email, String Password, int followers, double ratings) {
         this.displayName = displayName;
@@ -40,20 +41,20 @@ public class User {
         this.images = images;
     }
 
-    public ArrayList<String> getSellNumbers() {
-        return sellNumbers;
+    public ArrayList<String> getPostNumbers() {
+        return postNumbers;
     }
 
-    public void setSellNumbers(ArrayList<String> sellNumbers) {
-        this.sellNumbers = sellNumbers;
+    public void setPostNumbers(ArrayList<String> postNumbers) {
+        this.postNumbers = postNumbers;
     }
 
-    public ArrayList<String> getBuyNumbers() {
-        return buyNumbers;
+    public ArrayList<String> getRequestNumbers() {
+        return requestNumbers;
     }
 
-    public void setBuyNumbers(ArrayList<String> buyNumbers) {
-        this.buyNumbers = buyNumbers;
+    public void setRequestNumbers(ArrayList<String> requestNumbers) {
+        this.requestNumbers = requestNumbers;
     }
 
     public String getDisplayName() {

@@ -2,7 +2,7 @@ package com.example.tongan.myapplication.Classes;
 
 import java.util.ArrayList;
 
-public class Buy {
+public class RequestService extends Service{
 
     private String buyNumber;
     private ArrayList<String> imageURL;
