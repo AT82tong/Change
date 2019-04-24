@@ -25,6 +25,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.ramotion.foldingcell.FoldingCell;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -54,6 +55,8 @@ public class ProfileFragment extends Fragment {
     RecyclerView documentationsRecyclerView;
     LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
+    FoldingCell foldingCell;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,6 +71,16 @@ public class ProfileFragment extends Fragment {
 
         documentationsRecyclerView = view.findViewById(R.id.profileDisplayDocumentations);
         documentationsRecyclerView.setLayoutManager(layoutManager);
+
+        // foldingCell example
+        foldingCell = view.findViewById(R.id.folding_cell);
+
+        foldingCell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                foldingCell.toggle(false);
+            }
+        });
 
         // update data
         documentReference = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
@@ -87,7 +100,7 @@ public class ProfileFragment extends Fragment {
                     if (map.get("profileImage") == null) {
                         profileImage.setImageDrawable(getResources().getDrawable(R.drawable.settings_profile_picture));
                     } else {
-                        Glide.with(ProfileFragment.this).load(map.get("profileImage").toString()).into(profileImage);
+                        Glide.with(getActivity()).load(map.get("profileImage").toString()).into(profileImage);
                     }
                 }
             }
