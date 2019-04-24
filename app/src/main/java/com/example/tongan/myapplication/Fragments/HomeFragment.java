@@ -17,6 +17,7 @@ import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.Timer;
 
@@ -38,17 +39,30 @@ public class HomeFragment extends Fragment {
 
     private DatabaseHelper db = new DatabaseHelper();
 
+    FoldingCell foldingCell;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
-        homePageAds = (ViewPager) v.findViewById(R.id.homePage_ads);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        homePageAds = (ViewPager) view.findViewById(R.id.homePage_ads);
         homePageAdsAdapter = new HomePageAdsAdapter(this.getActivity());
         homePageAds.setAdapter(homePageAdsAdapter);
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new imageAutoSlider(), 5000, 5000);
+
+
+        // foldingCell example
+        foldingCell = view.findViewById(R.id.folding_cell);
+
+        foldingCell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                foldingCell.toggle(false);
+            }
+        });
 
 //        Log.d(TAG, "getCurrentUser: " + FirebaseAuth.getInstance().getCurrentUser());
 //        Log.d(TAG, "getEmail: " + db.getCurrentUserEmail());
@@ -102,8 +116,7 @@ public class HomeFragment extends Fragment {
 //                                            }
 //        );
 
-
-        return v;
+        return view;
     }
 
     @Override

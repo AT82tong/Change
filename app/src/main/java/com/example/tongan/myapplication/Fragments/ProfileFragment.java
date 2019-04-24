@@ -72,15 +72,15 @@ public class ProfileFragment extends Fragment {
         documentationsRecyclerView = view.findViewById(R.id.profileDisplayDocumentations);
         documentationsRecyclerView.setLayoutManager(layoutManager);
 
-        // foldingCell example
-        foldingCell = view.findViewById(R.id.folding_cell);
-
-        foldingCell.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                foldingCell.toggle(false);
-            }
-        });
+//        // foldingCell example
+//        foldingCell = view.findViewById(R.id.folding_cell);
+//
+//        foldingCell.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                foldingCell.toggle(false);
+//            }
+//        });
 
         // update data
         documentReference = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
