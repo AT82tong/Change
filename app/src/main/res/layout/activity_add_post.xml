@@ -53,7 +53,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/service_title_inputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -68,7 +68,7 @@
                     android:inputType="text"
                     android:singleLine="true"
                     android:textSize="20dp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <View
@@ -80,7 +80,7 @@
                 android:background="@color/grey" />
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/service_price_inputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -98,7 +98,7 @@
                     android:inputType="numberDecimal"
                     android:singleLine="true"
                     android:textSize="20dp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <View
@@ -110,7 +110,7 @@
                 android:background="@color/grey" />
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/service_description_inputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -130,7 +130,7 @@
                     android:maxLines="5"
                     android:singleLine="false"
                     android:textSize="20dp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <View
@@ -142,7 +142,7 @@
                 android:background="@color/grey" />
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/service_address_inputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -159,7 +159,7 @@
                     android:hint="Address"
                     android:textSize="20dp"
                     android:drawableRight="@drawable/location"/>
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <View

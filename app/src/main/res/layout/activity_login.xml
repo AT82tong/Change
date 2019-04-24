@@ -16,7 +16,7 @@
         android:layout_marginTop="90dp"
         android:src="@drawable/temp_icon" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/login_email_layout"
         android:layout_width="230dp"
         android:layout_height="72dp"
@@ -35,10 +35,10 @@
             android:inputType="textEmailAddress"
             android:textSize="20sp" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/login_password_layout"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
@@ -57,7 +57,7 @@
             android:inputType="textPassword"
             android:textSize="20sp" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/login_button_login"

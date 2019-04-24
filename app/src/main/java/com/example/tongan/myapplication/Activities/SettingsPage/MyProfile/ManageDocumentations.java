@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -42,7 +42,7 @@ public class ManageDocumentations extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
 
     ImageView backBtn;
-    Button addDocumentations;
+    ImageView addDocumentations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class ManageDocumentations extends AppCompatActivity {
     public void takePhoto() {
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePicture, 0);
-        Toast.makeText(ManageDocumentations.this, "takePhoto()",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ManageDocumentations.this, "takePhoto()",Toast.LENGTH_SHORT).show();
 
     }
 
@@ -101,7 +101,7 @@ public class ManageDocumentations extends AppCompatActivity {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto , 1);
-        Toast.makeText(ManageDocumentations.this, "pickPhoto()",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(ManageDocumentations.this, "pickPhoto()",Toast.LENGTH_SHORT).show();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
@@ -193,6 +193,7 @@ public class ManageDocumentations extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         imageAL.add(uri.toString());
                         doc.update("images", imageAL);
+                        Toast.makeText(ManageDocumentations.this, "Document Upload Successful.",Toast.LENGTH_SHORT).show();
                     }
                 });
             }

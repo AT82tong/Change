@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/grad_light_maya_blue_bottom_aquamarine_top">
 
-        <android.support.v7.widget.SearchView
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/searchBox"
             android:layout_width="392dp"
             android:layout_height="35dp"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/lightMayaBlue">
 
-                <android.support.v4.view.ViewPager
+                <androidx.viewpager.widget.ViewPager
                     android:id="@+id/homePage_ads"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
