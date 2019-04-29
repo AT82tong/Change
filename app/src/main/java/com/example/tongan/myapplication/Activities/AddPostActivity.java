@@ -7,6 +7,8 @@ import android.location.Location;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.tongan.myapplication.Classes.RequestService;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -229,12 +231,13 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         return isValidated;
     }
 
+    // add to database
     public void addPostServiceToDatabase(final String publisher, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress ) {
         randomID = UUID.randomUUID().toString();
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        PostService postService = new PostService(publisher, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date));
+        PostService postService = new PostService(publisher, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null);
         // add post service information to PostService database
         // get the randomID and update postNumbers in User database
         firebaseFirestore.collection("PostServices").document(randomID)
@@ -244,6 +247,27 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                     public void onSuccess(Void aVoid) {
                         postNumbers.add(randomID);
                         documentReference.update("postNumbers", postNumbers);
+                        Toast.makeText(AddPostActivity.this, "Post Service Successful.",Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Post Service Successful.");
+                        onBackPressed();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error saving to database", e);
+                    }
+                });
+
+
+        // add info to RequestService database
+        firebaseFirestore.collection("RequestService").document(randomID)
+                .set(postService)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        postNumbers.add(randomID);
+                        documentReference.update("requestNumbers", postNumbers);
                         Toast.makeText(AddPostActivity.this, "Post Service Successful.",Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Post Service Successful.");
                         onBackPressed();

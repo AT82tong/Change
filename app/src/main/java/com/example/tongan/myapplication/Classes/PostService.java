@@ -9,8 +9,8 @@ public class PostService extends Service {
     private String sellNumber;
     private ArrayList<String> imageURL;
 
-    public PostService(String publisher, String serviceTitle, double price, String category, String description, String address, String publishTime) {
-        super(publisher, serviceTitle, price, category, description, address, publishTime);
+    public PostService(String publisher, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage) {
+        super(publisher, serviceTitle, price, category, description, address, publishTime, profileImage);
     }
 
 

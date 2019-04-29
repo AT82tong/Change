@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="1dp">
+
+    <com.ramotion.foldingcell.FoldingCell
+        android:id="@+id/folding_cell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        ​
+
+        <LinearLayout
+            android:id="@+id/cell_content_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_green_dark"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="Unfold First Level"
+                android:textSize="24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="Unfold Second Level"
+                android:textSize="24dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="Accept"
+                android:textAllCaps="true"
+                android:textSize="24dp" />
+        </LinearLayout>
+        ​
+
+        <LinearLayout
+            android:id="@+id/cell_title_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="120dp"
+                android:layout_height="170dp"
+                android:layout_centerInParent="true"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="1dp"
+                app:cardMaxElevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/manatee">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/requesterImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="105dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/settings_profile_picture" />
+
+                    <TextView
+                        android:id="@+id/requesterName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/requesterImage"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="5dp"
+                        android:autoSizeTextType="uniform"
+                        android:gravity="center"
+                        android:text="Requester Name"
+                        android:textColor="@color/white"
+                        android:textSize="200sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/serviceTitle"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="top|center"
+                        android:singleLine="true"
+                        android:text="Car Battery Change"
+                        android:textColor="@color/black"
+                        android:textSize="25sp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <TextView
+                        android:id="@+id/serviceLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/serviceTitle"
+                        android:text="West Lafayette, IN."
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="20sp"/>
+
+                    <TextView
+                        android:id="@+id/serviceCategories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/serviceLocation"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="15sp"
+                        android:layout_marginStart="20dp"
+                        android:singleLine="true"
+                        android:text="Categories Categories Categories Categories"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="10dp"
+                                android:gravity="center"
+                                android:text="Price"
+                                android:textAllCaps="true"
+                                android:textColor="@color/noble"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/servicePrice"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="bottom|center"
+                                android:text="$1234.90"
+                                android:textColor="@color/noble"
+                                android:textSize="20sp" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="2dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/black2" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="10dp"
+                                android:gravity="center"
+                                android:text="Before"
+                                android:textAllCaps="true"
+                                android:textColor="@color/noble"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/completionBefore"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="bottom|center"
+                                android:text="Dec. 12"
+                                android:textColor="@color/noble"
+                                android:textSize="20sp" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" -->
+                <!--android:text="Price"-->
+                <!--android:layout_above="@id/servicePrice"/>-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/servicePrice"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:text="$120.00"-->
+                <!--android:textSize="25sp" />-->
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" -->
+                <!--android:text="Completion Before"-->
+                <!--android:layout_above="@id/completionBefore"/>-->
+                <!---->
+                <!--<TextView-->
+                <!--android:id="@+id/completionBefore"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_toEndOf="@id/servicePrice"-->
+                <!--android:gravity="end"-->
+                <!--android:textSize="25sp"-->
+                <!--android:text="Dec. 20, 2019" />-->
+
+            </LinearLayout>
+
+        </LinearLayout>
+        ​
+    </com.ramotion.foldingcell.FoldingCell>
+
+</RelativeLayout>
+

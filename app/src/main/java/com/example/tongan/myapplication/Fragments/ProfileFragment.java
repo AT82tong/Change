@@ -69,6 +69,7 @@ public class ProfileFragment extends Fragment {
         profileRating = view.findViewById(R.id.profile_rating);
         documentationText = view.findViewById(R.id.documentationsText);
 
+        // documentations recycler view
         documentationsRecyclerView = view.findViewById(R.id.profileDisplayDocumentations);
         documentationsRecyclerView.setLayoutManager(layoutManager);
 

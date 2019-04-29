@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 /**
- * Instrumented test, which will execute on an Android device.
+ * Instrumented grad_light_maya_blue_bottom_scampi_top, which will execute on an Android device.
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
+        // Context of the app under grad_light_maya_blue_bottom_scampi_top.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.example.tongan.myapplication", appContext.getPackageName());

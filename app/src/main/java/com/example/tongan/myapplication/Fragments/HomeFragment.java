@@ -4,6 +4,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,16 +14,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.tongan.myapplication.Adapters.FoldingCellRecyclerViewAdapter;
+import com.example.tongan.myapplication.Adapters.HomeCategoryIconHorizontalRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.HomePageAdsAdapter;
+import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ramotion.foldingcell.FoldingCell;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Timer;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAdapter.OnFoldingCellListener {
 
     private static final String TAG = "HomeFragment";
 
@@ -41,6 +48,9 @@ public class HomeFragment extends Fragment {
 
     FoldingCell foldingCell;
 
+    RecyclerView documentationsRecyclerView;
+    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,6 +63,14 @@ public class HomeFragment extends Fragment {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new imageAutoSlider(), 5000, 5000);
 
+        // category icons recyclers view
+        // not using this method ATM
+//        documentationsRecyclerView = view.findViewById(R.id.categoryIcons);
+//        documentationsRecyclerView.setLayoutManager(layoutManager);
+//        ArrayList<Integer> images = new ArrayList<>();
+//        ArrayList<String> names = new ArrayList<>();
+//        populateImages(images);
+//        populateNames(names);
 
         // foldingCell example
         foldingCell = view.findViewById(R.id.folding_cell);
@@ -79,7 +97,7 @@ public class HomeFragment extends Fragment {
 
 
 
-//-----        DOTS         -----
+//-----        DOTS         ----- (CURRENTLY NOT USING)
 //        sliderDot = (LinearLayout) v.findViewById(R.id.sliderDots);
 //        dotsCount = homePageAdsAdapter.getCount();
 //        dots = new ImageView[dotsCount];
@@ -139,6 +157,12 @@ public class HomeFragment extends Fragment {
 
     }
 
+
+    @Override
+    public void onFoldingCellListerner(int position) {
+
+    }
+
     public class imageAutoSlider extends java.util.TimerTask {
 
         @Override
@@ -156,6 +180,24 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+
+
+
+    // not needed for now (CURRENTLY NOT USING)
+//    private void initRecyclerView(ArrayList<String> images, ArrayList<String> names) {
+//        HomeCategoryIconHorizontalRecyclerViewAdapter adapter = new HomeCategoryIconHorizontalRecyclerViewAdapter(getActivity(), images, names);
+//        documentationsRecyclerView.setAdapter(adapter);
+//    }
+//
+//    public void populateImages(ArrayList<Integer> images) {
+//        images.add(R.drawable.service_garden);
+//
+//    }
+//
+//    public void populateNames(ArrayList<String> names) {
+//        names.add("Garden");
+//
+//    }
 
 
 //    @Override

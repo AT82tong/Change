@@ -16,10 +16,20 @@ public class Service {
     private String order_time;
     private String publishTime;
 
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    private String profileImage;
+
     public Service() {
     }
 
-    public Service(String publisher, String serviceTitle, double price, String category, String description, String address, String publishTime) {
+    public Service(String publisher, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage) {
         this.publisher = publisher;
         this.serviceTitle = serviceTitle;
         this.price = price;
@@ -27,6 +37,7 @@ public class Service {
         this.description = description;
         this.address = address;
         this.publishTime = publishTime;
+        this.profileImage = profileImage;
     }
 
     public Service(String publisher, String serviceTitle, double price, String category,
