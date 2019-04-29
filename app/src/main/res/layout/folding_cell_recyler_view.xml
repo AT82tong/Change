@@ -8,7 +8,8 @@
     <com.ramotion.foldingcell.FoldingCell
         android:id="@+id/folding_cell"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
         ​
 
         <LinearLayout
@@ -21,25 +22,106 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="500dp"
                 android:gravity="center"
                 android:text="Unfold First Level"
                 android:textSize="24dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:gravity="center"
-                android:text="Unfold Second Level"
-                android:textSize="24dp" />
+            <RelativeLayout
+                android:id="@+id/account_settings"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/folding_cell"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/setting_item_selector"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/textRequester"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Requester"
+                    android:textAllCaps="true"
+                    android:textColor="@color/noble"
+                    android:textStyle="bold" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_below="@id/textRequester"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/circle"
+                    android:src="@drawable/ic_launcher_background" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toRightOf="@id/profile_image"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profile_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Requester Name"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RatingBar
+                            android:id="@+id/serviceRequesterRating"
+                            style="@style/Widget.AppCompat.RatingBar.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom" />
+
+                        <TextView
+                            android:id="@+id/serviceRatingNumbers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="(30)"
+                            android:textSize="15dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:paddingEnd="10dp"
+                    android:src="@drawable/right_arrow" />
+
+            </RelativeLayout>
 
             <Button
+                android:id="@+id/serviceAccept"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@color/turbo"
                 android:gravity="center"
                 android:text="Accept"
                 android:textAllCaps="true"
                 android:textSize="24dp" />
+
         </LinearLayout>
         ​
 
@@ -94,6 +176,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:background="@color/white"
                 android:layout_marginRight="5dp"
                 android:orientation="vertical">
 
@@ -106,22 +189,22 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp"
                         android:gravity="top|center"
                         android:singleLine="true"
                         android:text="Car Battery Change"
                         android:textColor="@color/black"
-                        android:textSize="25sp"
-                        android:layout_marginBottom="5dp"/>
+                        android:textSize="25sp" />
 
                     <TextView
                         android:id="@+id/serviceLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/serviceTitle"
-                        android:text="West Lafayette, IN."
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="5dp"
-                        android:textSize="20sp"/>
+                        android:text="West Lafayette, IN."
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/serviceCategories"
@@ -129,10 +212,12 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/serviceLocation"
                         android:layout_centerHorizontal="true"
-                        android:textSize="15sp"
                         android:layout_marginStart="20dp"
+                        android:layout_marginTop="5dp"
                         android:singleLine="true"
-                        android:text="Categories Categories Categories Categories"/>
+                        android:text="Categories Categories Categories Categories"
+                        android:textSize="15sp" />
+
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -173,8 +258,8 @@
 
                         <View
                             android:layout_width="2dp"
-                            android:layout_marginTop="20dp"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="20dp"
                             android:background="@color/black2" />
 
                         <RelativeLayout
@@ -207,41 +292,12 @@
 
                 </RelativeLayout>
 
-                <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content" -->
-                <!--android:text="Price"-->
-                <!--android:layout_above="@id/servicePrice"/>-->
-
-                <!--<TextView-->
-                <!--android:id="@+id/servicePrice"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:text="$120.00"-->
-                <!--android:textSize="25sp" />-->
-
-                <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content" -->
-                <!--android:text="Completion Before"-->
-                <!--android:layout_above="@id/completionBefore"/>-->
-                <!---->
-                <!--<TextView-->
-                <!--android:id="@+id/completionBefore"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_toEndOf="@id/servicePrice"-->
-                <!--android:gravity="end"-->
-                <!--android:textSize="25sp"-->
-                <!--android:text="Dec. 20, 2019" />-->
-
             </LinearLayout>
 
         </LinearLayout>
         ​
     </com.ramotion.foldingcell.FoldingCell>
+
 
 </RelativeLayout>
 

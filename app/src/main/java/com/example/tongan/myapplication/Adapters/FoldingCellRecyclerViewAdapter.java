@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.R;
+import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
 
@@ -20,54 +21,86 @@ public class FoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<Folding
 
     public static final String TAG = "FoldingCellRecyclerViewAdapter";
 
-    private String image;
-    private String name;
-    private String title;
+    //private String image;
+    private ArrayList<String> nameAL;
+//    private String title;
+//    private String location;
+//    private String price;
+//    private String completion;
     private Context context;
 
-    public FoldingCellRecyclerViewAdapter(Context context, String image, String name, String title) {
-        this.image = image;
-        this.name = name;
-        this.title = title;
+    private OnFoldingCellListener onFoldingCellListener;
+
+
+    public FoldingCellRecyclerViewAdapter(Context context, ArrayList<String> nameAL, OnFoldingCellListener onFoldingCellListener) {
+        //this.image = image;
+        this.nameAL = nameAL;
+//        this.title = title;
+//        this.location = location;
+//        this.price = price;
+//        this.completion = completion;
         this.context = context;
+        this.onFoldingCellListener = onFoldingCellListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.folding_cell_recyler_view, viewGroup, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, onFoldingCellListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-            Glide.with(context).asBitmap().load(image).into(viewHolder.image);
-            viewHolder.name.setText(name);
-            viewHolder.title.setText(title);
+            //Glide.with(context).asBitmap().load(image).into(viewHolder.image);
+            viewHolder.name.setText(nameAL.get(i));
+//            viewHolder.title.setText(title);
+//            viewHolder.location.setText(location);
+//            viewHolder.price.setText(price);
+//            viewHolder.completion.setText(completion);
     }
 
 
     @Override
     public int getItemCount() {
-        return 0;
+        return nameAL.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        FoldingCell foldingCell;
         CircleImageView image;
         TextView name;
         TextView title;
+        TextView location;
+        TextView price;
+        TextView completion;
 
-        public ViewHolder(@NonNull View itemView) {
+        OnFoldingCellListener onFoldingCellListener;
+
+        public ViewHolder(@NonNull View itemView, OnFoldingCellListener onFoldingCellListener) {
             super(itemView);
-            image = itemView.findViewById(R.id.requesterImage);
+            foldingCell = itemView.findViewById(R.id.folding_cell);
+            //image = itemView.findViewById(R.id.requesterImage);
             name = itemView.findViewById(R.id.requesterName);
-            title = itemView.findViewById(R.id.serviceTitle);
+//            title = itemView.findViewById(R.id.serviceTitle);
+//            location = itemView.findViewById(R.id.serviceLocation);
+//            price = itemView.findViewById(R.id.servicePrice);
+//            completion = itemView.findViewById(R.id.completionBefore);
+
+            this.onFoldingCellListener = onFoldingCellListener;
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    foldingCell.toggle(false);
+                }
+            });
         }
+
     }
 
     public interface OnFoldingCellListener {
-        void onFoldingCellListerner(int position);
+        void onFoldingCellClick(int position);
     }
 }

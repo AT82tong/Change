@@ -15,16 +15,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.tongan.myapplication.Adapters.FoldingCellRecyclerViewAdapter;
-import com.example.tongan.myapplication.Adapters.HomeCategoryIconHorizontalRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.HomePageAdsAdapter;
-import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ramotion.foldingcell.FoldingCell;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Timer;
 
@@ -35,9 +32,13 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
     //private FirebaseFirestore db = FirebaseFirestore.getInstance();
     //private final Context context = this.getActivity();
 
-    ViewPager homePageAds;
-    HomePageAdsAdapter homePageAdsAdapter;
-    LinearLayout sliderDot;
+    private ViewPager homePageAds;
+    private HomePageAdsAdapter homePageAdsAdapter;
+    private LinearLayout sliderDot;
+
+    private RecyclerView foldingCellRecyclerView;
+    private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+
     private int dotsCount;
     private ImageView[] dots;
 
@@ -46,10 +47,10 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
 
     private DatabaseHelper db = new DatabaseHelper();
 
-    FoldingCell foldingCell;
+    private FoldingCell foldingCell;
 
-    RecyclerView documentationsRecyclerView;
-    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+//    RecyclerView documentationsRecyclerView;
+//    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
     @Nullable
     @Override
@@ -63,6 +64,10 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new imageAutoSlider(), 5000, 5000);
 
+        foldingCellRecyclerView = view.findViewById(R.id.foldingCellRecyclerView);
+        foldingCellRecyclerView.setLayoutManager(linearLayoutManager);
+        initRecyclerView();
+
         // category icons recyclers view
         // not using this method ATM
 //        documentationsRecyclerView = view.findViewById(R.id.categoryIcons);
@@ -73,14 +78,14 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
 //        populateNames(names);
 
         // foldingCell example
-        foldingCell = view.findViewById(R.id.folding_cell);
-
-        foldingCell.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                foldingCell.toggle(false);
-            }
-        });
+//        foldingCell = view.findViewById(R.id.folding_cell2);
+//
+//        foldingCell.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                foldingCell.toggle(false);
+//            }
+//        });
 
 //        Log.d(TAG, "getCurrentUser: " + FirebaseAuth.getInstance().getCurrentUser());
 //        Log.d(TAG, "getEmail: " + db.getCurrentUserEmail());
@@ -145,8 +150,6 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "here Page");
-
-
     }
 
     @Override
@@ -157,10 +160,19 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
 
     }
 
+    private void initRecyclerView() {
+        ArrayList<String> name = new ArrayList<>();
+        name.add("a");
+        name.add("b");
+        name.add("c");
+        FoldingCellRecyclerViewAdapter adapter = new FoldingCellRecyclerViewAdapter(getActivity(), name, this);
+        foldingCellRecyclerView.setAdapter(adapter);
+    }
 
     @Override
-    public void onFoldingCellListerner(int position) {
-
+    public void onFoldingCellClick(int position) {
+        //Toast.makeText( getContext(), "onFoldingCellClick: Clicked at position " + position, Toast.LENGTH_LONG).show();
+        //Log.d(TAG, "onFoldingCellClick: Clicked");
     }
 
     public class imageAutoSlider extends java.util.TimerTask {
