@@ -155,9 +155,7 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Log.d(TAG, "HomeFragment Page");
-
     }
 
     private void initRecyclerView() {
