@@ -3,6 +3,7 @@ package com.example.tongan.myapplication.Classes;
 import com.google.firebase.Timestamp;
 
 public class Service {
+    private String email;
     private String publisher;
     private String serviceTitle;
     private double price;
@@ -15,21 +16,12 @@ public class Service {
     private String service_image;
     private String order_time;
     private String publishTime;
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
-
     private String profileImage;
-
     public Service() {
     }
 
-    public Service(String publisher, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage) {
+    public Service(String email, String publisher, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage) {
+        this.email = email;
         this.publisher = publisher;
         this.serviceTitle = serviceTitle;
         this.price = price;
@@ -56,9 +48,21 @@ public class Service {
         this.order_time = order_time;
     }
 
-    /*
-     * Getters
-     */
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 
     public double getPrice() {
         return price;
@@ -96,20 +100,24 @@ public class Service {
         return category;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getPublishTime() {
         return publishTime;
     }
 
-    /*
-     * Setters
-     */
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPublishTime(String publishTime) {
+        this.publishTime = publishTime;
     }
 
     public String getPublisher() {
@@ -148,21 +156,9 @@ public class Service {
         return order_time;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public void setOrder_time(String order_time) {
         this.order_time = order_time;
     }
-
-    public void setPublishTime(String publishTime) {
-        this.publishTime = publishTime;
-    }
-    /*
-     * Other methods
-     */
-
 }
 
 

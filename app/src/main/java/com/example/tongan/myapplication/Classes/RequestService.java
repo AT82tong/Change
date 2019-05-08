@@ -7,7 +7,7 @@ public class RequestService extends Service{
     private String buyNumber;
     private ArrayList<String> imageURL;
 
-    public RequestService(String publisher, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage) {
-        super(publisher, serviceTitle, price, category, description, address, publishTime, profileImage);
+    public RequestService(String email, String publisher, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage) {
+        super(email, publisher, serviceTitle, price, category, description, address, publishTime, profileImage);
     }
 }

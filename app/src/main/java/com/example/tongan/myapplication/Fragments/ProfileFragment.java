@@ -83,7 +83,7 @@ public class ProfileFragment extends Fragment {
 //            }
 //        });
 
-        // update data
+        // get info from database and update UI
         documentReference = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override

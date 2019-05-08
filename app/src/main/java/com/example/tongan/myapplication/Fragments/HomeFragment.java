@@ -18,11 +18,19 @@ import com.example.tongan.myapplication.Adapters.FoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.HomePageAdsAdapter;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.ramotion.foldingcell.FoldingCell;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Timer;
 
 public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAdapter.OnFoldingCellListener {
@@ -31,6 +39,8 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
 
     //private FirebaseFirestore db = FirebaseFirestore.getInstance();
     //private final Context context = this.getActivity();
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private DocumentReference documentReference;
 
     private ViewPager homePageAds;
     private HomePageAdsAdapter homePageAdsAdapter;
@@ -64,18 +74,12 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new imageAutoSlider(), 5000, 5000);
 
+
+        loadServicesFromDatabase();
+
         foldingCellRecyclerView = view.findViewById(R.id.foldingCellRecyclerView);
         foldingCellRecyclerView.setLayoutManager(linearLayoutManager);
         initRecyclerView();
-
-        // category icons recyclers view
-        // not using this method ATM
-//        documentationsRecyclerView = view.findViewById(R.id.categoryIcons);
-//        documentationsRecyclerView.setLayoutManager(layoutManager);
-//        ArrayList<Integer> images = new ArrayList<>();
-//        ArrayList<String> names = new ArrayList<>();
-//        populateImages(images);
-//        populateNames(names);
 
         // foldingCell example
 //        foldingCell = view.findViewById(R.id.folding_cell2);
@@ -142,6 +146,25 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
         return view;
     }
 
+    private void loadServicesFromDatabase() {
+        firebaseFirestore.collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    ArrayList<String> titleAL = new ArrayList<>();
+                    ArrayList<String> priceAL = new ArrayList<>();
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        Log.d(TAG, "onComplete: " + documentSnapshot.getId());
+                        Map<String, Object> map = documentSnapshot.getData();
+                        titleAL.add(map.get("serviceTitle").toString());
+                        priceAL.add(df.format(map.get("price")));
+                    }
+                }
+            }
+        });
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle saveInstanceState) {
         super.onActivityCreated(saveInstanceState);
@@ -190,24 +213,6 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
             }
         }
     }
-
-
-
-    // not needed for now (CURRENTLY NOT USING)
-//    private void initRecyclerView(ArrayList<String> images, ArrayList<String> names) {
-//        HomeCategoryIconHorizontalRecyclerViewAdapter adapter = new HomeCategoryIconHorizontalRecyclerViewAdapter(getActivity(), images, names);
-//        documentationsRecyclerView.setAdapter(adapter);
-//    }
-//
-//    public void populateImages(ArrayList<Integer> images) {
-//        images.add(R.drawable.service_garden);
-//
-//    }
-//
-//    public void populateNames(ArrayList<String> names) {
-//        names.add("Garden");
-//
-//    }
 
 
 //    @Override
