@@ -83,7 +83,7 @@ public class ProfileFragment extends Fragment {
 //            }
 //        });
 
-        // update data
+        // update data, load from database
         documentReference = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -152,8 +152,6 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-    // public
-
 
 //        firebaseFirestore.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 //            @Override

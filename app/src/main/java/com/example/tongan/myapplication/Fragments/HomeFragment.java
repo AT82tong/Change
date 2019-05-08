@@ -20,6 +20,8 @@ import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
@@ -31,6 +33,9 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
 
     //private FirebaseFirestore db = FirebaseFirestore.getInstance();
     //private final Context context = this.getActivity();
+
+    private DocumentReference documentReference;
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     private ViewPager homePageAds;
     private HomePageAdsAdapter homePageAdsAdapter;
@@ -66,7 +71,7 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
 
         foldingCellRecyclerView = view.findViewById(R.id.foldingCellRecyclerView);
         foldingCellRecyclerView.setLayoutManager(linearLayoutManager);
-        initRecyclerView();
+        setUpFoldingCellRecyclerView();
 
         // category icons recyclers view
         // not using this method ATM
@@ -158,8 +163,9 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
         Log.d(TAG, "HomeFragment Page");
     }
 
-    private void initRecyclerView() {
+    private void setUpFoldingCellRecyclerView() {
         ArrayList<String> name = new ArrayList<>();
+        //documentReference = firebaseFirestore.collection("PostServices")
         name.add("a");
         name.add("b");
         name.add("c");
