@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="56dp"
+    android:layout_marginBottom="60dp"
     android:clipChildren="false"
     android:clipToPadding="false">
 
@@ -28,8 +28,8 @@
                 android:layout_height="150dp"
                 android:layout_margin="9dp"
                 android:background="@drawable/circle"
-                android:src="@drawable/settings_profile_picture"
-                android:padding="20dp" />
+                android:padding="20dp"
+                android:src="@drawable/settings_profile_picture" />
 
         </RelativeLayout>
 
@@ -152,89 +152,44 @@
         android:layout_below="@id/linlay"></ScrollView>
 
     <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/linlay"
-            android:background="@color/grey">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-
-        <TextView
-            style="@style/TxtTitle"
-            android:id="@+id/documentationsText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linlay"
-            android:fontFamily="sans-serif"
-            android:text="Documentations"
-            android:textSize="18dp"
-            android:visibility="visible" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/profileDisplayDocumentations"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/documentationsText"
-            android:layout_marginTop="1dp"
-            android:orientation="horizontal">
-        </androidx.recyclerview.widget.RecyclerView>
-
-    <com.ramotion.foldingcell.FoldingCell
-        android:layout_marginTop="10dp"
-        android:id="@+id/folding_cell"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profileDisplayDocumentations">
-        ​
-        <LinearLayout
-            android:id="@+id/cell_content_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@android:color/holo_green_dark"
-            android:visibility="gone">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:text="Unfold First Level"
-                android:gravity="center"
-                android:textSize="24dp"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linlay"
+        android:background="@color/grey">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:text="Unfold Second Level"
-                android:gravity="center"
-                android:textSize="24dp"/>
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:text="Unfold Button"
-                android:gravity="center"
-                android:textSize="24dp"/>
-        </LinearLayout>
-        ​
         <LinearLayout
-            android:id="@+id/cell_title_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@android:color/holo_blue_dark"
-                android:text="Base Level"
-                android:textSize="24dp"
-                android:gravity="center"/>
+
         </LinearLayout>
-        ​
-    </com.ramotion.foldingcell.FoldingCell>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/documentationsText"
+        style="@style/TxtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linlay"
+        android:fontFamily="sans-serif"
+        android:text="Documentations"
+        android:textSize="18dp"
+        android:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/profileDisplayDocumentations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/documentationsText"
+        android:layout_marginTop="1dp"
+        android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/foldingCellRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profileDisplayDocumentations"
+        android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>
