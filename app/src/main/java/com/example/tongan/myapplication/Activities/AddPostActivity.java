@@ -95,6 +95,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     private String serviceAddress;
     private String serviceCategory;
 
+    private DatabaseHelper databaseHelper = new DatabaseHelper();
     private String randomID;
     private ArrayList<String> postNumbers;
     private DocumentReference documentReference;
@@ -232,12 +233,12 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     }
 
     // add to database
-    public void addPostServiceToDatabase(final String publisher, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress ) {
+    public void addPostServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress ) {
         randomID = UUID.randomUUID().toString();
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        PostService postService = new PostService(publisher, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null);
+        PostService postService = new PostService(publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null);
         // add post service information to PostService database
         // get the randomID and update postNumbers in User database
         firebaseFirestore.collection("PostServices").document(randomID)
@@ -331,7 +332,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 //                                Log.d(TAG, "knownName: " + knownName);
 
                                 if (!country.equals("United States")) {
-                                    serviceAddressTextLayout.setError("Currently support United State only,");
+                                    serviceAddressTextLayout.setError("Currently supporting United State only,");
                                 } else {
                                     serviceAddressText.setText(address);
                                     serviceAddressTextLayout.setErrorEnabled(false);

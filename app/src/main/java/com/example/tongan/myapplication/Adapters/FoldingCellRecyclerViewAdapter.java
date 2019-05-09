@@ -32,7 +32,7 @@ public class FoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<Folding
     private OnFoldingCellListener onFoldingCellListener;
 
 
-    public FoldingCellRecyclerViewAdapter(Context context, ArrayList<String> nameAL, OnFoldingCellListener onFoldingCellListener) {
+    public FoldingCellRecyclerViewAdapter(Context context, ArrayList<String> nameAL) {
         //this.image = image;
         this.nameAL = nameAL;
 //        this.title = title;
@@ -40,7 +40,6 @@ public class FoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<Folding
 //        this.price = price;
 //        this.completion = completion;
         this.context = context;
-        this.onFoldingCellListener = onFoldingCellListener;
     }
 
     @NonNull

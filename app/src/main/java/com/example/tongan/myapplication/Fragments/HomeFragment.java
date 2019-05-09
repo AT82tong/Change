@@ -49,15 +49,15 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
     private RecyclerView foldingCellRecyclerView;
     private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
-    private int dotsCount;
-    private ImageView[] dots;
-
-    private FirebaseAuth fireBaseAuth;
-    private FirebaseUser fireBaseUser;
-
-    private DatabaseHelper db = new DatabaseHelper();
-
-    private FoldingCell foldingCell;
+//    private int dotsCount;
+//    private ImageView[] dots;
+//
+//    private FirebaseAuth fireBaseAuth;
+//    private FirebaseUser fireBaseUser;
+//
+//    private DatabaseHelper db = new DatabaseHelper();
+//
+//    private FoldingCell foldingCell;
 
 //    RecyclerView documentationsRecyclerView;
 //    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -146,6 +146,7 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
         return view;
     }
 
+    // load all services from database
     private void loadServicesFromDatabase() {
         firebaseFirestore.collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -154,9 +155,9 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
                     DecimalFormat df = new DecimalFormat("#.00");
                     ArrayList<String> titleAL = new ArrayList<>();
                     ArrayList<String> priceAL = new ArrayList<>();
-                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                        Log.d(TAG, "onComplete: " + documentSnapshot.getId());
-                        Map<String, Object> map = documentSnapshot.getData();
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                        Log.d(TAG, "onComplete: " + queryDocumentSnapshot.getId());
+                        Map<String, Object> map = queryDocumentSnapshot.getData();
                         titleAL.add(map.get("serviceTitle").toString());
                         priceAL.add(df.format(map.get("price")));
                     }
@@ -186,7 +187,7 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
         name.add("a");
         name.add("b");
         name.add("c");
-        FoldingCellRecyclerViewAdapter adapter = new FoldingCellRecyclerViewAdapter(getActivity(), name, this);
+        FoldingCellRecyclerViewAdapter adapter = new FoldingCellRecyclerViewAdapter(getActivity(), name);
         foldingCellRecyclerView.setAdapter(adapter);
     }
 

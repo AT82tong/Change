@@ -3,8 +3,7 @@ package com.example.tongan.myapplication.Classes;
 import com.google.firebase.Timestamp;
 
 public class Service {
-    private String email;
-    private String publisher;
+    private String publisherEmail;
     private String serviceTitle;
     private double price;
     private String category;
@@ -19,10 +18,8 @@ public class Service {
     private String profileImage;
     public Service() {
     }
-
-    public Service(String email, String publisher, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage) {
-        this.email = email;
-        this.publisher = publisher;
+    public Service(String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage) {
+        this.publisherEmail = publisherEmail;
         this.serviceTitle = serviceTitle;
         this.price = price;
         this.category = category;
@@ -35,7 +32,7 @@ public class Service {
     public Service(String publisher, String serviceTitle, double price, String category,
                    String description, String address, int bought_times, double rating,
                    String[] buyers, String service_image, String order_time) {
-        this.publisher = publisher;
+        this.publisherEmail = publisher;
         this.serviceTitle = serviceTitle;
         this.price = price;
         this.category = category;
@@ -46,14 +43,6 @@ public class Service {
         this.buyers = buyers;
         this.service_image = service_image;
         this.order_time = order_time;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getProfileImage() {
@@ -120,12 +109,12 @@ public class Service {
         this.publishTime = publishTime;
     }
 
-    public String getPublisher() {
-        return publisher;
+    public String getpublisherEmail() {
+        return publisherEmail;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setpublisherEmail(String publisherEmail) {
+        this.publisherEmail = publisherEmail;
     }
 
     public String getService_image() {
