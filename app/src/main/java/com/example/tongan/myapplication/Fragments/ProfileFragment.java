@@ -121,7 +121,6 @@ public class ProfileFragment extends Fragment implements FoldingCellRecyclerView
         loadProfileInfoFromDatabase();
         loadDocumentationsFromDatabase();
         loadServiceInfoFromDatabase();
-        displayFoldingCellRecyclerView();
 
         settingsImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,18 +244,14 @@ public class ProfileFragment extends Fragment implements FoldingCellRecyclerView
                         }
                     }
                 }
-                FoldingCellRecyclerViewAdapter adapter = new FoldingCellRecyclerViewAdapter(getActivity(), nameAL);
-                foldingCellRecyclerView.setAdapter(adapter);
+
                 // displaying service info
                 // nameAL is for current testing only
-                displayFoldingCellRecyclerView();
+                FoldingCellRecyclerViewAdapter adapter = new FoldingCellRecyclerViewAdapter(getActivity(), nameAL);
+                foldingCellRecyclerView.setAdapter(adapter);
+
             }
         });
-
-    }
-
-    private void displayFoldingCellRecyclerView() {
-
     }
 
     @Override
