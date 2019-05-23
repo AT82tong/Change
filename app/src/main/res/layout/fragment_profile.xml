@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="60dp"
+    android:background="@color/grey"
     android:clipChildren="false"
     android:clipToPadding="false">
 
@@ -166,31 +167,76 @@
 
     </RelativeLayout>
 
-
-    <TextView
-        android:id="@+id/documentationsText"
-        style="@style/TxtTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/linerlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@id/linlay"
-        android:fontFamily="sans-serif"
-        android:text="Documentations"
-        android:textSize="18dp"
-        android:visibility="visible" />
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/profileDisplayDocumentations"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/documentationsText"
-        android:layout_marginTop="1dp"
-        android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/documentationsText"
+            style="@style/TxtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Documentations"
+            android:textSize="18dp"
+            android:visibility="visible" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/foldingCellRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/profileDisplayDocumentations"
-        android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profileDisplayDocumentations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/documentationsText"
+            android:layout_marginTop="1dp"
+            android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@color/black2"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/posted_service"
+            style="@style/TxtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Posted Service"
+            android:textSize="18dp"
+            android:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/postServiceFoldingCellRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileDisplayDocumentations"
+            android:layout_alignStart="@+id/linerlayout"
+            android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>
+
+
+        <TextView
+            android:id="@+id/requested_service"
+            style="@style/TxtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Requested Service"
+            android:textSize="18dp"
+            android:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/requestServiceFoldingCellRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profileDisplayDocumentations"
+            android:layout_alignStart="@+id/linerlayout"
+            android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
 
 </RelativeLayout>

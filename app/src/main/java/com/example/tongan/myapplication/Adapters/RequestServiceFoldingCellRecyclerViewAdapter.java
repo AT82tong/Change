@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tongan.myapplication.Classes.PostService;
+import com.example.tongan.myapplication.Classes.RequestService;
+import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.R;
 import com.ramotion.foldingcell.FoldingCell;
 
@@ -17,12 +20,13 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<FoldingCellRecyclerViewAdapter.ViewHolder> {
+public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<RequestServiceFoldingCellRecyclerViewAdapter.ViewHolder> {
 
-    public static final String TAG = "FoldingCellRecyclerViewAdapter";
+    public static final String TAG = "RequestServiceFoldingCellRecyclerViewAdapter";
 
     //private String image;
-    private ArrayList<String> nameAL;
+    private ArrayList<User> userAL;
+    private ArrayList<RequestService> requestServiceAL;
 //    private String title;
 //    private String location;
 //    private String price;
@@ -32,9 +36,10 @@ public class FoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<Folding
     private OnFoldingCellListener onFoldingCellListener;
 
 
-    public FoldingCellRecyclerViewAdapter(Context context, ArrayList<String> nameAL) {
+    public RequestServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<User> userAL, ArrayList<RequestService> requestServiceAL) {
         //this.image = image;
-        this.nameAL = nameAL;
+        this.userAL = userAL;
+        this.requestServiceAL = requestServiceAL;
 //        this.title = title;
 //        this.location = location;
 //        this.price = price;
@@ -52,24 +57,24 @@ public class FoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<Folding
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-            //Glide.with(context).asBitmap().load(image).into(viewHolder.image);
-            viewHolder.name.setText(nameAL.get(i));
-//            viewHolder.title.setText(title);
+            Glide.with(context).asBitmap().load(userAL.get(i).getProfileImage()).into(viewHolder.profileImage);
+            viewHolder.name.setText(userAL.get(i).getDisplayName());
+            viewHolder.title.setText(requestServiceAL.get(i).getServiceTitle());
 //            viewHolder.location.setText(location);
-//            viewHolder.price.setText(price);
+            viewHolder.price.setText(Double.toString(requestServiceAL.get(i).getPrice()));
 //            viewHolder.completion.setText(completion);
     }
 
 
     @Override
     public int getItemCount() {
-        return nameAL.size();
+        return requestServiceAL.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         FoldingCell foldingCell;
-        CircleImageView image;
+        CircleImageView profileImage;
         TextView name;
         TextView title;
         TextView location;
@@ -81,11 +86,11 @@ public class FoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<Folding
         public ViewHolder(@NonNull View itemView, OnFoldingCellListener onFoldingCellListener) {
             super(itemView);
             foldingCell = itemView.findViewById(R.id.folding_cell);
-            //image = itemView.findViewById(R.id.requesterImage);
+            profileImage = itemView.findViewById(R.id.requesterProfileImage);
             name = itemView.findViewById(R.id.requesterName);
-//            title = itemView.findViewById(R.id.serviceTitle);
+            title = itemView.findViewById(R.id.serviceTitle);
 //            location = itemView.findViewById(R.id.serviceLocation);
-//            price = itemView.findViewById(R.id.servicePrice);
+            price = itemView.findViewById(R.id.servicePrice);
 //            completion = itemView.findViewById(R.id.completionBefore);
 
             this.onFoldingCellListener = onFoldingCellListener;

@@ -23,7 +23,9 @@
     <color name="luminousVividRed">#FF0000</color>
     <color name="scampi">#645A99</color>
     <color name="regent_st_blue">#A1CBDE</color>
-    <color name="manatee">#7F7FA1</color>
     <color name="noble">#999999</color>
     <color name="turbo">#F9C627</color>
+
+    <color name="PostServiceTagColor">#7F7FA1</color>
+    <color name="RequestServiceTagColor">#FF7E47</color>
 </resources>

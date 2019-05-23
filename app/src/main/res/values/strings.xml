@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Change</string>
     <string name="bottom_navigation_home">Home</string>
     <string name="bottom_navigation_add">Add</string>
     <string name="bottom_navigation_personal">Profile</string>

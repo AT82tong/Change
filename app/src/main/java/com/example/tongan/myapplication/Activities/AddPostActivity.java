@@ -78,7 +78,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     EditText serviceTitleText;
     EditText servicePriceText;
     EditText serviceDescriptionText;
-    EditText serviceAddressText;
+    EditText serviceStreetAddressText;
     Spinner serviceCategorySpinner;
 
     private TextInputLayout serviceTitleTextLayout;
@@ -121,7 +121,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         servicePriceText = findViewById(R.id.service_price_input);
         servicePriceText.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(10,2)});
         serviceDescriptionText = findViewById(R.id.service_description_input);
-        serviceAddressText = findViewById(R.id.service_address_input);
+        serviceStreetAddressText = findViewById(R.id.service_street_address_input);
         serviceCategorySpinner = findViewById(R.id.service_category_spinner);
         backBtn = findViewById(R.id.post_service_back_button);
         submitButton = findViewById(R.id.post_service_submit_btn);
@@ -150,7 +150,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         });
 
         // address drawable right click
-        serviceAddressText.setOnTouchListener(new View.OnTouchListener() {
+        serviceStreetAddressText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 final int DRAWABLE_LEFT = 0;
@@ -159,9 +159,9 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                 final int DRAWABLE_BOTTOM = 3;
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (serviceAddressText.getRight() - serviceAddressText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    if(event.getRawX() >= (serviceStreetAddressText.getRight() - serviceStreetAddressText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         googleApiClient.connect();
-
+                        //Toast.makeText(AddPostActivity.this, "HERE.",Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 }
@@ -196,7 +196,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         serviceTitle = serviceTitleText.getText().toString();
         servicePrice = servicePriceText.getText().toString();
         serviceDescription = serviceDescriptionText.getText().toString();
-        serviceAddress = serviceAddressText.getText().toString();
+        serviceAddress = serviceStreetAddressText.getText().toString();
 
 
         boolean isValidated = true;
@@ -324,7 +324,9 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                                 postalCode = addresses.get(0).getPostalCode();
                                 knownName = addresses.get(0).getFeatureName();
 
-//                                Log.d(TAG, "address: " + address);
+//                                Log.d(TAG, "address: " + addresses.get(0).getThoroughfare());
+                                Toast.makeText(AddPostActivity.this, "" + addresses.get(0).getThoroughfare(), Toast.LENGTH_SHORT).show();
+
 //                                Log.d(TAG, "city: " + city);
 //                                Log.d(TAG, "state: " + state);
 //                                Log.d(TAG, "country: " + country);
@@ -334,9 +336,11 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                                 if (!country.equals("United States")) {
                                     serviceAddressTextLayout.setError("Currently supporting United State only,");
                                 } else {
-                                    serviceAddressText.setText(address);
+                                    serviceStreetAddressText.setText(address);
                                     serviceAddressTextLayout.setErrorEnabled(false);
                                 }
+                            } else {
+                                serviceAddressTextLayout.setError("Unable to locate");
                             }
                         }
                     });

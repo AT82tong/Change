@@ -11,29 +11,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.example.tongan.myapplication.Adapters.FoldingCellRecyclerViewAdapter;
+import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.HomePageAdsAdapter;
-import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.ramotion.foldingcell.FoldingCell;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Timer;
 
-public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAdapter.OnFoldingCellListener {
+public class HomeFragment extends Fragment implements PostServiceFoldingCellRecyclerViewAdapter.OnFoldingCellListener {
 
     private static final String TAG = "HomeFragment";
 
@@ -187,8 +182,8 @@ public class HomeFragment extends Fragment implements FoldingCellRecyclerViewAda
         name.add("a");
         name.add("b");
         name.add("c");
-        FoldingCellRecyclerViewAdapter adapter = new FoldingCellRecyclerViewAdapter(getActivity(), name);
-        foldingCellRecyclerView.setAdapter(adapter);
+        //PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), name);
+        //foldingCellRecyclerView.setAdapter(adapter);
     }
 
     @Override

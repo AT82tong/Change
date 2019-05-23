@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,19 +17,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.SettingsPage.ProfileSettingsActivity;
-import com.example.tongan.myapplication.Adapters.FoldingCellRecyclerViewAdapter;
+import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
+import com.example.tongan.myapplication.Adapters.RequestServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.PostService;
-import com.example.tongan.myapplication.Classes.Service;
+import com.example.tongan.myapplication.Classes.RequestService;
+import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -39,7 +36,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -48,7 +44,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileFragment extends Fragment implements FoldingCellRecyclerViewAdapter.OnFoldingCellListener {
+public class ProfileFragment extends Fragment implements PostServiceFoldingCellRecyclerViewAdapter.OnFoldingCellListener {
 
     private static final String TAG = "ProfileFragment";
 
@@ -64,6 +60,8 @@ public class ProfileFragment extends Fragment implements FoldingCellRecyclerView
     private TextView profileFollowers;
     private TextView profileRating;
     private TextView documentationText;
+    private TextView postServiceText;
+    private TextView requestServiceText;
 
     private String email = databaseHelper.getCurrentUserEmail();
     private ArrayList<String> postNumbers = new ArrayList<>();
@@ -72,8 +70,10 @@ public class ProfileFragment extends Fragment implements FoldingCellRecyclerView
     private RecyclerView documentationsRecyclerView;
     private LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
-    private RecyclerView foldingCellRecyclerView;
-    private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+    private RecyclerView postServiceFoldingCellRecyclerView;
+    private RecyclerView requesttServiceFoldingCellRecyclerView;
+    private LinearLayoutManager linearLayoutManagerPostService = new LinearLayoutManager(getContext());
+    private LinearLayoutManager linearLayoutManagerRequestService = new LinearLayoutManager(getContext());
 
     private String userDisplayName;
     private String userFollowers;
@@ -84,9 +84,9 @@ public class ProfileFragment extends Fragment implements FoldingCellRecyclerView
     private String serviceDescription;
     private String servicePublishTime;
 
-    // for testing
-    final ArrayList<String> nameAL = new ArrayList<>();
-    //
+    final User user = new User();
+    final ArrayList<PostService> postServicesAL = new ArrayList<PostService>();
+    final ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
 
     @Nullable
     @Override
@@ -99,28 +99,23 @@ public class ProfileFragment extends Fragment implements FoldingCellRecyclerView
         profileFollowers = view.findViewById(R.id.profile_followers);
         profileRating = view.findViewById(R.id.profile_rating);
         documentationText = view.findViewById(R.id.documentationsText);
+        postServiceText = view.findViewById(R.id.posted_service);
+        requestServiceText = view.findViewById(R.id.requested_service);
 
         // documentations recycler view
         documentationsRecyclerView = view.findViewById(R.id.profileDisplayDocumentations);
         documentationsRecyclerView.setLayoutManager(layoutManager);
 
         // folding cell recylcler view
-        foldingCellRecyclerView = view.findViewById(R.id.foldingCellRecyclerView);
-        foldingCellRecyclerView.setLayoutManager(linearLayoutManager);
-
-//        // foldingCell example
-//        foldingCell = view.findViewById(R.id.folding_cell);
-//
-//        foldingCell.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                foldingCell.toggle(false);
-//            }
-//        });
+        postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
+        postServiceFoldingCellRecyclerView.setLayoutManager(linearLayoutManagerPostService);
+        requesttServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
+        requesttServiceFoldingCellRecyclerView.setLayoutManager(linearLayoutManagerRequestService);
 
         loadProfileInfoFromDatabase();
         loadDocumentationsFromDatabase();
-        loadServiceInfoFromDatabase();
+        loadPostServiceInfoFromDatabase();
+        loadRequestServiceInfoFromDatabase();
 
         settingsImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +176,11 @@ public class ProfileFragment extends Fragment implements FoldingCellRecyclerView
                             requestNumbers.add(requestNumber);
                         }
                     }
+
+                    user.setDisplayName(userDisplayName);
+                    user.setFollower(Integer.parseInt(userFollowers));
+                    user.setRating(Double.parseDouble(value.format(map.get("rating"))));
+                    user.setProfileImage(userProfileImage);
                 }
             }
         });
@@ -206,9 +206,9 @@ public class ProfileFragment extends Fragment implements FoldingCellRecyclerView
         });
     }
 
-    private void loadServiceInfoFromDatabase() {
-        final ArrayList<PostService> postServicesAL = new ArrayList<>();
-
+    // display Post Services if have any
+    private void loadPostServiceInfoFromDatabase() {
+        final ArrayList<User> userAl = new ArrayList<>();
         firebaseFirestore.collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -234,22 +234,68 @@ public class ProfileFragment extends Fragment implements FoldingCellRecyclerView
                                 postService.setPublishTime(servicePublishTime);
 
                                 postServicesAL.add(postService);
+                                userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
 
-                                // for testing
-                                nameAL.add(userDisplayName);
-                                //
-
-                                Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
+                                //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
                             }
                         }
                     }
+                    // displaying service info
+                    //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                    PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), userAl, postServicesAL);
+                    postServiceFoldingCellRecyclerView.setAdapter(adapter);
                 }
+                else {
+                    postServiceText.setVisibility(View.GONE);
+                    postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
 
-                // displaying service info
-                // nameAL is for current testing only
-                FoldingCellRecyclerViewAdapter adapter = new FoldingCellRecyclerViewAdapter(getActivity(), nameAL);
-                foldingCellRecyclerView.setAdapter(adapter);
+    // display Requested Services if have any
+    private void loadRequestServiceInfoFromDatabase() {
+        final ArrayList<User> userAl = new ArrayList<>();
+        firebaseFirestore.collection("RequestServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()) {
+                        for (String requestNumber : requestNumbers) {
+                            if (queryDocumentSnapshot.getId().equals(requestNumber)) {
+                                RequestService requestService = new RequestService();
+                                Map<String, Object> map = queryDocumentSnapshot.getData();
+                                DecimalFormat df = new DecimalFormat("#.00");
 
+                                serviceTitle = map.get("serviceTitle").toString();
+                                serviceAddress = map.get("address").toString();
+                                serviceDescription = map.get("description").toString();
+                                servicePrice = Double.parseDouble(df.format(map.get("price")));
+                                servicePublishTime = map.get("publishTime").toString();
+
+                                requestService.setpublisherEmail(email);
+                                requestService.setServiceTitle(serviceTitle);
+                                requestService.setAddress(serviceAddress);
+                                requestService.setDescription(serviceDescription);
+                                requestService.setPrice(servicePrice);
+                                requestService.setPublishTime(servicePublishTime);
+
+                                requestServicesAL.add(requestService);
+                                userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
+
+                                //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                    // displaying service info
+                    //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                    RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), userAl, requestServicesAL);
+                    requesttServiceFoldingCellRecyclerView.setAdapter(adapter);
+                }
+                else {
+                    requestServiceText.setVisibility(View.GONE);
+                    requesttServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -258,27 +304,4 @@ public class ProfileFragment extends Fragment implements FoldingCellRecyclerView
     public void onFoldingCellClick(int position) {
 
     }
-
-
-//        firebaseFirestore.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-//                        if (queryDocumentSnapshot.getId().equals(databaseHelper.getCurrentUserEmail())) {
-//
-//                            Map<String, Object> map = queryDocumentSnapshot.getData();
-//                            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
-//                            String followers = numberFormat.format(map.get("follower"));
-//                            profileName.setText(map.get("displayName").toString());
-//                            profileFollowers.setText(followers);
-//
-//                            DecimalFormat value = new DecimalFormat("0.0");
-//                            profileRating.setText(value.format(map.get("rating")));
-//                        }
-//                    }
-//                }
-//            }
-//        });
-
 }

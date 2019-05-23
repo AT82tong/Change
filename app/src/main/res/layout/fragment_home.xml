@@ -125,14 +125,14 @@
                                 android:layout_height="50dp"
                                 android:layout_centerHorizontal="true"
                                 android:layout_margin="5dp"
-                                android:src="@drawable/service_car" />
+                                android:src="@drawable/service_automotive" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/homepage_service_automobile"
                                 android:layout_centerHorizontal="true"
-                                android:text="Automobile" />
+                                android:text="Automotive" />
 
                         </RelativeLayout>
 
@@ -157,14 +157,14 @@
                                 android:layout_height="50dp"
                                 android:layout_centerHorizontal="true"
                                 android:layout_margin="5dp"
-                                android:src="@drawable/service_cleaning" />
+                                android:src="@drawable/service_lesson" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/homepage_service_cleaning"
                                 android:layout_centerHorizontal="true"
-                                android:text="Cleaning" />
+                                android:text="Lesson" />
                         </RelativeLayout>
 
 
@@ -178,14 +178,14 @@
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_margin="5dp"
-                                android:src="@drawable/service_house" />
+                                android:src="@drawable/service_household" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/homepage_service_home"
                                 android:layout_centerHorizontal="true"
-                                android:text="House" />
+                                android:text="Household" />
 
                         </RelativeLayout>
 
@@ -233,14 +233,14 @@
                                 android:layout_height="50dp"
                                 android:layout_centerHorizontal="true"
                                 android:layout_margin="5dp"
-                                android:src="@drawable/service_garden" />
+                                android:src="@drawable/service_lawn" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/homepage_service_gardening"
                                 android:layout_centerHorizontal="true"
-                                android:text="Gardening" />
+                                android:text="Lawn" />
 
                         </RelativeLayout>
 
@@ -266,14 +266,14 @@
                                 android:layout_height="50dp"
                                 android:layout_centerHorizontal="true"
                                 android:layout_margin="5dp"
-                                android:src="@drawable/service_moving" />
+                                android:src="@drawable/service_labor" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/homepage_service_moving"
                                 android:layout_centerHorizontal="true"
-                                android:text="Moving" />
+                                android:text="Labor" />
 
                         </RelativeLayout>
 
