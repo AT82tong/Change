@@ -213,41 +213,42 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()) {
-                        for (String postNumber : postNumbers) {
-                            if (queryDocumentSnapshot.getId().equals(postNumber)) {
-                                PostService postService = new PostService();
-                                Map<String, Object> map = queryDocumentSnapshot.getData();
-                                DecimalFormat df = new DecimalFormat("#.00");
+                    if (task.getResult().size() == 0) {
+                        postServiceText.setVisibility(View.GONE);
+                        postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                            for (String postNumber : postNumbers) {
+                                if (queryDocumentSnapshot.getId().equals(postNumber)) {
+                                    PostService postService = new PostService();
+                                    Map<String, Object> map = queryDocumentSnapshot.getData();
+                                    DecimalFormat df = new DecimalFormat("#.00");
 
-                                serviceTitle = map.get("serviceTitle").toString();
-                                serviceAddress = map.get("address").toString();
-                                serviceDescription = map.get("description").toString();
-                                servicePrice = Double.parseDouble(df.format(map.get("price")));
-                                servicePublishTime = map.get("publishTime").toString();
+                                    serviceTitle = map.get("serviceTitle").toString();
+                                    serviceAddress = map.get("address").toString();
+                                    serviceDescription = map.get("description").toString();
+                                    servicePrice = Double.parseDouble(df.format(map.get("price")));
+                                    servicePublishTime = map.get("publishTime").toString();
 
-                                postService.setpublisherEmail(email);
-                                postService.setServiceTitle(serviceTitle);
-                                postService.setAddress(serviceAddress);
-                                postService.setDescription(serviceDescription);
-                                postService.setPrice(servicePrice);
-                                postService.setPublishTime(servicePublishTime);
+                                    postService.setpublisherEmail(email);
+                                    postService.setServiceTitle(serviceTitle);
+                                    postService.setAddress(serviceAddress);
+                                    postService.setDescription(serviceDescription);
+                                    postService.setPrice(servicePrice);
+                                    postService.setPublishTime(servicePublishTime);
 
-                                postServicesAL.add(postService);
-                                userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
+                                    postServicesAL.add(postService);
+                                    userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
 
-                                //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
+                                    //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
+                        // displaying service info
+                        //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                        PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), userAl, postServicesAL);
+                        postServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
-                    // displaying service info
-                    //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
-                    PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), userAl, postServicesAL);
-                    postServiceFoldingCellRecyclerView.setAdapter(adapter);
-                }
-                else {
-                    postServiceText.setVisibility(View.GONE);
-                    postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
                 }
             }
         });
@@ -260,41 +261,42 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot queryDocumentSnapshot: task.getResult()) {
-                        for (String requestNumber : requestNumbers) {
-                            if (queryDocumentSnapshot.getId().equals(requestNumber)) {
-                                RequestService requestService = new RequestService();
-                                Map<String, Object> map = queryDocumentSnapshot.getData();
-                                DecimalFormat df = new DecimalFormat("#.00");
+                    if (task.getResult().size() == 0) {
+                        requestServiceText.setVisibility(View.GONE);
+                        requesttServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                            for (String requestNumber : requestNumbers) {
+                                if (queryDocumentSnapshot.getId().equals(requestNumber)) {
+                                    RequestService requestService = new RequestService();
+                                    Map<String, Object> map = queryDocumentSnapshot.getData();
+                                    DecimalFormat df = new DecimalFormat("#.00");
 
-                                serviceTitle = map.get("serviceTitle").toString();
-                                serviceAddress = map.get("address").toString();
-                                serviceDescription = map.get("description").toString();
-                                servicePrice = Double.parseDouble(df.format(map.get("price")));
-                                servicePublishTime = map.get("publishTime").toString();
+                                    serviceTitle = map.get("serviceTitle").toString();
+                                    serviceAddress = map.get("address").toString();
+                                    serviceDescription = map.get("description").toString();
+                                    servicePrice = Double.parseDouble(df.format(map.get("price")));
+                                    servicePublishTime = map.get("publishTime").toString();
 
-                                requestService.setpublisherEmail(email);
-                                requestService.setServiceTitle(serviceTitle);
-                                requestService.setAddress(serviceAddress);
-                                requestService.setDescription(serviceDescription);
-                                requestService.setPrice(servicePrice);
-                                requestService.setPublishTime(servicePublishTime);
+                                    requestService.setpublisherEmail(email);
+                                    requestService.setServiceTitle(serviceTitle);
+                                    requestService.setAddress(serviceAddress);
+                                    requestService.setDescription(serviceDescription);
+                                    requestService.setPrice(servicePrice);
+                                    requestService.setPublishTime(servicePublishTime);
 
-                                requestServicesAL.add(requestService);
-                                userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
+                                    requestServicesAL.add(requestService);
+                                    userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
 
-                                //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
+                                    //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
+                        // displaying service info
+                        //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                        RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), userAl, requestServicesAL);
+                        requesttServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
-                    // displaying service info
-                    //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
-                    RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), userAl, requestServicesAL);
-                    requesttServiceFoldingCellRecyclerView.setAdapter(adapter);
-                }
-                else {
-                    requestServiceText.setVisibility(View.GONE);
-                    requesttServiceFoldingCellRecyclerView.setVisibility(View.GONE);
                 }
             }
         });
