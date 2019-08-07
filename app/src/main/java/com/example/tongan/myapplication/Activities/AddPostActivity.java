@@ -1,28 +1,36 @@
 package com.example.tongan.myapplication.Activities;
 
+import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.example.tongan.myapplication.Classes.RequestService;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
+import android.provider.MediaStore;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.Helper.DecimalDigitsInputFilter;
@@ -33,11 +41,15 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -59,7 +71,6 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     protected GoogleApiClient googleApiClient;
     private FusedLocationProviderClient fusedLocationProviderClient;
 
-    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     // user location
     double longitude;
@@ -81,24 +92,32 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     EditText serviceStreetAddressText;
     Spinner serviceCategorySpinner;
 
+    // editable inputbox
     private TextInputLayout serviceTitleTextLayout;
     private TextInputLayout servicePriceTextLayout;
     private TextInputLayout serviceDescriptionTextLayout;
     private TextInputLayout serviceAddressTextLayout;
 
+    // clickable buttons
     private ImageView backBtn;
-    private Button submitButton;
+    private Button submitBtn;
+    private Button addImageBtn;
 
+    // local variables
     private String serviceTitle;
     private String servicePrice;
     private String serviceDescription;
     private String serviceAddress;
     private String serviceCategory;
 
-    private DatabaseHelper databaseHelper = new DatabaseHelper();
     private String randomID;
     private ArrayList<String> postNumbers;
     private DocumentReference documentReference;
+
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private StorageReference storageReference = firebaseStorage.getReference();
+    private DatabaseHelper databaseHelper = new DatabaseHelper();
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +125,9 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         setContentView(R.layout.activity_add_post);
 
         final DatabaseHelper databaseHelper = new DatabaseHelper();
+
+        // Initialize Places
+        // Places.initialize(getApplicationContext(), apiK)
 
         // location
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -119,20 +141,20 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 
         serviceTitleText = findViewById(R.id.service_title_input);
         servicePriceText = findViewById(R.id.service_price_input);
-        servicePriceText.setFilters(new InputFilter[] {new DecimalDigitsInputFilter(10,2)});
+        servicePriceText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(10, 2)});
         serviceDescriptionText = findViewById(R.id.service_description_input);
         serviceStreetAddressText = findViewById(R.id.service_street_address_input);
         serviceCategorySpinner = findViewById(R.id.service_category_spinner);
-        backBtn = findViewById(R.id.post_service_back_button);
-        submitButton = findViewById(R.id.post_service_submit_btn);
+        backBtn = findViewById(R.id.backBtn);
+        submitBtn = findViewById(R.id.submitBtn);
+        addImageBtn = findViewById(R.id.addImageBtn);
 
         serviceTitleTextLayout = findViewById(R.id.service_title_inputLayout);
         servicePriceTextLayout = findViewById(R.id.service_price_inputLayout);
         serviceDescriptionTextLayout = findViewById(R.id.service_description_inputLayout);
         serviceAddressTextLayout = findViewById(R.id.service_address_inputLayout);
 
-
-        // get all postNumbers from current user
+        // get all postNumbers for current user
         postNumbers = new ArrayList<>();
         documentReference = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -159,7 +181,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                 final int DRAWABLE_BOTTOM = 3;
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (serviceStreetAddressText.getRight() - serviceStreetAddressText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    if (event.getRawX() >= (serviceStreetAddressText.getRight() - serviceStreetAddressText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         googleApiClient.connect();
                         //Toast.makeText(AddPostActivity.this, "HERE.",Toast.LENGTH_SHORT).show();
                         return true;
@@ -169,7 +191,9 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
             }
         });
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        randomID = UUID.randomUUID().toString();
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
@@ -180,6 +204,13 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         });
 
         backBtn();
+
+        addImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
     }
 
     public void backBtn() {
@@ -233,9 +264,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     }
 
     // add to database
-    public void addPostServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress ) {
-        randomID = UUID.randomUUID().toString();
-
+    public void addPostServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         PostService postService = new PostService(publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null);
@@ -248,7 +277,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                     public void onSuccess(Void aVoid) {
                         postNumbers.add(randomID);
                         documentReference.update("postNumbers", postNumbers);
-                        Toast.makeText(AddPostActivity.this, "Post Service Successful.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPostActivity.this, "Post Service Successful.", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Post Service Successful.");
                         onBackPressed();
                     }
@@ -269,7 +298,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                     public void onSuccess(Void aVoid) {
                         postNumbers.add(randomID);
                         documentReference.update("requestNumbers", postNumbers);
-                        Toast.makeText(AddPostActivity.this, "Post Service Successful.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPostActivity.this, "Post Service Successful.", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Post Service Successful.");
                         onBackPressed();
                     }
@@ -360,5 +389,129 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     public void onConnectionSuspended(int i) {
         Log.d(TAG, "Connection suspendedd");
+    }
+
+
+    public void takePhoto() {
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePicture, 0);
+    }
+
+    public void pickPhoto() {
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto, 1);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch (requestCode) {
+            case 0:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    savePhotoToDatabase(resultCode, selectedImage);
+                }
+                break;
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    savePhotoToDatabase(resultCode, selectedImage);
+                }
+                break;
+        }
+        loadPhotosFromDatabase();
+    }
+
+    private void selectImage() {
+        final String[] photoOptions = {"Take Photo", "Choose From Library"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add Image");
+        builder.setItems(photoOptions, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        takePhoto();
+                        break;
+                    case 1:
+                        pickPhoto();
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void initRecyclerView(ArrayList<String> images) {
+        RecyclerView recyclerView = findViewById(R.id.postServiceImages);
+        HorizontalDocumentationsRecyclerViewAdapter adapter = new HorizontalDocumentationsRecyclerViewAdapter(this, images);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(AddPostActivity.this, LinearLayoutManager.HORIZONTAL, false));
+    }
+
+    // extension
+    private String getFileExtension(Uri uri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    private void savePhotoToDatabase(int resultCode, Uri selectedImage) {
+        String photoOption;
+        if (resultCode == 0) {
+            photoOption = "TakePhoto";
+        } else {
+            photoOption = "PickPhoto";
+        }
+
+        final ArrayList<String> imageAL = new ArrayList<>();
+
+        final StorageReference ref = storageReference.child("PostService/" + randomID + "/" + photoOption + UUID.randomUUID().toString() + "." + getFileExtension(selectedImage));
+        ref.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                final DocumentReference doc = FirebaseFirestore.getInstance().collection("PostServices").document(randomID);
+                doc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                        if (documentSnapshot != null) {
+                            Map<String, Object> map = documentSnapshot.getData();
+                            if (map.get("images") != null) {
+                                for (String imageUrl : (ArrayList<String>) map.get("images")) {
+                                    imageAL.add(imageUrl);
+                                }
+                            }
+                        }
+                    }
+                });
+                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        imageAL.add(uri.toString());
+                        doc.update("images", imageAL);
+                        //Toast.makeText(AddPostActivity.this, "Document Upload Successful.",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void loadPhotosFromDatabase() {
+        DocumentReference doc = FirebaseFirestore.getInstance().collection("PostServices").document(randomID);
+        doc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    Map<String, Object> map = documentSnapshot.getData();
+                    if (map.get("images") != null) {
+                        ArrayList<String> images = new ArrayList<>();
+                        images.addAll((ArrayList<String>) map.get("images"));
+                        initRecyclerView(images);
+                    }
+                }
+            }
+        });
     }
 }

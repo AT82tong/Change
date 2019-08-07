@@ -7,14 +7,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View;
-import android.webkit.MimeTypeMap;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.tongan.myapplication.Adapters.VerticalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
@@ -37,9 +37,9 @@ import javax.annotation.Nullable;
 
 public class ManageDocumentations extends AppCompatActivity {
 
-    private FirebaseStorage firebaseStorage;
-    private StorageReference storageReference;
-    private DatabaseHelper databaseHelper;
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private StorageReference storageReference = firebaseStorage.getReference();
+    private DatabaseHelper databaseHelper = new DatabaseHelper();
 
     ImageView backBtn;
     ImageView addDocumentations;
@@ -50,28 +50,10 @@ public class ManageDocumentations extends AppCompatActivity {
         setContentView(R.layout.activity_add_documentations);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-        databaseHelper = new DatabaseHelper();
-
         backBtn = findViewById(R.id.back_button);
         addDocumentations = findViewById(R.id.add_documentations);
 
-        // Load photos from database
-        DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
-        doc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (documentSnapshot != null) {
-                    Map<String, Object> map = documentSnapshot.getData();
-                    if (map.get("images") != null) {
-                        ArrayList<String> images = new ArrayList<>();
-                        images.addAll((ArrayList<String>)map.get("images"));
-                        initRecyclerView(images);
-                    }
-                }
-            }
-        });
+        loadPhotosFromDatabase();
 
         addDocumentations.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,28 +76,27 @@ public class ManageDocumentations extends AppCompatActivity {
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(takePicture, 0);
         //Toast.makeText(ManageDocumentations.this, "takePhoto()",Toast.LENGTH_SHORT).show();
-
     }
 
     public void pickPhoto() {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto , 1);
+        startActivityForResult(pickPhoto, 1);
         //Toast.makeText(ManageDocumentations.this, "pickPhoto()",Toast.LENGTH_SHORT).show();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        switch(requestCode) {
+        switch (requestCode) {
             case 0:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Uri selectedImage = imageReturnedIntent.getData();
                     savePhotoToDatabase(resultCode, selectedImage);
                 }
                 break;
             case 1:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Uri selectedImage = imageReturnedIntent.getData();
                     savePhotoToDatabase(resultCode, selectedImage);
                 }
@@ -193,9 +174,26 @@ public class ManageDocumentations extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         imageAL.add(uri.toString());
                         doc.update("images", imageAL);
-                        Toast.makeText(ManageDocumentations.this, "Document Upload Successful.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ManageDocumentations.this, "Document Upload Successful.", Toast.LENGTH_SHORT).show();
                     }
                 });
+            }
+        });
+    }
+
+    private void loadPhotosFromDatabase() {
+        DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
+        doc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    Map<String, Object> map = documentSnapshot.getData();
+                    if (map.get("images") != null) {
+                        ArrayList<String> images = new ArrayList<>();
+                        images.addAll((ArrayList<String>) map.get("images"));
+                        initRecyclerView(images);
+                    }
+                }
             }
         });
     }

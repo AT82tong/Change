@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -21,7 +20,7 @@
             android:textSize="28sp" />
 
         <ImageView
-            android:id="@+id/post_service_back_button"
+            android:id="@+id/backBtn"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
@@ -43,7 +42,7 @@
         android:id="@+id/info_area_new_post"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/post_service_submit_btn"
+        android:layout_above="@id/submitBtn"
         android:layout_below="@id/post_service_banner"
         android:layout_marginTop="10dp">
 
@@ -132,11 +131,19 @@
                     android:textSize="20dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/postServiceImages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/service_description_inputLayout"
+                android:layout_marginTop="1dp"
+                android:orientation="horizontal"></androidx.recyclerview.widget.RecyclerView>
+
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@id/service_description_inputLayout"
+                android:layout_below="@id/postServiceImages"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:background="@color/grey" />
@@ -146,18 +153,18 @@
                 android:id="@+id/service_address_inputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/service_description_inputLayout">
+                android:layout_below="@id/postServiceImages">
 
-                    <EditText
-                        android:id="@+id/service_street_address_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/service_description_inputLayout"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/edit_text_style_transparent_bg"
-                        android:hint="Street Address"
-                        android:textSize="20dp"
-                        android:drawableRight="@drawable/location"/>
+                <EditText
+                    android:id="@+id/service_street_address_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/service_description_inputLayout"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/edit_text_style_transparent_bg"
+                    android:drawableRight="@drawable/location"
+                    android:hint="Street Address"
+                    android:textSize="20dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -197,9 +204,24 @@
 
     </ScrollView>
 
+    <Button
+        android:id="@+id/addImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/submitBtn"
+        android:layout_toLeftOf="@id/requestBtn"
+        android:text="Add Image" />
 
     <Button
-        android:id="@+id/post_service_submit_btn"
+        android:id="@+id/requestBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/submitBtn"
+        android:layout_centerHorizontal="true"
+        android:text="Request" />
+
+    <Button
+        android:id="@+id/submitBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

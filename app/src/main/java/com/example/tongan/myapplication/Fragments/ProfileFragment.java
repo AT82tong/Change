@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.SettingsPage.ProfileSettingsActivity;
-import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
+import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.RequestServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.RequestService;
@@ -27,7 +27,6 @@ import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -48,7 +47,6 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
 
     private static final String TAG = "ProfileFragment";
 
-    private FirebaseAuth fireBaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
     private DocumentReference documentReference;
@@ -68,12 +66,8 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
     private ArrayList<String> requestNumbers = new ArrayList<>();
 
     private RecyclerView documentationsRecyclerView;
-    private LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-
     private RecyclerView postServiceFoldingCellRecyclerView;
-    private RecyclerView requesttServiceFoldingCellRecyclerView;
-    private LinearLayoutManager linearLayoutManagerPostService = new LinearLayoutManager(getContext());
-    private LinearLayoutManager linearLayoutManagerRequestService = new LinearLayoutManager(getContext());
+    private RecyclerView requestServiceFoldingCellRecyclerView;
 
     private String userDisplayName;
     private String userFollowers;
@@ -104,13 +98,13 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
 
         // documentations recycler view
         documentationsRecyclerView = view.findViewById(R.id.profileDisplayDocumentations);
-        documentationsRecyclerView.setLayoutManager(layoutManager);
+        documentationsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
-        // folding cell recylcler view
+        // folding cell recycler view
         postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
-        postServiceFoldingCellRecyclerView.setLayoutManager(linearLayoutManagerPostService);
-        requesttServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
-        requesttServiceFoldingCellRecyclerView.setLayoutManager(linearLayoutManagerRequestService);
+        requestServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
+        postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         loadProfileInfoFromDatabase();
         loadDocumentationsFromDatabase();
@@ -263,7 +257,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                 if (task.isSuccessful()) {
                     if (task.getResult().size() == 0) {
                         requestServiceText.setVisibility(View.GONE);
-                        requesttServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                        requestServiceFoldingCellRecyclerView.setVisibility(View.GONE);
                     } else {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                             for (String requestNumber : requestNumbers) {
@@ -295,7 +289,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                         // displaying service info
                         //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
                         RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), userAl, requestServicesAL);
-                        requesttServiceFoldingCellRecyclerView.setAdapter(adapter);
+                        requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
                 }
             }
