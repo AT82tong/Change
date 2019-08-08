@@ -87,17 +87,19 @@ public class ManageDocumentations extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
+        ArrayList<String> test = new ArrayList<>();
         switch (requestCode) {
             case 0:
                 if (resultCode == RESULT_OK) {
                     Uri selectedImage = imageReturnedIntent.getData();
+                    test.add(selectedImage.toString());
                     savePhotoToDatabase(resultCode, selectedImage);
                 }
                 break;
             case 1:
                 if (resultCode == RESULT_OK) {
                     Uri selectedImage = imageReturnedIntent.getData();
+                    test.add(selectedImage.toString());
                     savePhotoToDatabase(resultCode, selectedImage);
                 }
                 break;

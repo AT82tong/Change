@@ -112,6 +112,8 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 
     private String randomID;
     private ArrayList<String> postNumbers;
+    private ArrayList<String> serviceImagesStringAL = new ArrayList<>();
+    private ArrayList<Uri> serviceImagesUriAL = new ArrayList<>();
     private DocumentReference documentReference;
 
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
@@ -198,6 +200,9 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
             public void onClick(View v) {
                 if (validateInputs()) {
                     addPostServiceToDatabase(databaseHelper.getCurrentUserEmail(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address);
+                    if (!serviceImagesUriAL.isEmpty()) {
+                        savePhotoToDatabase(serviceImagesUriAL);
+                    }
                     //Toast.makeText(AddPostActivity.this, "successful.",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -212,6 +217,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
             }
         });
     }
+
 
     public void backBtn() {
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -406,21 +412,29 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        switch (requestCode) {
-            case 0:
-                if (resultCode == RESULT_OK) {
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    savePhotoToDatabase(resultCode, selectedImage);
-                }
-                break;
-            case 1:
-                if (resultCode == RESULT_OK) {
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    savePhotoToDatabase(resultCode, selectedImage);
-                }
-                break;
+        if (resultCode == RESULT_OK) {
+            Uri selectedImage = imageReturnedIntent.getData();
+            serviceImagesUriAL.add(selectedImage);
+            serviceImagesStringAL.add(selectedImage.toString());
+            //savePhotoToDatabase(resultCode, selectedImage);
         }
-        loadPhotosFromDatabase();
+
+        initRecyclerView(serviceImagesStringAL);
+
+//        switch (requestCode) {
+//            case 0:
+//                if (resultCode == RESULT_OK) {
+//                    Uri selectedImage = imageReturnedIntent.getData();
+//                    savePhotoToDatabase(resultCode, selectedImage);
+//                }
+//                break;
+//            case 1:
+//                if (resultCode == RESULT_OK) {
+//                    Uri selectedImage = imageReturnedIntent.getData();
+//                    savePhotoToDatabase(resultCode, selectedImage);
+//                }
+//                break;
+//        }
     }
 
     private void selectImage() {
@@ -458,60 +472,29 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
-    private void savePhotoToDatabase(int resultCode, Uri selectedImage) {
-        String photoOption;
-        if (resultCode == 0) {
-            photoOption = "TakePhoto";
-        } else {
-            photoOption = "PickPhoto";
-        }
+    private void savePhotoToDatabase(ArrayList<Uri> serviceImagesUriAL) {
 
         final ArrayList<String> imageAL = new ArrayList<>();
+        // store images to storage
+        final StorageReference ref = storageReference.child("PostService/" + randomID + "/" + UUID.randomUUID().toString() + "." + getFileExtension(serviceImagesUriAL.get(0)));
 
-        final StorageReference ref = storageReference.child("PostService/" + randomID + "/" + photoOption + UUID.randomUUID().toString() + "." + getFileExtension(selectedImage));
-        ref.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                final DocumentReference doc = FirebaseFirestore.getInstance().collection("PostServices").document(randomID);
-                doc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                        if (documentSnapshot != null) {
-                            Map<String, Object> map = documentSnapshot.getData();
-                            if (map.get("images") != null) {
-                                for (String imageUrl : (ArrayList<String>) map.get("images")) {
-                                    imageAL.add(imageUrl);
-                                }
-                            }
+        // store images to firebase
+        for (final Uri image : serviceImagesUriAL) {
+            ref.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    final DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            // might still be wrong, need to test it
+                            imageAL.add(uri.toString());
+                            doc.update("images", imageAL);
                         }
-                    }
-                });
-                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        imageAL.add(uri.toString());
-                        doc.update("images", imageAL);
-                        //Toast.makeText(AddPostActivity.this, "Document Upload Successful.",Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-    }
-
-    private void loadPhotosFromDatabase() {
-        DocumentReference doc = FirebaseFirestore.getInstance().collection("PostServices").document(randomID);
-        doc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                if (documentSnapshot != null) {
-                    Map<String, Object> map = documentSnapshot.getData();
-                    if (map.get("images") != null) {
-                        ArrayList<String> images = new ArrayList<>();
-                        images.addAll((ArrayList<String>) map.get("images"));
-                        initRecyclerView(images);
-                    }
+                    });
                 }
-            }
-        });
+            });
+        }
+
     }
 }

@@ -200,25 +200,26 @@
                 android:layout_toEndOf="@id/service_category_view"
                 android:entries="@array/category" />
 
+            <Button
+                android:id="@+id/addImageBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/service_category_spinner"
+                android:layout_toLeftOf="@id/requestBtn"
+                android:text="Add Image" />
+
+            <Button
+                android:id="@+id/requestBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/service_category_spinner"
+                android:layout_centerHorizontal="true"
+                android:text="Request" />
+
         </RelativeLayout>
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/addImageBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/submitBtn"
-        android:layout_toLeftOf="@id/requestBtn"
-        android:text="Add Image" />
-
-    <Button
-        android:id="@+id/requestBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/submitBtn"
-        android:layout_centerHorizontal="true"
-        android:text="Request" />
 
     <Button
         android:id="@+id/submitBtn"
