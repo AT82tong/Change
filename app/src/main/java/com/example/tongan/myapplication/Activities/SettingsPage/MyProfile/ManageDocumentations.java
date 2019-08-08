@@ -92,14 +92,12 @@ public class ManageDocumentations extends AppCompatActivity {
             case 0:
                 if (resultCode == RESULT_OK) {
                     Uri selectedImage = imageReturnedIntent.getData();
-                    test.add(selectedImage.toString());
                     savePhotoToDatabase(resultCode, selectedImage);
                 }
                 break;
             case 1:
                 if (resultCode == RESULT_OK) {
                     Uri selectedImage = imageReturnedIntent.getData();
-                    test.add(selectedImage.toString());
                     savePhotoToDatabase(resultCode, selectedImage);
                 }
                 break;

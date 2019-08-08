@@ -11,7 +11,7 @@ public class RequestService extends Service{
 
     }
 
-    public RequestService(String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage) {
-        super(publisherEmail, serviceTitle, price, category, description, address, publishTime, profileImage);
+    public RequestService(String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, ArrayList<String> serviceImages) {
+        super(publisherEmail, serviceTitle, price, category, description, address, publishTime, profileImage, serviceImages);
     }
 }

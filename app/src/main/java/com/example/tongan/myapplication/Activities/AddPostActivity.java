@@ -273,7 +273,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     public void addPostServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        PostService postService = new PostService(publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null);
+        PostService postService = new PostService(publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, null);
         // add post service information to PostService database
         // get the randomID and update postNumbers in User database
         firebaseFirestore.collection("PostServices").document(randomID)
@@ -296,25 +296,25 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                 });
 
 
-        // add info to RequestService database
-        firebaseFirestore.collection("RequestService").document(randomID)
-                .set(postService)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        postNumbers.add(randomID);
-                        documentReference.update("requestNumbers", postNumbers);
-                        Toast.makeText(AddPostActivity.this, "Post Service Successful.", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "Post Service Successful.");
-                        onBackPressed();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Error saving to database", e);
-                    }
-                });
+//        // add info to RequestService database
+//        firebaseFirestore.collection("RequestService").document(randomID)
+//                .set(postService)
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        postNumbers.add(randomID);
+//                        documentReference.update("requestNumbers", postNumbers);
+//                        Toast.makeText(AddPostActivity.this, "Post Service Successful.", Toast.LENGTH_SHORT).show();
+//                        Log.d(TAG, "Post Service Successful.");
+//                        onBackPressed();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.d(TAG, "Error saving to database", e);
+//                    }
+//                });
     }
 
     @Override
@@ -475,19 +475,17 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     private void savePhotoToDatabase(ArrayList<Uri> serviceImagesUriAL) {
 
         final ArrayList<String> imageAL = new ArrayList<>();
-        // store images to storage
-        final StorageReference ref = storageReference.child("PostService/" + randomID + "/" + UUID.randomUUID().toString() + "." + getFileExtension(serviceImagesUriAL.get(0)));
-
-        // store images to firebase
         for (final Uri image : serviceImagesUriAL) {
+            // store images to storage
+            final StorageReference ref = storageReference.child("PostService/" + randomID + "/" + UUID.randomUUID().toString() + "." + getFileExtension(image));
+            // store images to firebase
             ref.putFile(image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    final DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
+                    final DocumentReference doc = FirebaseFirestore.getInstance().collection("PostServices").document(randomID);
                     ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            // might still be wrong, need to test it
                             imageAL.add(uri.toString());
                             doc.update("images", imageAL);
                         }

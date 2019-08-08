@@ -2,6 +2,9 @@ package com.example.tongan.myapplication.Classes;
 
 import com.google.firebase.Timestamp;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Service {
     private String publisherEmail;
     private String serviceTitle;
@@ -16,9 +19,12 @@ public class Service {
     private String order_time;
     private String publishTime;
     private String profileImage;
+    private ArrayList<String> serviceImages;
+
     public Service() {
     }
-    public Service(String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage) {
+
+    public Service(String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, ArrayList<String> serviceImages) {
         this.publisherEmail = publisherEmail;
         this.serviceTitle = serviceTitle;
         this.price = price;
@@ -27,6 +33,7 @@ public class Service {
         this.address = address;
         this.publishTime = publishTime;
         this.profileImage = profileImage;
+        this.serviceImages = serviceImages;
     }
 
     public Service(String publisher, String serviceTitle, double price, String category,
@@ -43,6 +50,14 @@ public class Service {
         this.buyers = buyers;
         this.service_image = service_image;
         this.order_time = order_time;
+    }
+
+    public ArrayList<String> getServiceImages() {
+        return serviceImages;
+    }
+
+    public void setServiceImages(ArrayList<String> serviceImages) {
+        this.serviceImages = serviceImages;
     }
 
     public String getProfileImage() {
