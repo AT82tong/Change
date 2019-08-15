@@ -13,8 +13,8 @@ public class PostService extends Service {
 
     }
 
-    public PostService(String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, ArrayList<String> serviceImages) {
-        super(publisherEmail, serviceTitle, price, category, description, address, publishTime, profileImage, serviceImages);
+    public PostService(String id, String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, ArrayList<String> serviceImages) {
+        super(id, publisherEmail, serviceTitle, price, category, description, address, publishTime, profileImage, serviceImages);
     }
 
 }

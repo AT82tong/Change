@@ -69,6 +69,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
     private RecyclerView postServiceFoldingCellRecyclerView;
     private RecyclerView requestServiceFoldingCellRecyclerView;
 
+    private String serviceId;
     private String userDisplayName;
     private String userFollowers;
     private String userProfileImage;
@@ -218,12 +219,14 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                                     Map<String, Object> map = queryDocumentSnapshot.getData();
                                     DecimalFormat df = new DecimalFormat("#.00");
 
+                                    serviceId = map.get("id").toString();
                                     serviceTitle = map.get("serviceTitle").toString();
                                     serviceAddress = map.get("address").toString();
                                     serviceDescription = map.get("description").toString();
                                     servicePrice = Double.parseDouble(df.format(map.get("price")));
                                     servicePublishTime = map.get("publishTime").toString();
 
+                                    postService.setId(serviceId);
                                     postService.setpublisherEmail(email);
                                     postService.setServiceTitle(serviceTitle);
                                     postService.setAddress(serviceAddress);
@@ -266,12 +269,14 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                                     Map<String, Object> map = queryDocumentSnapshot.getData();
                                     DecimalFormat df = new DecimalFormat("#.00");
 
+                                    serviceId = map.get("id").toString();
                                     serviceTitle = map.get("serviceTitle").toString();
                                     serviceAddress = map.get("address").toString();
                                     serviceDescription = map.get("description").toString();
                                     servicePrice = Double.parseDouble(df.format(map.get("price")));
                                     servicePublishTime = map.get("publishTime").toString();
 
+                                    requestService.setId(serviceId);
                                     requestService.setpublisherEmail(email);
                                     requestService.setServiceTitle(serviceTitle);
                                     requestService.setAddress(serviceAddress);
@@ -298,6 +303,6 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
 
     @Override
     public void onFoldingCellClick(int position) {
-
+        Log.d(TAG, "Position: " + position);
     }
 }

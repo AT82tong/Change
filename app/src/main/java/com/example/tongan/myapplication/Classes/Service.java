@@ -6,6 +6,15 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Service {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
     private String publisherEmail;
     private String serviceTitle;
     private double price;
@@ -24,7 +33,8 @@ public class Service {
     public Service() {
     }
 
-    public Service(String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, ArrayList<String> serviceImages) {
+    public Service(String id, String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, ArrayList<String> serviceImages) {
+        this.id = id;
         this.publisherEmail = publisherEmail;
         this.serviceTitle = serviceTitle;
         this.price = price;

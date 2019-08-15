@@ -1,10 +1,15 @@
 package com.example.tongan.myapplication.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,10 +17,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.User;
+import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -31,6 +47,8 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 //    private String price;
 //    private String completion;
     private Context context;
+
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     private OnFoldingCellListener onFoldingCellListener;
 
@@ -79,24 +97,38 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         TextView generalLocation;
         TextView price;
         TextView completion;
+        Button removeService;
 
-        OnFoldingCellListener onFoldingCellListener;
+        //OnFoldingCellListener onFoldingCellListener;
 
-        public ViewHolder(@NonNull View itemView, OnFoldingCellListener onFoldingCellListener) {
+        public ViewHolder(@NonNull View itemView, final OnFoldingCellListener onFoldingCellListener) {
             super(itemView);
+            //Log.d(TAG, "itemView: " + itemView);
             foldingCell = itemView.findViewById(R.id.folding_cell);
             profileImage = itemView.findViewById(R.id.requesterProfileImage);
             name = itemView.findViewById(R.id.requesterName);
             title = itemView.findViewById(R.id.serviceTitle);
 //            location = itemView.findViewById(R.id.serviceLocation);
             price = itemView.findViewById(R.id.servicePrice);
+            removeService = itemView.findViewById(R.id.serviceRemove);
 //            completion = itemView.findViewById(R.id.completionBefore);
 
-            this.onFoldingCellListener = onFoldingCellListener;
+
+            //this.onFoldingCellListener = onFoldingCellListener;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //onFoldingCellListener.onFoldingCellClick(getAdapterPosition());
+                    //Log.d(TAG, "Position: " + onFoldingCellListener.onFoldingCellClick(););
                     foldingCell.toggle(false);
+                }
+            });
+
+            removeService.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog dialog = pressed(getAdapterPosition());
+                    dialog.show();
                 }
             });
         }
@@ -105,5 +137,57 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 
     public interface OnFoldingCellListener {
         void onFoldingCellClick(int position);
+    }
+
+    public AlertDialog pressed(final int position) {
+        //Log.d(TAG, "pressed");
+        final ArrayList<String> postNumbers = new ArrayList<>();
+        AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setTitle("Delete")
+                .setMessage("Do you want to delete?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DocumentReference ref = firebaseFirestore.collection("PostServices").document(postServicesAL.get(position).getId());
+                        ref.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    final DocumentReference ref = firebaseFirestore.collection("Users").document(postServicesAL.get(position).getpublisherEmail());
+                                    ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                            if (documentSnapshot != null) {
+                                                Map<String, Object> map = documentSnapshot.getData();
+                                                if (null != map.get("postNumbers") && !map.get("postNumbers").equals(postServicesAL.get(position).getId())) {
+                                                    for (String postNumber : (ArrayList<String>) map.get("postNumbers")) {
+                                                        postNumbers.add(postNumber);
+                                                    }
+                                                }
+                                                ref.update("postNumbers", postNumbers);
+                                                // still need to work on deleting the service from User database
+                                                // works fine for PostServices
+                                            }
+                                        }
+                                    });
+                                    Log.d(TAG, "Deleted: " + postServicesAL.get(position).getId());
+                                } else {
+                                    Log.d(TAG, "Not Deleted: " + postServicesAL.get(position).getId());
+                                }
+                            }
+                        });
+                        //Log.d(TAG, "Delete: " + postServicesAL.get(position).getId());
+                    }
+                })
+
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(TAG, "Cancel: " + postServicesAL.get(position).getId());
+                    }
+                })
+                .create();
+
+        return alertDialog;
     }
 }

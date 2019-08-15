@@ -273,7 +273,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     public void addPostServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        PostService postService = new PostService(publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, null);
+        PostService postService = new PostService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, null);
         // add post service information to PostService database
         // get the randomID and update postNumbers in User database
         firebaseFirestore.collection("PostServices").document(randomID)
