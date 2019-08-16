@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.ramotion.foldingcell.FoldingCell;
@@ -48,7 +49,10 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 //    private String completion;
     private Context context;
 
+    private ArrayList<String> postNumbers;
+
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private DatabaseHelper databaseHelper = new DatabaseHelper();
 
     private OnFoldingCellListener onFoldingCellListener;
 
@@ -113,7 +117,6 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
             removeService = itemView.findViewById(R.id.serviceRemove);
 //            completion = itemView.findViewById(R.id.completionBefore);
 
-
             //this.onFoldingCellListener = onFoldingCellListener;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,7 +130,7 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
             removeService.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog dialog = pressed(getAdapterPosition());
+                    AlertDialog dialog = removeService(getAdapterPosition());
                     dialog.show();
                 }
             });
@@ -139,47 +142,20 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         void onFoldingCellClick(int position);
     }
 
-    public AlertDialog pressed(final int position) {
+    public AlertDialog removeService(final int position) {
         //Log.d(TAG, "pressed");
-        final ArrayList<String> postNumbers = new ArrayList<>();
+        postNumbers = new ArrayList<>();
         AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setTitle("Delete")
                 .setMessage("Do you want to delete?")
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DocumentReference ref = firebaseFirestore.collection("PostServices").document(postServicesAL.get(position).getId());
-                        ref.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    final DocumentReference ref = firebaseFirestore.collection("Users").document(postServicesAL.get(position).getpublisherEmail());
-                                    ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                            if (documentSnapshot != null) {
-                                                Map<String, Object> map = documentSnapshot.getData();
-                                                if (null != map.get("postNumbers") && !map.get("postNumbers").equals(postServicesAL.get(position).getId())) {
-                                                    for (String postNumber : (ArrayList<String>) map.get("postNumbers")) {
-                                                        postNumbers.add(postNumber);
-                                                    }
-                                                }
-                                                ref.update("postNumbers", postNumbers);
-                                                // still need to work on deleting the service from User database
-                                                // works fine for PostServices
-                                            }
-                                        }
-                                    });
-                                    Log.d(TAG, "Deleted: " + postServicesAL.get(position).getId());
-                                } else {
-                                    Log.d(TAG, "Not Deleted: " + postServicesAL.get(position).getId());
-                                }
-                            }
-                        });
-                        //Log.d(TAG, "Delete: " + postServicesAL.get(position).getId());
+                        firebaseFirestore.collection("PostServices").document(postServicesAL.get(position).getId()).delete();
+                        final DocumentReference ref = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
+                        ref.update("postNumbers", FieldValue.arrayRemove(postServicesAL.get(position).getId()));
                     }
                 })
-
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -187,6 +163,7 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
                     }
                 })
                 .create();
+        alertDialog.show();
 
         return alertDialog;
     }
