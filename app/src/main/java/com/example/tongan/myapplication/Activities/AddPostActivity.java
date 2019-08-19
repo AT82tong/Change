@@ -32,6 +32,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.PostService;
+import com.example.tongan.myapplication.Classes.RequestService;
+import com.example.tongan.myapplication.Fragments.HomeFragment;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.Helper.DecimalDigitsInputFilter;
 import com.example.tongan.myapplication.R;
@@ -45,6 +47,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
@@ -101,6 +104,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     // clickable buttons
     private ImageView backBtn;
     private Button submitBtn;
+    private Button requestBtn;
     private Button addImageBtn;
 
     // local variables
@@ -112,21 +116,23 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 
     private String randomID;
     private ArrayList<String> postNumbers;
+    private ArrayList<String> requestNumbers;
     private ArrayList<String> serviceImagesStringAL = new ArrayList<>();
     private ArrayList<Uri> serviceImagesUriAL = new ArrayList<>();
-    private DocumentReference documentReference;
+    private DocumentReference ref;
 
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private StorageReference storageReference = firebaseStorage.getReference();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private Date date;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
-
-        final DatabaseHelper databaseHelper = new DatabaseHelper();
 
         // Initialize Places
         // Places.initialize(getApplicationContext(), apiK)
@@ -149,6 +155,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         serviceCategorySpinner = findViewById(R.id.service_category_spinner);
         backBtn = findViewById(R.id.backBtn);
         submitBtn = findViewById(R.id.submitBtn);
+        requestBtn = findViewById(R.id.requestBtn);
         addImageBtn = findViewById(R.id.addImageBtn);
 
         serviceTitleTextLayout = findViewById(R.id.service_title_inputLayout);
@@ -156,22 +163,12 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         serviceDescriptionTextLayout = findViewById(R.id.service_description_inputLayout);
         serviceAddressTextLayout = findViewById(R.id.service_address_inputLayout);
 
+
         // get all postNumbers for current user
         postNumbers = new ArrayList<>();
-        documentReference = FirebaseFirestore.getInstance().collection("Users").document(databaseHelper.getCurrentUserEmail());
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (documentSnapshot != null) {
-                    Map<String, Object> map = documentSnapshot.getData();
-                    if (null != map.get("postNumbers")) {
-                        for (String postNumber : (ArrayList<String>) map.get("postNumbers")) {
-                            postNumbers.add(postNumber);
-                        }
-                    }
-                }
-            }
-        });
+        requestNumbers = new ArrayList<>();
+        ref = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
+        //final DocumentReference ref = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
 
         // address drawable right click
         serviceStreetAddressText.setOnTouchListener(new View.OnTouchListener() {
@@ -203,13 +200,59 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                     if (!serviceImagesUriAL.isEmpty()) {
                         savePhotoToDatabase(serviceImagesUriAL);
                     }
+
+//                    documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+//                            if (documentSnapshot != null) {
+//                                Map<String, Object> map = documentSnapshot.getData();
+//                                if (null != map.get("postNumbers")) {
+//                                    for (String postNumber : (ArrayList<String>) map.get("postNumbers")) {
+//                                        postNumbers.add(postNumber);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    });
                     //Toast.makeText(AddPostActivity.this, "successful.",Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        backBtn();
+        requestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateInputs()) {
+                    addRequestServiceToDatabase(databaseHelper.getCurrentUserEmail(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address);
+                    if (!serviceImagesUriAL.isEmpty()) {
+                        savePhotoToDatabase(serviceImagesUriAL);
+                    }
 
+                    //ref.update("requestNumbers", FieldValue.arrayUnion(randomID));
+//                    documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+//                            if (documentSnapshot != null) {
+//                                Map<String, Object> map = documentSnapshot.getData();
+//                                if (null != map.get("requestNumbers")) {
+//                                    for (String requestNumber : (ArrayList<String>) map.get("requestNumbers")) {
+//                                        requestNumbers.add(requestNumber);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    });
+                }
+            }
+        });
+
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         addImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,15 +261,6 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         });
     }
 
-
-    public void backBtn() {
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-    }
 
     public boolean validateInputs() {
 
@@ -269,10 +303,9 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         return isValidated;
     }
 
-    // add to database
+    // add post service to database
     public void addPostServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
+        date = new Date();
         PostService postService = new PostService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, null);
         // add post service information to PostService database
         // get the randomID and update postNumbers in User database
@@ -281,40 +314,46 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        postNumbers.add(randomID);
-                        documentReference.update("postNumbers", postNumbers);
+                        ref.update("postNumbers", FieldValue.arrayUnion(randomID));
+
+                        //postNumbers.add(randomID);
+                        //ref.update("postNumbers", postNumbers);
                         Toast.makeText(AddPostActivity.this, "Post Service Successful.", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Post Service Successful.");
-                        onBackPressed();
+                        Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
+                        startActivity(intent);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Error saving to database", e);
+                        Log.d(TAG, "Error saving Post Service to database", e);
                     }
                 });
+    }
 
-
-//        // add info to RequestService database
-//        firebaseFirestore.collection("RequestService").document(randomID)
-//                .set(postService)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        postNumbers.add(randomID);
-//                        documentReference.update("requestNumbers", postNumbers);
-//                        Toast.makeText(AddPostActivity.this, "Post Service Successful.", Toast.LENGTH_SHORT).show();
-//                        Log.d(TAG, "Post Service Successful.");
-//                        onBackPressed();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.d(TAG, "Error saving to database", e);
-//                    }
-//                });
+    // add request service to database
+    public void addRequestServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
+        date = new Date();
+        RequestService requestService = new RequestService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, null);
+        firebaseFirestore.collection("RequestServices").document(randomID)
+                .set(requestService)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        ref.update("requestNumbers", FieldValue.arrayUnion(randomID));
+                        //requestNumbers.add(randomID);
+                        //ref.update("requestNumbers", requestNumbers);
+                        Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error saving Request Service to database", e);
+                    }
+                });
     }
 
     @Override
@@ -494,5 +533,10 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
             });
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

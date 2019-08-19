@@ -214,7 +214,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/service_category_spinner"
                 android:layout_centerHorizontal="true"
-                android:text="Request" />
+                android:text="Submit Request" />
 
         </RelativeLayout>
 

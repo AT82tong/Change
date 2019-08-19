@@ -1,5 +1,6 @@
 package com.example.tongan.myapplication.Fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -107,18 +108,23 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        loadProfileInfoFromDatabase();
-        loadDocumentationsFromDatabase();
-        loadPostServiceInfoFromDatabase();
-        loadRequestServiceInfoFromDatabase();
+        Activity activity = getActivity();
 
-        settingsImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ProfileSettingsActivity.class);
-                startActivity(intent);
-            }
-        });
+        if (isAdded() && activity != null) {
+            loadProfileInfoFromDatabase();
+            loadDocumentationsFromDatabase();
+            loadPostServiceInfoFromDatabase();
+            loadRequestServiceInfoFromDatabase();
+
+            settingsImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ProfileSettingsActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
         return view;
     }
 
@@ -203,8 +209,8 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
 
     // display Post Services if have any
     private void loadPostServiceInfoFromDatabase() {
-        final ArrayList<User> userAl = new ArrayList<>();
-        firebaseFirestore.collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        //final ArrayList<User> userAl = new ArrayList<>();
+        FirebaseFirestore.getInstance().collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -235,7 +241,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                                     postService.setPublishTime(servicePublishTime);
 
                                     postServicesAL.add(postService);
-                                    userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
+                                    //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
 
                                     //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
                                 }
@@ -243,7 +249,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                         }
                         // displaying service info
                         //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
-                        PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), userAl, postServicesAL);
+                        PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), user, postServicesAL);
                         postServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
                 }
@@ -253,8 +259,8 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
 
     // display Requested Services if have any
     private void loadRequestServiceInfoFromDatabase() {
-        final ArrayList<User> userAl = new ArrayList<>();
-        firebaseFirestore.collection("RequestServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        //final ArrayList<User> userAl = new ArrayList<>();
+        FirebaseFirestore.getInstance().collection("RequestServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -285,7 +291,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                                     requestService.setPublishTime(servicePublishTime);
 
                                     requestServicesAL.add(requestService);
-                                    userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
+                                    //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
 
                                     //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
                                 }
@@ -293,7 +299,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                         }
                         // displaying service info
                         //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
-                        RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), userAl, requestServicesAL);
+                        RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), user, requestServicesAL);
                         requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
                 }
@@ -304,5 +310,10 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
     @Override
     public void onFoldingCellClick(int position) {
         Log.d(TAG, "Position: " + position);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

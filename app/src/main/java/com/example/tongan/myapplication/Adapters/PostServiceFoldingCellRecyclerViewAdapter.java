@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,20 +18,12 @@ import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
-import java.util.Map;
-
-import javax.annotation.Nullable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -41,7 +32,7 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
     public static final String TAG = "PostServiceFoldingCellRecyclerViewAdapter";
 
     //private String image;
-    private ArrayList<User> userAL;
+    private User user;
     private ArrayList<PostService> postServicesAL;
 //    private String title;
 //    private String location;
@@ -57,9 +48,9 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
     private OnFoldingCellListener onFoldingCellListener;
 
 
-    public PostServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<User> userAL, ArrayList<PostService> postServicesAL) {
+    public PostServiceFoldingCellRecyclerViewAdapter(Context context, User user, ArrayList<PostService> postServicesAL) {
         //this.image = image;
-        this.userAL = userAL;
+        this.user = user;
         this.postServicesAL = postServicesAL;
 //        this.title = title;
 //        this.location = location;
@@ -71,19 +62,23 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.folding_cell_recyler_view, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.post_service_foldin_cell_recyler_view, viewGroup, false);
         return new ViewHolder(view, onFoldingCellListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-            Glide.with(context).asBitmap().load(userAL.get(i).getProfileImage()).into(viewHolder.profileImage);
-            viewHolder.name.setText(userAL.get(i).getDisplayName());
-            viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
-//            viewHolder.location.setText(location);
-            viewHolder.price.setText(Double.toString(postServicesAL.get(i).getPrice()));
-//            viewHolder.completion.setText(completion);
+        if (user.getProfileImage() != null) {
+            Glide.with(context).asBitmap().load(user.getProfileImage()).into(viewHolder.profileImage);
+        } else {
+            Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(viewHolder.profileImage);
+        }
+        viewHolder.name.setText(user.getDisplayName());
+        viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
+//      viewHolder.location.setText(location);
+        viewHolder.price.setText(Double.toString(postServicesAL.get(i).getPrice()));
+//      viewHolder.completion.setText(completion);
     }
 
 
