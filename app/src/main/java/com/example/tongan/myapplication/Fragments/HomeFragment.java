@@ -1,12 +1,14 @@
 package com.example.tongan.myapplication.Fragments;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,10 @@ import android.widget.LinearLayout;
 
 import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.HomePageAdsAdapter;
+import com.example.tongan.myapplication.Classes.PostService;
+import com.example.tongan.myapplication.Classes.RequestService;
+import com.example.tongan.myapplication.Classes.User;
+import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -43,6 +49,14 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
     private RecyclerView foldingCellRecyclerView;
     private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+    final ArrayList<PostService> postServicesAL = new ArrayList<PostService>();
+    final ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
+    private RecyclerView postServiceFoldingCellRecyclerView;
+    private RecyclerView requestServiceFoldingCellRecyclerView;
+
+    private User user = new User();
+
+    private DatabaseHelper databaseHelper = new DatabaseHelper();
 
 //    private int dotsCount;
 //    private ImageView[] dots;
@@ -69,12 +83,16 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new imageAutoSlider(), 5000, 5000);
 
+//        postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
+//        requestServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
+//        postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        loadServicesFromDatabase();
+//        loadPostServiceInfoFromDatabase();
 
         foldingCellRecyclerView = view.findViewById(R.id.foldingCellRecyclerView);
         foldingCellRecyclerView.setLayoutManager(linearLayoutManager);
-        initRecyclerView();
+        //initRecyclerView();
 
         // foldingCell example
 //        foldingCell = view.findViewById(R.id.folding_cell2);
@@ -97,8 +115,6 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 //        Log.d(TAG, "email: " + user.getEmail());
 //        db.getUserData(db.getCurrentUserEmail());
         //Log.d(TAG, "password: " + db.user.getPassword());
-
-
 
 
 //-----        DOTS         ----- (CURRENTLY NOT USING)
@@ -143,7 +159,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
     // load all services from database
     private void loadServicesFromDatabase() {
-        firebaseFirestore.collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -177,19 +193,53 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         Log.d(TAG, "HomeFragment Page");
     }
 
-    private void initRecyclerView() {
-        ArrayList<String> name = new ArrayList<>();
-        name.add("a");
-        name.add("b");
-        name.add("c");
-        //PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), name);
-        //foldingCellRecyclerView.setAdapter(adapter);
-    }
+//    private void initRecyclerView() {
+//        ArrayList<String> name = new ArrayList<>();
+//        name.add("a");
+//        name.add("b");
+//        name.add("c");
+//        //PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), name);
+//        //foldingCellRecyclerView.setAdapter(adapter);
+//    }
 
     @Override
     public void onFoldingCellClick(int position) {
         //Toast.makeText( getContext(), "onFoldingCellClick: Clicked at position " + position, Toast.LENGTH_LONG).show();
         //Log.d(TAG, "onFoldingCellClick: Clicked");
+    }
+
+    private void loadPostServiceInfoFromDatabase() {
+        //databaseHelper.loadPostServiceInfoFromDatabase(postServiceText, postServiceFoldingCellRecyclerView, postNumbers, getActivity());
+        //final ArrayList<User> userAl = new ArrayList<>();
+        FirebaseFirestore.getInstance().collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                        PostService postService = new PostService();
+                        Map<String, Object> map = queryDocumentSnapshot.getData();
+                        DecimalFormat df = new DecimalFormat("#.00");
+
+                        postService.setId(map.get("id").toString());
+//                        postService.setpublisherEmail(databaseHelper.getCurrentUserEmail());
+                        postService.setServiceTitle(map.get("serviceTitle").toString());
+                        postService.setAddress(map.get("address").toString());
+                        postService.setDescription(map.get("description").toString());
+                        postService.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                        postService.setPublishTime(map.get("publishTime").toString());
+
+                        postServicesAL.add(postService);
+                        //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
+
+                        //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
+                    }
+                    // displaying service info
+                    //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                    PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), user, postServicesAL);
+                    postServiceFoldingCellRecyclerView.setAdapter(adapter);
+                }
+            }
+        });
     }
 
     public class imageAutoSlider extends java.util.TimerTask {

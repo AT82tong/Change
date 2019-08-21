@@ -70,15 +70,9 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
     private RecyclerView postServiceFoldingCellRecyclerView;
     private RecyclerView requestServiceFoldingCellRecyclerView;
 
-    private String serviceId;
     private String userDisplayName;
     private String userFollowers;
     private String userProfileImage;
-    private String serviceTitle;
-    private Double servicePrice;
-    private String serviceAddress;
-    private String serviceDescription;
-    private String servicePublishTime;
 
     final User user = new User();
     final ArrayList<PostService> postServicesAL = new ArrayList<PostService>();
@@ -182,6 +176,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                     user.setFollower(Integer.parseInt(userFollowers));
                     user.setRating(Double.parseDouble(value.format(map.get("rating"))));
                     user.setProfileImage(userProfileImage);
+                    user.setEmail(email);
                 }
             }
         });
@@ -209,6 +204,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
 
     // display Post Services if have any
     private void loadPostServiceInfoFromDatabase() {
+        //databaseHelper.loadPostServiceInfoFromDatabase(postServiceText, postServiceFoldingCellRecyclerView, postNumbers, getActivity());
         //final ArrayList<User> userAl = new ArrayList<>();
         FirebaseFirestore.getInstance().collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -225,20 +221,14 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                                     Map<String, Object> map = queryDocumentSnapshot.getData();
                                     DecimalFormat df = new DecimalFormat("#.00");
 
-                                    serviceId = map.get("id").toString();
-                                    serviceTitle = map.get("serviceTitle").toString();
-                                    serviceAddress = map.get("address").toString();
-                                    serviceDescription = map.get("description").toString();
-                                    servicePrice = Double.parseDouble(df.format(map.get("price")));
-                                    servicePublishTime = map.get("publishTime").toString();
-
-                                    postService.setId(serviceId);
-                                    postService.setpublisherEmail(email);
-                                    postService.setServiceTitle(serviceTitle);
-                                    postService.setAddress(serviceAddress);
-                                    postService.setDescription(serviceDescription);
-                                    postService.setPrice(servicePrice);
-                                    postService.setPublishTime(servicePublishTime);
+                                    postService.setId(map.get("id").toString());
+//                                    postService.setpublisherEmail(email);
+                                    postService.setServiceTitle(map.get("serviceTitle").toString());
+                                    postService.setAddress(map.get("address").toString());
+                                    postService.setDescription(map.get("description").toString());
+                                    postService.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                                    postService.setPublishTime(map.get("publishTime").toString());
+                                    postService.setUser(user);
 
                                     postServicesAL.add(postService);
                                     //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
@@ -275,20 +265,13 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                                     Map<String, Object> map = queryDocumentSnapshot.getData();
                                     DecimalFormat df = new DecimalFormat("#.00");
 
-                                    serviceId = map.get("id").toString();
-                                    serviceTitle = map.get("serviceTitle").toString();
-                                    serviceAddress = map.get("address").toString();
-                                    serviceDescription = map.get("description").toString();
-                                    servicePrice = Double.parseDouble(df.format(map.get("price")));
-                                    servicePublishTime = map.get("publishTime").toString();
-
-                                    requestService.setId(serviceId);
-                                    requestService.setpublisherEmail(email);
-                                    requestService.setServiceTitle(serviceTitle);
-                                    requestService.setAddress(serviceAddress);
-                                    requestService.setDescription(serviceDescription);
-                                    requestService.setPrice(servicePrice);
-                                    requestService.setPublishTime(servicePublishTime);
+                                    requestService.setId(map.get("id").toString());
+//                                    requestService.setpublisherEmail(email);
+                                    requestService.setServiceTitle(map.get("serviceTitle").toString());
+                                    requestService.setAddress(map.get("address").toString());
+                                    requestService.setDescription(map.get("description").toString());
+                                    requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                                    requestService.setPublishTime(map.get("publishTime").toString());
 
                                     requestServicesAL.add(requestService);
                                     //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.

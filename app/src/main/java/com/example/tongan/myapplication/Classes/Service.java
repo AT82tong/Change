@@ -15,7 +15,6 @@ public class Service {
     }
 
     private String id;
-    private String publisherEmail;
     private String serviceTitle;
     private double price;
     private String category;
@@ -27,29 +26,35 @@ public class Service {
     private String service_image;
     private String order_time;
     private String publishTime;
-    private String profileImage;
     private ArrayList<String> serviceImages;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Service() {
     }
 
-    public Service(String id, String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, ArrayList<String> serviceImages) {
+    public Service(User user, String id, String serviceTitle, double price, String category, String description, String address, String publishTime, ArrayList<String> serviceImages) {
+        this.user = user;
         this.id = id;
-        this.publisherEmail = publisherEmail;
         this.serviceTitle = serviceTitle;
         this.price = price;
         this.category = category;
         this.description = description;
         this.address = address;
         this.publishTime = publishTime;
-        this.profileImage = profileImage;
         this.serviceImages = serviceImages;
     }
 
     public Service(String publisher, String serviceTitle, double price, String category,
                    String description, String address, int bought_times, double rating,
                    String[] buyers, String service_image, String order_time) {
-        this.publisherEmail = publisher;
         this.serviceTitle = serviceTitle;
         this.price = price;
         this.category = category;
@@ -69,15 +74,6 @@ public class Service {
     public void setServiceImages(ArrayList<String> serviceImages) {
         this.serviceImages = serviceImages;
     }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
-
     public double getPrice() {
         return price;
     }
@@ -132,14 +128,6 @@ public class Service {
 
     public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
-    }
-
-    public String getpublisherEmail() {
-        return publisherEmail;
-    }
-
-    public void setpublisherEmail(String publisherEmail) {
-        this.publisherEmail = publisherEmail;
     }
 
     public String getService_image() {

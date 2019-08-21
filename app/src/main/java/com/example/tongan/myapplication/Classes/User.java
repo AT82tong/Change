@@ -16,13 +16,17 @@ public class User {
     private ArrayList<String> requestNumbers;
     private ArrayList<String> images;
 
-    public User (){}
     public User(String displayName, String Email, String Password, int followers, double ratings) {
         this.displayName = displayName;
         this.email = Email;
         this.password = Password;
         this.followers = followers;
         this.rating = ratings;
+    }
+
+    public User(String displayName, String Email) {
+        this.displayName = displayName;
+        this.email = Email;
     }
 
     public String getProfileImage() {
