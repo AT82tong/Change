@@ -197,7 +197,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
-                    addPostServiceToDatabase(serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address);
+                    addPostServiceToDatabase(databaseHelper.getCurrentUserEmail(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address);
                     if (!serviceImagesUriAL.isEmpty()) {
                         savePhotoToDatabase(serviceImagesUriAL);
                     }
@@ -224,7 +224,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
-                    addRequestServiceToDatabase(serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address);
+                    addRequestServiceToDatabase(databaseHelper.getCurrentUserEmail(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address);
                     if (!serviceImagesUriAL.isEmpty()) {
                         savePhotoToDatabase(serviceImagesUriAL);
                     }
