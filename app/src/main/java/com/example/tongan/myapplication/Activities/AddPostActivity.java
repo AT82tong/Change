@@ -191,7 +191,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 
         randomID = UUID.randomUUID().toString();
 
-        loadProfileInfoFromDatabase();
+        //loadProfileInfoFromDatabase();
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,26 +303,26 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         return isValidated;
     }
 
-    private void loadProfileInfoFromDatabase() {
-        documentReference = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
-        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                if (documentSnapshot != null) {
-                    Map<String, Object> map = documentSnapshot.getData();
-                    userDisplayName = map.get("displayName").toString();
-
-                    user = new User(userDisplayName, databaseHelper.getCurrentUserEmail());
-                }
-            }
-        });
-    }
+//    private void loadProfileInfoFromDatabase() {
+//        documentReference = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
+//        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+//                if (documentSnapshot != null) {
+//                    Map<String, Object> map = documentSnapshot.getData();
+//                    userDisplayName = map.get("displayName").toString();
+//
+//                    user = new User(userDisplayName, databaseHelper.getCurrentUserEmail());
+//                }
+//            }
+//        });
+//    }
 
 
     // add post service to database
-    public void addPostServiceToDatabase(String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
+    public void addPostServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
         date = new Date();
-        PostService postService = new PostService(user, randomID, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null);
+        PostService postService = new PostService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, null);
         // add post service information to PostService database
         // get the randomID and update postNumbers in User database
         firebaseFirestore.collection("PostServices").document(randomID)
@@ -332,6 +332,8 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                     public void onSuccess(Void aVoid) {
                         ref.update("postNumbers", FieldValue.arrayUnion(randomID));
 
+                        //postNumbers.add(randomID);
+                        //ref.update("postNumbers", postNumbers);
                         Toast.makeText(AddPostActivity.this, "Post Service Successful.", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Post Service Successful.");
                         Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
@@ -347,16 +349,17 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     }
 
     // add request service to database
-    public void addRequestServiceToDatabase(String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
+    public void addRequestServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
         date = new Date();
-        RequestService requestService = new RequestService(user, randomID, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null);
+        RequestService requestService = new RequestService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, null);
         firebaseFirestore.collection("RequestServices").document(randomID)
                 .set(requestService)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         ref.update("requestNumbers", FieldValue.arrayUnion(randomID));
-
+                        //requestNumbers.add(randomID);
+                        //ref.update("requestNumbers", requestNumbers);
                         Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
                         startActivity(intent);
                     }

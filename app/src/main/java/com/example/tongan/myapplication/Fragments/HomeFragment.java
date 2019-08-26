@@ -83,15 +83,13 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new imageAutoSlider(), 5000, 5000);
 
-//        postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
+        postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerViewHomePage);
 //        requestServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
-//        postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //        requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 //        loadPostServiceInfoFromDatabase();
 
-        foldingCellRecyclerView = view.findViewById(R.id.foldingCellRecyclerView);
-        foldingCellRecyclerView.setLayoutManager(linearLayoutManager);
         //initRecyclerView();
 
         // foldingCell example
@@ -155,26 +153,6 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 //        );
 
         return view;
-    }
-
-    // load all services from database
-    private void loadServicesFromDatabase() {
-        FirebaseFirestore.getInstance().collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    DecimalFormat df = new DecimalFormat("#.00");
-                    ArrayList<String> titleAL = new ArrayList<>();
-                    ArrayList<String> priceAL = new ArrayList<>();
-                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                        Log.d(TAG, "onComplete: " + queryDocumentSnapshot.getId());
-                        Map<String, Object> map = queryDocumentSnapshot.getData();
-                        titleAL.add(map.get("serviceTitle").toString());
-                        priceAL.add(df.format(map.get("price")));
-                    }
-                }
-            }
-        });
     }
 
     @Override
