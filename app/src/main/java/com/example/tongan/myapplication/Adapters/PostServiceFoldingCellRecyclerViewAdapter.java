@@ -19,11 +19,17 @@ import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -97,12 +103,13 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         TextView price;
         TextView completion;
         Button removeService;
+        Button editService;
 
         //OnFoldingCellListener onFoldingCellListener;
 
         public ViewHolder(@NonNull View itemView, final OnFoldingCellListener onFoldingCellListener) {
             super(itemView);
-            //Log.d(TAG, "itemView: " + itemView);
+            Log.d(TAG, "itemView: " + itemView);
             foldingCell = itemView.findViewById(R.id.folding_cell);
             profileImage = itemView.findViewById(R.id.requesterProfileImage);
             name = itemView.findViewById(R.id.requesterName);
@@ -110,7 +117,10 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 //            location = itemView.findViewById(R.id.serviceLocation);
             price = itemView.findViewById(R.id.servicePrice);
             removeService = itemView.findViewById(R.id.serviceRemove);
+            editService = itemView.findViewById(R.id.serviceEdit);
 //            completion = itemView.findViewById(R.id.completionBefore);
+
+            Log.d(TAG, "HERE");
 
             //this.onFoldingCellListener = onFoldingCellListener;
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +137,13 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
                 public void onClick(View v) {
                     AlertDialog dialog = removeService(getAdapterPosition());
                     dialog.show();
+                }
+            });
+
+            editService.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //editService(getAdapterPosition());
                 }
             });
         }
@@ -162,4 +179,16 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 
         return alertDialog;
     }
+
+//    public void editService(final int position) {
+//        DocumentReference ref = firebaseFirestore.collection("PostServices").document(postServicesAL.get(position).getAddress());
+//        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+//                if (documentSnapshot != null) {
+//                    String email = documentSnapshot.get("publisherEmail").toString();
+//                }
+//            }
+//        });
+//    }
 }

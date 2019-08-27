@@ -228,7 +228,6 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                                     postService.setDescription(map.get("description").toString());
                                     postService.setPrice(Double.parseDouble(df.format(map.get("price"))));
                                     postService.setPublishTime(map.get("publishTime").toString());
-                                    postService.setUser(user);
 
                                     postServicesAL.add(postService);
                                     //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
