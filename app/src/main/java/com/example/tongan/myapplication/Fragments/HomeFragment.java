@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         loadPostServiceInfoFromDatabase();
-        //loadRequestServiceInfoFromDatabase();
+        loadRequestServiceInfoFromDatabase();
 
         //initRecyclerView();
 
@@ -201,8 +201,6 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
-                    String email = "";
-                    String tempEmail = "";
                     for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                         final PostService postService = new PostService();
                         Map<String, Object> map = queryDocumentSnapshot.getData();
@@ -263,7 +261,25 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                         requestService.setPublishTime(map.get("publishTime").toString());
                         requestService.setPublisherEmail(map.get("publisherEmail").toString());
 
+                        requestServicesAL.clear();
                         requestServicesAL.add(requestService);
+
+                        DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(requestService.getPublisherEmail());
+                        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot documentSnapshot = task.getResult();
+                                    if (documentSnapshot.exists()) {
+                                        Map<String, Object> map = documentSnapshot.getData();
+                                        User user = new User(map.get("displayName").toString(), map.get("email").toString());
+
+                                        RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), user, requestServicesAL);
+                                        requestServiceFoldingCellRecyclerView.setAdapter(adapter);
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
             }
