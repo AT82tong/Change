@@ -60,18 +60,6 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
         this.context = context;
     }
 
-    public RequestServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<User> users, ArrayList<RequestService> requestServiceAL) {
-        //this.image = image;
-        //this.userAL = userAL;
-        this.users = users;
-        this.requestServiceAL = requestServiceAL;
-//        this.title = title;
-//        this.location = location;
-//        this.price = price;
-//        this.completion = completion;
-        this.context = context;
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

@@ -87,14 +87,9 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         }
         viewHolder.name.setText(user.getDisplayName());
 
-        if (postServicesAL != null) {
-            viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
+        viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
 //      viewHolder.location.setText(location);
-            viewHolder.price.setText(Double.toString(postServicesAL.get(i).getPrice()));
-        } else {
-            viewHolder.title.setText(postService.getServiceTitle());
-            viewHolder.price.setText(Double.toString(postService.getPrice()));
-        }
+        viewHolder.price.setText(Double.toString(postServicesAL.get(i).getPrice()));
 //      viewHolder.completion.setText(completion);
     }
 

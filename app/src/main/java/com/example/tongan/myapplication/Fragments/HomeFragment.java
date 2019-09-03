@@ -288,8 +288,6 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                 }
             }
         });
-        RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), users, requestServicesAL);
-        requestServiceFoldingCellRecyclerView.setAdapter(adapter);
     }
 
     public class imageAutoSlider extends java.util.TimerTask {
