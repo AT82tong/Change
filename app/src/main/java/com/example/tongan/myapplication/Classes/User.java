@@ -18,12 +18,17 @@ public class User {
 
     public User(){}
 
-    public User(String displayName, String Email, String Password, int followers, double ratings) {
+    public User(String displayName, String email) {
         this.displayName = displayName;
-        this.email = Email;
-        this.password = Password;
+        this.email = email;
+    }
+
+    public User(String displayName, String email, String password, int followers, double rating) {
+        this.displayName = displayName;
+        this.email = email;
+        this.password = password;
         this.followers = followers;
-        this.rating = ratings;
+        this.rating = rating;
     }
 
     public String getProfileImage() {

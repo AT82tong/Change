@@ -214,7 +214,6 @@
             android:id="@+id/postServiceFoldingCellRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/profileDisplayDocumentations"
             android:layout_alignStart="@+id/linerlayout"
             android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>
 
@@ -233,7 +232,6 @@
             android:id="@+id/requestServiceFoldingCellRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/profileDisplayDocumentations"
             android:layout_alignStart="@+id/linerlayout"
             android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>
 

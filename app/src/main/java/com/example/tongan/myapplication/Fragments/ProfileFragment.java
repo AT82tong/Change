@@ -47,36 +47,29 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ProfileFragment extends Fragment implements PostServiceFoldingCellRecyclerViewAdapter.OnFoldingCellListener {
 
     private static final String TAG = "ProfileFragment";
-
+    final User user = new User();
+    final ArrayList<PostService> postServicesAL = new ArrayList<PostService>();
+    final ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
     private DocumentReference documentReference;
-
     private ImageView settingsImage;
     private CircleImageView profileImage;
-
     private TextView profileName;
     private TextView profileFollowers;
     private TextView profileRating;
     private TextView documentationText;
     private TextView postServiceText;
     private TextView requestServiceText;
-
     private String email = databaseHelper.getCurrentUserEmail();
     private ArrayList<String> postNumbers = new ArrayList<>();
     private ArrayList<String> requestNumbers = new ArrayList<>();
-
     private RecyclerView documentationsRecyclerView;
     private RecyclerView postServiceFoldingCellRecyclerView;
     private RecyclerView requestServiceFoldingCellRecyclerView;
-
     private String userDisplayName;
     private String userFollowers;
     private String userProfileImage;
-
-    final User user = new User();
-    final ArrayList<PostService> postServicesAL = new ArrayList<PostService>();
-    final ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
 
     @Nullable
     @Override
@@ -209,7 +202,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         FirebaseFirestore.getInstance().collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
+                if (task.isSuccessful() && task.getResult() != null) {
                     if (task.getResult().size() == 0) {
                         postServiceText.setVisibility(View.GONE);
                         postServiceFoldingCellRecyclerView.setVisibility(View.GONE);

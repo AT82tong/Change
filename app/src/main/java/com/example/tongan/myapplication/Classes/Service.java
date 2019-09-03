@@ -1,19 +1,8 @@
 package com.example.tongan.myapplication.Classes;
 
-import com.google.firebase.Timestamp;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Service {
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     private String id;
     private String publisherEmail;
     private String serviceTitle;
@@ -29,11 +18,13 @@ public class Service {
     private String publishTime;
     private String profileImage;
     private ArrayList<String> serviceImages;
+    private boolean isAccepted;
+    private ArrayList<String> acceptorList;
 
     public Service() {
     }
 
-    public Service(String id, String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, ArrayList<String> serviceImages) {
+    public Service(String id, String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, boolean isAccepted, ArrayList<String> serviceImages, ArrayList<String> acceptorList) {
         this.id = id;
         this.publisherEmail = publisherEmail;
         this.serviceTitle = serviceTitle;
@@ -44,22 +35,40 @@ public class Service {
         this.publishTime = publishTime;
         this.profileImage = profileImage;
         this.serviceImages = serviceImages;
+        this.isAccepted = isAccepted;
+        this.acceptorList = acceptorList;
     }
 
-    public Service(String publisher, String serviceTitle, double price, String category,
-                   String description, String address, int bought_times, double rating,
-                   String[] buyers, String service_image, String order_time) {
-        this.publisherEmail = publisher;
-        this.serviceTitle = serviceTitle;
-        this.price = price;
-        this.category = category;
-        this.description = description;
-        this.address = address;
-        this.bought_times = bought_times;
-        this.rating = rating;
-        this.buyers = buyers;
-        this.service_image = service_image;
-        this.order_time = order_time;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isAccepted() {
+        return isAccepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        isAccepted = accepted;
+    }
+
+    public String getPublisherEmail() {
+        return publisherEmail;
+    }
+
+    public void setPublisherEmail(String publisherEmail) {
+        this.publisherEmail = publisherEmail;
+    }
+
+    public ArrayList<String> getAcceptorList() {
+        return acceptorList;
+    }
+
+    public void setAcceptorList(ArrayList<String> acceptorList) {
+        this.acceptorList = acceptorList;
     }
 
     public ArrayList<String> getServiceImages() {
@@ -132,14 +141,6 @@ public class Service {
 
     public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
-    }
-
-    public String getpublisherEmail() {
-        return publisherEmail;
-    }
-
-    public void setpublisherEmail(String publisherEmail) {
-        this.publisherEmail = publisherEmail;
     }
 
     public String getService_image() {

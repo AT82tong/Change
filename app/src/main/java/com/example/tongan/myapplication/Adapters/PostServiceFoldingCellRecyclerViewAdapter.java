@@ -18,13 +18,18 @@ import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.ramotion.foldingcell.FoldingCell;
+
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -39,6 +44,7 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 
     //private String image;
     private User user;
+    private PostService postService;
     private ArrayList<PostService> postServicesAL;
 //    private String title;
 //    private String location;
@@ -53,7 +59,6 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 
     private OnFoldingCellListener onFoldingCellListener;
 
-
     public PostServiceFoldingCellRecyclerViewAdapter(Context context, User user, ArrayList<PostService> postServicesAL) {
         //this.image = image;
         this.user = user;
@@ -65,7 +70,13 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         this.context = context;
     }
 
-    @NonNull
+    public PostServiceFoldingCellRecyclerViewAdapter(Context context, User user, PostService postService) {
+        this.user = user;
+        this.context = context;
+        this.postService = postService;
+    }
+
+        @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.post_service_foldin_cell_recyler_view, viewGroup, false);
@@ -81,16 +92,26 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
             Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(viewHolder.profileImage);
         }
         viewHolder.name.setText(user.getDisplayName());
-        viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
+
+        if (postServicesAL != null) {
+            viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
 //      viewHolder.location.setText(location);
-        viewHolder.price.setText(Double.toString(postServicesAL.get(i).getPrice()));
+            viewHolder.price.setText(Double.toString(postServicesAL.get(i).getPrice()));
+        } else {
+            viewHolder.title.setText(postService.getServiceTitle());
+            viewHolder.price.setText(Double.toString(postService.getPrice()));
+        }
 //      viewHolder.completion.setText(completion);
     }
 
 
     @Override
     public int getItemCount() {
-        return postServicesAL.size();
+        try {
+            return postServicesAL.size();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -109,7 +130,7 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 
         public ViewHolder(@NonNull View itemView, final OnFoldingCellListener onFoldingCellListener) {
             super(itemView);
-            Log.d(TAG, "itemView: " + itemView);
+            //Log.d(TAG, "itemView: " + itemView);
             foldingCell = itemView.findViewById(R.id.folding_cell);
             profileImage = itemView.findViewById(R.id.requesterProfileImage);
             name = itemView.findViewById(R.id.requesterName);
@@ -121,6 +142,8 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 //            completion = itemView.findViewById(R.id.completionBefore);
 
             Log.d(TAG, "HERE");
+
+            checkVisibility(removeService, editService);
 
             //this.onFoldingCellListener = onFoldingCellListener;
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +177,26 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         void onFoldingCellClick(int position);
     }
 
-    public AlertDialog removeService(final int position) {
+    // set remove and edit buttons to gone for services that does not belong to the current user
+    // should not be working now, need to fix
+    private void checkVisibility(final Button removeService, final Button editService) {
+        firebaseFirestore.collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String email = document.get("publisherEmail").toString();
+                        if (!email.equals(databaseHelper.getCurrentUserEmail())) {
+                            removeService.setVisibility(View.GONE);
+                            editService.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private AlertDialog removeService(final int position) {
         //Log.d(TAG, "pressed");
         postNumbers = new ArrayList<>();
         AlertDialog alertDialog = new AlertDialog.Builder(context)

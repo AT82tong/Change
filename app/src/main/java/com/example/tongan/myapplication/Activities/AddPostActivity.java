@@ -30,13 +30,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.RequestService;
 import com.example.tongan.myapplication.Classes.User;
-import com.example.tongan.myapplication.Fragments.HomeFragment;
-import com.example.tongan.myapplication.Fragments.ProfileFragment;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.Helper.DecimalDigitsInputFilter;
 import com.example.tongan.myapplication.R;
@@ -48,25 +45,19 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -322,7 +313,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     // add post service to database
     public void addPostServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
         date = new Date();
-        PostService postService = new PostService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, null);
+        PostService postService = new PostService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, false, null, null);
         // add post service information to PostService database
         // get the randomID and update postNumbers in User database
         firebaseFirestore.collection("PostServices").document(randomID)
@@ -351,7 +342,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     // add request service to database
     public void addRequestServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
         date = new Date();
-        RequestService requestService = new RequestService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, null);
+        RequestService requestService = new RequestService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, false, null, null);
         firebaseFirestore.collection("RequestServices").document(randomID)
                 .set(requestService)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -34,6 +34,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
     //private String image;
     //private ArrayList<User> userAL;
     private User user;
+    private ArrayList<User> users;
     private ArrayList<RequestService> requestServiceAL;
 //    private String title;
 //    private String location;
@@ -51,6 +52,18 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
         //this.image = image;
         //this.userAL = userAL;
         this.user = user;
+        this.requestServiceAL = requestServiceAL;
+//        this.title = title;
+//        this.location = location;
+//        this.price = price;
+//        this.completion = completion;
+        this.context = context;
+    }
+
+    public RequestServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<User> users, ArrayList<RequestService> requestServiceAL) {
+        //this.image = image;
+        //this.userAL = userAL;
+        this.users = users;
         this.requestServiceAL = requestServiceAL;
 //        this.title = title;
 //        this.location = location;
