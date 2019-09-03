@@ -70,13 +70,7 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         this.context = context;
     }
 
-    public PostServiceFoldingCellRecyclerViewAdapter(Context context, User user, PostService postService) {
-        this.user = user;
-        this.context = context;
-        this.postService = postService;
-    }
-
-        @NonNull
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.post_service_foldin_cell_recyler_view, viewGroup, false);
@@ -107,11 +101,7 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 
     @Override
     public int getItemCount() {
-        try {
-            return postServicesAL.size();
-        } catch (Exception e) {
-            return 0;
-        }
+        return postServicesAL.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

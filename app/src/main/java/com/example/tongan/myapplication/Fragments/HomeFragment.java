@@ -195,12 +195,14 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         //Log.d(TAG, "onFoldingCellClick: Clicked");
     }
 
-    // need to improve in future    DOES NOT WORK, NEED FIX
+    // need to improve in future
     private void loadPostServiceInfoFromDatabase() {
         FirebaseFirestore.getInstance().collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
+                    String email = "";
+                    String tempEmail = "";
                     for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                         final PostService postService = new PostService();
                         Map<String, Object> map = queryDocumentSnapshot.getData();
@@ -215,6 +217,9 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                         postService.setPublishTime(map.get("publishTime").toString());
                         postService.setPublisherEmail(map.get("publisherEmail").toString());
 
+                        postServicesAL.clear();
+                        postServicesAL.add(postService);
+
                         DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(postService.getPublisherEmail());
                         doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
@@ -225,7 +230,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                                         Map<String, Object> map = documentSnapshot.getData();
                                         User user = new User(map.get("displayName").toString(), map.get("email").toString());
 
-                                        PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), user, postService);
+                                        PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), user, postServicesAL);
                                         postServiceFoldingCellRecyclerView.setAdapter(adapter);
                                     }
                                 }
