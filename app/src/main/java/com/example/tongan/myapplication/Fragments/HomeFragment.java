@@ -6,12 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.tongan.myapplication.Adapters.HomePageAdsAdapter;
@@ -64,6 +66,8 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
     private DatabaseHelper databaseHelper = new DatabaseHelper();
 
+    private TextView postServiceText;
+    private TextView requestServiceText;
 //    private int dotsCount;
 //    private ImageView[] dots;
 //
@@ -89,6 +93,9 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new imageAutoSlider(), 5000, 5000);
 
+        postServiceText = view.findViewById(R.id.post_service);
+        requestServiceText = view.findViewById(R.id.request_service);
+
         postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
         postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         requestServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
@@ -97,6 +104,33 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         loadPostServiceInfoFromDatabase();
         loadRequestServiceInfoFromDatabase();
 
+        postServiceText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
+                    postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
+                } else {
+                    postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
+                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+                }
+                ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            }
+        });
+
+        requestServiceText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
+                    postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
+                } else {
+                    postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
+                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+                }
+                ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+            }
+        });
         //initRecyclerView();
 
         // foldingCell example

@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.SettingsPage.ProfileSettingsActivity;
@@ -82,8 +83,8 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         profileFollowers = view.findViewById(R.id.profile_followers);
         profileRating = view.findViewById(R.id.profile_rating);
         documentationText = view.findViewById(R.id.documentationsText);
-        postServiceText = view.findViewById(R.id.posted_service);
-        requestServiceText = view.findViewById(R.id.requested_service);
+        postServiceText = view.findViewById(R.id.post_service);
+        requestServiceText = view.findViewById(R.id.request_service);
 
         // documentations recycler view
         documentationsRecyclerView = view.findViewById(R.id.profileDisplayDocumentations);
@@ -108,6 +109,34 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), ProfileSettingsActivity.class);
                     startActivity(intent);
+                }
+            });
+
+            postServiceText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
+                        postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
+                    } else {
+                        postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
+                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+                    }
+                    ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+                }
+            });
+
+            requestServiceText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
+                        postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
+                    } else {
+                        postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
+                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+                    }
+                    ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                 }
             });
         }
