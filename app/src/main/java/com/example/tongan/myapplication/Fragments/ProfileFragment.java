@@ -48,8 +48,8 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
 
     private static final String TAG = "ProfileFragment";
     final User user = new User();
-    final ArrayList<PostService> postServicesAL = new ArrayList<PostService>();
-    final ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
+    private ArrayList<PostService> postServicesAL = new ArrayList<PostService>();
+    private ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
     private DocumentReference documentReference;
@@ -129,6 +129,8 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         documentationsRecyclerView.setAdapter(adapter);
     }
 
+
+    // can be remove in future?
     private void loadProfileInfoFromDatabase() {
         // get profile info from database and update UI
         documentReference = firebaseFirestore.collection("Users").document(email);
@@ -221,6 +223,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                                     postService.setDescription(map.get("description").toString());
                                     postService.setPrice(Double.parseDouble(df.format(map.get("price"))));
                                     postService.setPublishTime(map.get("publishTime").toString());
+                                    postService.setPublisherEmail(map.get("publisherEmail").toString());
 
                                     postServicesAL.add(postService);
                                     //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
@@ -231,7 +234,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                         }
                         // displaying service info
                         //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
-                        PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), user, postServicesAL);
+                        PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), postServicesAL);
                         postServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
                 }
@@ -264,6 +267,8 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                                     requestService.setDescription(map.get("description").toString());
                                     requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
                                     requestService.setPublishTime(map.get("publishTime").toString());
+                                    requestService.setPublisherEmail(map.get("publisherEmail").toString());
+
 
                                     requestServicesAL.add(requestService);
                                     //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
@@ -274,7 +279,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                         }
                         // displaying service info
                         //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
-                        RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), user, requestServicesAL);
+                        RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
                         requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
                 }

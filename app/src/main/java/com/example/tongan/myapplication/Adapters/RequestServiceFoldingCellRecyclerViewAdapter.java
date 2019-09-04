@@ -18,12 +18,18 @@ import com.example.tongan.myapplication.Classes.RequestService;
 import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,8 +39,6 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 
     //private String image;
     //private ArrayList<User> userAL;
-    private User user;
-    private ArrayList<User> users;
     private ArrayList<RequestService> requestServiceAL;
 //    private String title;
 //    private String location;
@@ -48,10 +52,9 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
     private OnFoldingCellListener onFoldingCellListener;
 
 
-    public RequestServiceFoldingCellRecyclerViewAdapter(Context context, User user, ArrayList<RequestService> requestServiceAL) {
+    public RequestServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<RequestService> requestServiceAL) {
         //this.image = image;
         //this.userAL = userAL;
-        this.user = user;
         this.requestServiceAL = requestServiceAL;
 //        this.title = title;
 //        this.location = location;
@@ -68,18 +71,40 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
 
-        if (user.getProfileImage() != null) {
-            Glide.with(context).asBitmap().load(user.getProfileImage()).into(viewHolder.profileImage);
-        } else {
-            Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(viewHolder.profileImage);
-        }
-            viewHolder.name.setText(user.getDisplayName());
-            viewHolder.title.setText(requestServiceAL.get(i).getServiceTitle());
-//            viewHolder.location.setText(location);
-            viewHolder.price.setText(Double.toString(requestServiceAL.get(i).getPrice()));
-//            viewHolder.completion.setText(completion);
+        DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(requestServiceAL.get(i).getPublisherEmail());
+        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        Map<String, Object> map = documentSnapshot.getData();
+
+                        //user.setDisplayName(map.get("displayName").toString());
+                        //user.setEmail(map.get("email").toString());
+                        //user.setProfileImage(map.get("profileImage").toString());
+                        //viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
+                        viewHolder.requesterName.setText(map.get("displayName").toString());
+                        if (map.get("profileImage") != null) {
+                            Glide.with(context).asBitmap().load(map.get("profileImage").toString()).into(viewHolder.profileImage);
+                        } else {
+                            Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(viewHolder.profileImage);
+                        }
+
+                        //System.out.println(user.getDisplayName());
+                    }
+                }
+            }
+        });
+
+//        viewHolder.name.setText(user.getDisplayName());
+//
+        viewHolder.serviceTitle.setText(requestServiceAL.get(i).getServiceTitle());
+        viewHolder.servicePrice.setText(Double.toString(requestServiceAL.get(i).getPrice()));
+////      viewHolder.location.setText(location);
+//      viewHolder.completion.setText(completion);
     }
 
 
@@ -92,12 +117,13 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 
         FoldingCell foldingCell;
         CircleImageView profileImage;
-        TextView name;
-        TextView title;
-        TextView location;
-        TextView price;
+        TextView requesterName;
+        TextView serviceTitle;
+        TextView generalLocation;
+        TextView servicePrice;
         TextView completion;
         Button removeService;
+        Button editService;
 
         OnFoldingCellListener onFoldingCellListener;
 
@@ -105,12 +131,16 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
             super(itemView);
             foldingCell = itemView.findViewById(R.id.folding_cell);
             profileImage = itemView.findViewById(R.id.requesterProfileImage);
-            name = itemView.findViewById(R.id.requesterName);
-            title = itemView.findViewById(R.id.serviceTitle);
+            requesterName = itemView.findViewById(R.id.requesterName);
+            serviceTitle = itemView.findViewById(R.id.serviceTitle);
 //            location = itemView.findViewById(R.id.serviceLocation);
-            price = itemView.findViewById(R.id.servicePrice);
+            servicePrice = itemView.findViewById(R.id.servicePrice);
             removeService = itemView.findViewById(R.id.serviceRemove);
+            editService = itemView.findViewById(R.id.serviceEdit);
 //            completion = itemView.findViewById(R.id.completionBefore);
+
+
+            checkVisibility(removeService, editService);
 
             this.onFoldingCellListener = onFoldingCellListener;
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +162,23 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 
     public interface OnFoldingCellListener {
         void onFoldingCellClick(int position);
+    }
+
+    private void checkVisibility(final Button removeService, final Button editService) {
+        firebaseFirestore.collection("RequestServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String email = document.get("publisherEmail").toString();
+                        if (!email.equals(databaseHelper.getCurrentUserEmail())) {
+                            removeService.setVisibility(View.GONE);
+                            editService.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public AlertDialog removeService(final int position) {
