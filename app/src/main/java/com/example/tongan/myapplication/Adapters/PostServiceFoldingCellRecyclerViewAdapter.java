@@ -59,9 +59,8 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 
     private OnFoldingCellListener onFoldingCellListener;
 
-    public PostServiceFoldingCellRecyclerViewAdapter(Context context, User user, ArrayList<PostService> postServicesAL) {
+    public PostServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<PostService> postServicesAL) {
         //this.image = image;
-        this.user = user;
         this.postServicesAL = postServicesAL;
 //        this.title = title;
 //        this.location = location;
@@ -78,18 +77,36 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
 
-        if (user.getProfileImage() != null) {
-            Glide.with(context).asBitmap().load(user.getProfileImage()).into(viewHolder.profileImage);
-        } else {
-            Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(viewHolder.profileImage);
-        }
-        viewHolder.name.setText(user.getDisplayName());
+        DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(postServicesAL.get(i).getPublisherEmail());
+        doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        Map<String, Object> map = documentSnapshot.getData();
 
-        viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
-//      viewHolder.location.setText(location);
-        viewHolder.price.setText(Double.toString(postServicesAL.get(i).getPrice()));
+                        //user.setDisplayName(map.get("displayName").toString());
+                        //user.setEmail(map.get("email").toString());
+                        //user.setProfileImage(map.get("profileImage").toString());
+                        //viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
+                        viewHolder.requesterName.setText(map.get("displayName").toString());
+                        if (map.get("profileImage") != null) {
+                            Glide.with(context).asBitmap().load(map.get("profileImage").toString()).into(viewHolder.profileImage);
+                        } else {
+                            Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(viewHolder.profileImage);
+                        }
+                        //System.out.println(user.getDisplayName());
+                    }
+                }
+            }
+        });
+//
+        viewHolder.serviceTitle.setText(postServicesAL.get(i).getServiceTitle());
+        viewHolder.servicePrice.setText(Double.toString(postServicesAL.get(i).getPrice()));
+////      viewHolder.location.setText(location);
 //      viewHolder.completion.setText(completion);
     }
 
@@ -103,10 +120,10 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 
         FoldingCell foldingCell;
         CircleImageView profileImage;
-        TextView name;
-        TextView title;
+        TextView requesterName;
+        TextView serviceTitle;
         TextView generalLocation;
-        TextView price;
+        TextView servicePrice;
         TextView completion;
         Button removeService;
         Button editService;
@@ -118,10 +135,10 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
             //Log.d(TAG, "itemView: " + itemView);
             foldingCell = itemView.findViewById(R.id.folding_cell);
             profileImage = itemView.findViewById(R.id.requesterProfileImage);
-            name = itemView.findViewById(R.id.requesterName);
-            title = itemView.findViewById(R.id.serviceTitle);
+            requesterName = itemView.findViewById(R.id.requesterName);
+            serviceTitle = itemView.findViewById(R.id.serviceTitle);
 //            location = itemView.findViewById(R.id.serviceLocation);
-            price = itemView.findViewById(R.id.servicePrice);
+            servicePrice = itemView.findViewById(R.id.servicePrice);
             removeService = itemView.findViewById(R.id.serviceRemove);
             editService = itemView.findViewById(R.id.serviceEdit);
 //            completion = itemView.findViewById(R.id.completionBefore);

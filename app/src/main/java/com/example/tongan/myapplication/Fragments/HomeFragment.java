@@ -57,8 +57,6 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
     private RecyclerView foldingCellRecyclerView;
     private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
-    private ArrayList<User> postServiceUsers = new ArrayList<>();
-    private ArrayList<User> requestServiceUsers = new ArrayList<>();
     private ArrayList<PostService> postServicesAL = new ArrayList<>();
     private ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
     private RecyclerView postServiceFoldingCellRecyclerView;
@@ -195,7 +193,6 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         //Log.d(TAG, "onFoldingCellClick: Clicked");
     }
 
-    // need to improve in future
     private void loadPostServiceInfoFromDatabase() {
         FirebaseFirestore.getInstance().collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -215,37 +212,16 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                         postService.setPublishTime(map.get("publishTime").toString());
                         postService.setPublisherEmail(map.get("publisherEmail").toString());
 
-                        postServicesAL.clear();
                         postServicesAL.add(postService);
-
-                        if (!postService.getPublisherEmail().equals(databaseHelper.getCurrentUserEmail())) {
-                            DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(postService.getPublisherEmail());
-                            doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot documentSnapshot = task.getResult();
-                                        if (documentSnapshot.exists()) {
-                                            Map<String, Object> map = documentSnapshot.getData();
-                                            User user = new User(map.get("displayName").toString(), map.get("email").toString());
-
-                                            PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), user, postServicesAL);
-                                            postServiceFoldingCellRecyclerView.setAdapter(adapter);
-                                        }
-                                    }
-                                }
-                            });
-                        }
                     }
+                    PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), postServicesAL);
+                    postServiceFoldingCellRecyclerView.setAdapter(adapter);
                 }
             }
         });
     }
 
     private void loadRequestServiceInfoFromDatabase() {
-        //databaseHelper.loadPostServiceInfoFromDatabase(postServiceText, postServiceFoldingCellRecyclerView, postNumbers, getActivity());
-        //final ArrayList<User> userAl = new ArrayList<>();
-        final ArrayList<User> users = new ArrayList<>();
         FirebaseFirestore.getInstance().collection("RequestServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -263,28 +239,11 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                         requestService.setPublishTime(map.get("publishTime").toString());
                         requestService.setPublisherEmail(map.get("publisherEmail").toString());
 
-                        requestServicesAL.clear();
                         requestServicesAL.add(requestService);
 
-                        if (!requestService.getPublisherEmail().equals(databaseHelper.getCurrentUserEmail())) {
-                            DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(requestService.getPublisherEmail());
-                            doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot documentSnapshot = task.getResult();
-                                        if (documentSnapshot.exists()) {
-                                            Map<String, Object> map = documentSnapshot.getData();
-                                            User user = new User(map.get("displayName").toString(), map.get("email").toString());
-
-                                            RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), user, requestServicesAL);
-                                            requestServiceFoldingCellRecyclerView.setAdapter(adapter);
-                                        }
-                                    }
-                                }
-                            });
-                        }
                     }
+                    RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
+                    requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                 }
             }
         });

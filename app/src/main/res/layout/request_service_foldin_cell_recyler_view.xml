@@ -210,6 +210,13 @@
                         android:text="X"
                         android:id="@+id/serviceRemove"/>
 
+                    <Button
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:text="E"
+                        android:id="@+id/serviceEdit"
+                        android:layout_below="@id/serviceRemove"/>
+
                     <TextView
                         android:id="@+id/serviceLocation"
                         android:layout_width="wrap_content"
