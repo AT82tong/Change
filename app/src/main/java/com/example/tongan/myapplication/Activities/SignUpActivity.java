@@ -202,7 +202,6 @@ public class SignUpActivity extends AppCompatActivity {
 //                    }
 //                });
 
-        // use email as document in firestore
         db.collection("Users").document(email)
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

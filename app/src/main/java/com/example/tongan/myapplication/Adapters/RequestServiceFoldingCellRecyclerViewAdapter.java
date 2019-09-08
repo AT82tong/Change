@@ -3,6 +3,7 @@ package com.example.tongan.myapplication.Adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tongan.myapplication.Activities.EditServiceActivity;
+import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.RequestService;
-import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,14 +40,12 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
     public static final String TAG = "RequestServiceFoldingCellRecyclerViewAdapter";
 
     //private String image;
-    //private ArrayList<User> userAL;
     private ArrayList<RequestService> requestServiceAL;
 //    private String title;
 //    private String location;
 //    private String price;
 //    private String completion;
     private Context context;
-    private ArrayList<String> requestNumbers;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
 
@@ -53,13 +53,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 
 
     public RequestServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<RequestService> requestServiceAL) {
-        //this.image = image;
-        //this.userAL = userAL;
         this.requestServiceAL = requestServiceAL;
-//        this.title = title;
-//        this.location = location;
-//        this.price = price;
-//        this.completion = completion;
         this.context = context;
     }
 
@@ -157,6 +151,13 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
                     dialog.show();
                 }
             });
+
+            editService.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editService(getAdapterPosition(), requestServiceAL);
+                }
+            });
         }
     }
 
@@ -183,7 +184,6 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 
     public AlertDialog removeService(final int position) {
         //Log.d(TAG, "pressed");
-        requestNumbers = new ArrayList<>();
         AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setTitle("Delete")
                 .setMessage("Do you want to delete?")
@@ -205,5 +205,12 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
         alertDialog.show();
 
         return alertDialog;
+    }
+
+    private void editService(final int position, ArrayList<RequestService> requestServiceAL) {
+        Intent intent = new Intent(context, EditServiceActivity.class);
+        intent.putExtra("requestService", requestServiceAL.get(position));
+        intent.putExtra("serviceType", "RequestServices");
+        context.startActivity(intent);
     }
 }

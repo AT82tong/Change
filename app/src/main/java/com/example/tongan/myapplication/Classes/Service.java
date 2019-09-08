@@ -1,8 +1,9 @@
 package com.example.tongan.myapplication.Classes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Service {
+public class Service implements Serializable {
     private String id;
     private String publisherEmail;
     private String serviceTitle;
@@ -14,7 +15,7 @@ public class Service {
     private double rating;
     private String[] buyers;
     private String service_image;
-    private String order_time;
+    private String orderTime;
     private String publishTime;
     private String profileImage;
     private ArrayList<String> serviceImages;
@@ -167,12 +168,12 @@ public class Service {
         this.buyers = buyers;
     }
 
-    public String getOrder_time() {
-        return order_time;
+    public String getOrderTime() {
+        return orderTime;
     }
 
-    public void setOrder_time(String order_time) {
-        this.order_time = order_time;
+    public void setOrderTime(String orderTime) {
+        this.orderTime = orderTime;
     }
 }
 

@@ -72,18 +72,18 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     double latitude;
     Geocoder geocoder;
     List<Address> addresses;
-    String address;
-    String city;
-    String state;
-    String country;
-    String postalCode;
-    String knownName;
+    private String address;
+    private String city;
+    private String state;
+    private String country;
+    private String postalCode;
+    private String knownName;
     // layouts
-    EditText serviceTitleText;
-    EditText servicePriceText;
-    EditText serviceDescriptionText;
-    EditText serviceStreetAddressText;
-    Spinner serviceCategorySpinner;
+    private EditText serviceTitleText;
+    private EditText servicePriceText;
+    private EditText serviceDescriptionText;
+    private EditText serviceStreetAddressText;
+    private Spinner serviceCategorySpinner;
     private FusedLocationProviderClient fusedLocationProviderClient;
     // editable inputbox
     private TextInputLayout serviceTitleTextLayout;
@@ -108,17 +108,11 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     private ArrayList<String> serviceImagesStringAL = new ArrayList<>();
     private ArrayList<Uri> serviceImagesUriAL = new ArrayList<>();
     private DocumentReference ref;
-    private User user;
 
-    private DocumentReference documentReference;
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private StorageReference storageReference = firebaseStorage.getReference();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-
-    private String userDisplayName;
-    private String userFollowers;
-    private String userProfileImage;
 
     private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
     private Date date;
@@ -192,21 +186,6 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                     if (!serviceImagesUriAL.isEmpty()) {
                         savePhotoToDatabase(serviceImagesUriAL);
                     }
-
-//                    documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-//                            if (documentSnapshot != null) {
-//                                Map<String, Object> map = documentSnapshot.getData();
-//                                if (null != map.get("postNumbers")) {
-//                                    for (String postNumber : (ArrayList<String>) map.get("postNumbers")) {
-//                                        postNumbers.add(postNumber);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    });
-                    //Toast.makeText(AddPostActivity.this, "successful.",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -219,21 +198,6 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                     if (!serviceImagesUriAL.isEmpty()) {
                         savePhotoToDatabase(serviceImagesUriAL);
                     }
-
-                    //ref.update("requestNumbers", FieldValue.arrayUnion(randomID));
-//                    documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-//                            if (documentSnapshot != null) {
-//                                Map<String, Object> map = documentSnapshot.getData();
-//                                if (null != map.get("requestNumbers")) {
-//                                    for (String requestNumber : (ArrayList<String>) map.get("requestNumbers")) {
-//                                        requestNumbers.add(requestNumber);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    });
                 }
             }
         });

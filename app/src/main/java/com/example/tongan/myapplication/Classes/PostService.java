@@ -2,6 +2,7 @@ package com.example.tongan.myapplication.Classes;
 
 import com.google.firebase.Timestamp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class PostService extends Service {
