@@ -15,19 +15,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.tongan.myapplication.Classes.PostService;
-import com.example.tongan.myapplication.Helper.DecimalDigitsInputFilter;
+import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
-import java.util.Date;
 
 public class EditServiceActivity extends AppCompatActivity implements Serializable {
 
@@ -70,20 +66,28 @@ public class EditServiceActivity extends AppCompatActivity implements Serializab
 
         submitBtn = findViewById(R.id.submitBtn);
 
-        final PostService postService = (PostService) getIntent().getSerializableExtra("postService");
+
+        final Service service;
+        if (getIntent().getSerializableExtra("postService") != null) {
+            service = (Service) getIntent().getSerializableExtra("postService");
+        } else {
+            service = (Service) getIntent().getSerializableExtra("requestService");
+        }
+
         final String serviceType = getIntent().getStringExtra("serviceType");
         DecimalFormat value = new DecimalFormat("0.00");
 
-        serviceTitleText.setText(postService.getServiceTitle());
-        servicePriceText.setText(value.format(postService.getPrice()));
-        serviceDescriptionText.setText(postService.getDescription());
-        serviceAddressText.setText(postService.getAddress());
+        serviceTitleText.setText(service.getServiceTitle());
+        servicePriceText.setText(value.format(service.getPrice()));
+        serviceDescriptionText.setText(service.getDescription());
+        serviceAddressText.setText(service.getAddress());
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
-                    addServiceToDatabase(serviceType, postService.getId(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, serviceAddress);
+                    updateServiceInDatabase(serviceType, service.getId(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, serviceAddress);
+                    onBackPressed();
                 }
             }
         });
@@ -129,7 +133,7 @@ public class EditServiceActivity extends AppCompatActivity implements Serializab
     }
 
     // IMAGE NOT DONE, NEED TO COMPLETE IN FUTURE
-    public void addServiceToDatabase(String serviceType, String serviceId, String serviceTitle, double servicePrice, String serviceCategory, String serviceDescription, String serviceAddress) {
+    public void updateServiceInDatabase(String serviceType, String serviceId, String serviceTitle, double servicePrice, String serviceCategory, String serviceDescription, String serviceAddress) {
         DocumentReference ref = FirebaseFirestore.getInstance().collection(serviceType).document(serviceId);
         ref.update("serviceTitle", serviceTitle);
         ref.update("price", servicePrice);

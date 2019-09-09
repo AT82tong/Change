@@ -125,6 +125,7 @@
                 android:background="@color/turbo"
                 android:text="Accept"
                 android:textAllCaps="true"
+                android:visibility="visible"
                 android:textSize="24dp" />
 
         </LinearLayout>
@@ -208,14 +209,16 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:text="X"
-                        android:id="@+id/serviceRemove"/>
+                        android:id="@+id/serviceRemove"
+                        android:visibility="gone"/>
 
                     <Button
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:text="E"
                         android:id="@+id/serviceEdit"
-                        android:layout_below="@id/serviceRemove"/>
+                        android:layout_below="@id/serviceRemove"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/serviceLocation"

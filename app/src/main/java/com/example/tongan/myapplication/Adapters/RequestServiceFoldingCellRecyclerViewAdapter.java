@@ -45,6 +45,18 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 //    private String location;
 //    private String price;
 //    private String completion;
+
+    private FoldingCell foldingCell;
+    private CircleImageView profileImage;
+    private TextView requesterName;
+    private TextView serviceTitle;
+    private TextView generalLocation;
+    private TextView servicePrice;
+    private TextView completion;
+    private Button removeService;
+    private Button editService;
+    private Button acceptService;
+
     private Context context;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
@@ -80,11 +92,11 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
                         //user.setEmail(map.get("email").toString());
                         //user.setProfileImage(map.get("profileImage").toString());
                         //viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
-                        viewHolder.requesterName.setText(map.get("displayName").toString());
+                        requesterName.setText(map.get("displayName").toString());
                         if (map.get("profileImage") != null) {
-                            Glide.with(context).asBitmap().load(map.get("profileImage").toString()).into(viewHolder.profileImage);
+                            Glide.with(context).asBitmap().load(map.get("profileImage").toString()).into(profileImage);
                         } else {
-                            Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(viewHolder.profileImage);
+                            Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(profileImage);
                         }
 
                         //System.out.println(user.getDisplayName());
@@ -95,8 +107,8 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 
 //        viewHolder.name.setText(user.getDisplayName());
 //
-        viewHolder.serviceTitle.setText(requestServiceAL.get(i).getServiceTitle());
-        viewHolder.servicePrice.setText(Double.toString(requestServiceAL.get(i).getPrice()));
+        serviceTitle.setText(requestServiceAL.get(i).getServiceTitle());
+        servicePrice.setText(Double.toString(requestServiceAL.get(i).getPrice()));
 ////      viewHolder.location.setText(location);
 //      viewHolder.completion.setText(completion);
     }
@@ -109,15 +121,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        FoldingCell foldingCell;
-        CircleImageView profileImage;
-        TextView requesterName;
-        TextView serviceTitle;
-        TextView generalLocation;
-        TextView servicePrice;
-        TextView completion;
-        Button removeService;
-        Button editService;
+
 
         OnFoldingCellListener onFoldingCellListener;
 
@@ -131,10 +135,10 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
             servicePrice = itemView.findViewById(R.id.servicePrice);
             removeService = itemView.findViewById(R.id.serviceRemove);
             editService = itemView.findViewById(R.id.serviceEdit);
+            acceptService = itemView.findViewById(R.id.serviceAccept);
 //            completion = itemView.findViewById(R.id.completionBefore);
 
-
-            checkVisibility(removeService, editService);
+            checkVisibility();
 
             this.onFoldingCellListener = onFoldingCellListener;
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -165,16 +169,17 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
         void onFoldingCellClick(int position);
     }
 
-    private void checkVisibility(final Button removeService, final Button editService) {
+    private void checkVisibility() {
         firebaseFirestore.collection("RequestServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String email = document.get("publisherEmail").toString();
-                        if (!email.equals(databaseHelper.getCurrentUserEmail())) {
-                            removeService.setVisibility(View.GONE);
-                            editService.setVisibility(View.GONE);
+                        if (email.equals(databaseHelper.getCurrentUserEmail())) {
+                            removeService.setVisibility(View.VISIBLE);
+                            editService.setVisibility(View.VISIBLE);
+                            acceptService.setVisibility(View.GONE);
                         }
                     }
                 }
