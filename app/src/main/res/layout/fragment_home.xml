@@ -12,16 +12,17 @@
         android:layout_height="wrap_content"
         android:background="@drawable/grad_light_maya_blue_bottom_aquamarine_top">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchBox"
+        <Button
+            android:id="@+id/searchText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_height="50dp"
+            android:layout_margin="15dp"
+            android:textSize="20sp"
+            android:paddingStart="10dp"
+            android:gravity="start|center_vertical"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@drawable/search"
+            android:hint="Search..."
             android:background="@drawable/search_box_style" />
 
     </RelativeLayout>

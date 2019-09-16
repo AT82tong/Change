@@ -1,11 +1,17 @@
 package com.example.tongan.myapplication.Fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +33,12 @@ import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -51,10 +63,12 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
     //private final Context context = this.getActivity();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DocumentReference documentReference;
+    private DatabaseReference databaseReference;
 
     private ViewPager homePageAds;
     private HomePageAdsAdapter homePageAdsAdapter;
     private LinearLayout sliderDot;
+    private EditText searchInput;
 
     private RecyclerView foldingCellRecyclerView;
     private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -68,6 +82,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
     private TextView postServiceText;
     private TextView requestServiceText;
+
 //    private int dotsCount;
 //    private ImageView[] dots;
 //
@@ -93,6 +108,10 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new imageAutoSlider(), 5000, 5000);
 
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("PostServices");
+
+        searchInput = view.findViewById(R.id.searchText);
+
         postServiceText = view.findViewById(R.id.post_service);
         requestServiceText = view.findViewById(R.id.request_service);
 
@@ -103,6 +122,27 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
         loadPostServiceInfoFromDatabase();
         loadRequestServiceInfoFromDatabase();
+
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    firebaseSearch(s.toString());
+                } else {
+                    firebaseSearch("");
+                }
+            }
+        });
 
         postServiceText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,6 +339,31 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
             }
         }
+    }
+
+    private void firebaseSearch(String searchText) {
+        System.out.println("Search Text: " + searchText);
+//        Query firebaseSearchQuery = FirebaseDatabase.getInstance().getReference().child("PostServices").orderByChild("serviceTitle")
+//                .startAt(searchText)
+//                .endAt(searchText + "\uf8ff");
+//
+//        firebaseSearchQuery.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.hasChildren()) {
+//                    final ArrayList<PostService> aList = new ArrayList<>();
+//                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                        final PostService postService = ds.getValue(PostService.class);
+//                        aList.add(postService);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
 
