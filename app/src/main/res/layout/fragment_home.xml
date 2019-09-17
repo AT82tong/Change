@@ -13,7 +13,7 @@
         android:background="@drawable/grad_light_maya_blue_bottom_aquamarine_top">
 
         <Button
-            android:id="@+id/searchText"
+            android:id="@+id/searchBtn"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="15dp"

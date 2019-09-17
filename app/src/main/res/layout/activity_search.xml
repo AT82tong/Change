@@ -15,8 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:orientation="horizontal">
 
             <RelativeLayout
@@ -28,7 +28,7 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp">
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/searchText"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -37,6 +37,9 @@
                     android:drawablePadding="5dp"
                     android:hint="Search..."
                     android:paddingLeft="10dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:windowSoftInputMode="stateAlwaysVisible"
                     android:textSize="20sp" />
 
             </RelativeLayout>
@@ -56,10 +59,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:clickable="true"
                     android:hint="Cancel"
-                    android:textSize="20sp"
-                    android:clickable="true"/>
+                    android:textSize="20sp" />
 
             </RelativeLayout>
 

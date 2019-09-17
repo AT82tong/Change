@@ -1,5 +1,6 @@
 package com.example.tongan.myapplication.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.tongan.myapplication.Activities.SearchActivity;
 import com.example.tongan.myapplication.Adapters.HomePageAdsAdapter;
 import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.RequestServiceFoldingCellRecyclerViewAdapter;
@@ -68,7 +71,8 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
     private ViewPager homePageAds;
     private HomePageAdsAdapter homePageAdsAdapter;
     private LinearLayout sliderDot;
-    private EditText searchInput;
+
+    private Button searchBtn;
 
     private RecyclerView foldingCellRecyclerView;
     private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -110,7 +114,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("PostServices");
 
-        searchInput = view.findViewById(R.id.searchText);
+        searchBtn = view.findViewById(R.id.searchBtn);
 
         postServiceText = view.findViewById(R.id.post_service);
         requestServiceText = view.findViewById(R.id.request_service);
@@ -123,24 +127,11 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         loadPostServiceInfoFromDatabase();
         loadRequestServiceInfoFromDatabase();
 
-        searchInput.addTextChangedListener(new TextWatcher() {
+        searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()) {
-                    firebaseSearch(s.toString());
-                } else {
-                    firebaseSearch("");
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
             }
         });
 
