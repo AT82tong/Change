@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -62,6 +63,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
     private TextView documentationText;
     private TextView postServiceText;
     private TextView requestServiceText;
+    private Button ordersBtn;
     private String email = databaseHelper.getCurrentUserEmail();
     private ArrayList<String> postNumbers = new ArrayList<>();
     private ArrayList<String> requestNumbers = new ArrayList<>();
@@ -85,6 +87,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         documentationText = view.findViewById(R.id.documentationsText);
         postServiceText = view.findViewById(R.id.post_service);
         requestServiceText = view.findViewById(R.id.request_service);
+        ordersBtn = view.findViewById(R.id.ordersBtn);
 
         // documentations recycler view
         documentationsRecyclerView = view.findViewById(R.id.profileDisplayDocumentations);
