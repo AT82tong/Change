@@ -42,11 +42,15 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
+import javax.annotation.Nullable;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<PostServiceFoldingCellRecyclerViewAdapter.ViewHolder> {
 
     public static final String TAG = "PostServiceFoldingCellRecyclerViewAdapter";
+
+    private DocumentReference documentReference;
 
     //private String image;
     private ArrayList<PostService> postServicesAL;
@@ -54,15 +58,6 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 //    private String location;
 //    private String price;
 //    private String completion;
-
-    private FoldingCell foldingCell;
-    private CircleImageView profileImage;
-    private TextView requesterName;
-    private TextView serviceTitle;
-    private TextView servicePrice;
-    private Button removeService;
-    private Button editService;
-    private Button acceptService;
 
     private Context context;
 
@@ -99,11 +94,11 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
                         //user.setEmail(map.get("email").toString());
                         //user.setProfileImage(map.get("profileImage").toString());
                         //viewHolder.title.setText(postServicesAL.get(i).getServiceTitle());
-                        requesterName.setText(map.get("displayName").toString());
+                        viewHolder.requesterName.setText(map.get("displayName").toString());
                         if (map.get("profileImage") != null) {
-                            Glide.with(context).asBitmap().load(map.get("profileImage").toString()).into(profileImage);
+                            Glide.with(context).asBitmap().load(map.get("profileImage").toString()).into(viewHolder.profileImage);
                         } else {
-                            Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(profileImage);
+                            Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(viewHolder.profileImage);
                         }
                         //System.out.println(user.getDisplayName());
                     }
@@ -111,8 +106,8 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
             }
         });
 //
-        serviceTitle.setText(postServicesAL.get(i).getServiceTitle());
-        servicePrice.setText(Double.toString(postServicesAL.get(i).getPrice()));
+        viewHolder.serviceTitle.setText(postServicesAL.get(i).getServiceTitle());
+        viewHolder.servicePrice.setText(Double.toString(postServicesAL.get(i).getPrice()));
 ////      viewHolder.location.setText(location);
 //      viewHolder.completion.setText(completion);
     }
@@ -126,6 +121,15 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         //OnFoldingCellListener onFoldingCellListener;
+
+        private FoldingCell foldingCell;
+        private CircleImageView profileImage;
+        private TextView requesterName;
+        private TextView serviceTitle;
+        private TextView servicePrice;
+        private Button removeService;
+        private Button editService;
+        private Button acceptService;
 
         public ViewHolder(@NonNull View itemView, final OnFoldingCellListener onFoldingCellListener) {
             super(itemView);
@@ -141,7 +145,8 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
             acceptService = itemView.findViewById(R.id.serviceAccept);
 //            completion = itemView.findViewById(R.id.completionBefore);
 
-            checkVisibility();
+            // can be improve later (don't think passing buttons as arguments is correct way to do this)
+            checkVisibility(removeService, editService, acceptService);
 
             //this.onFoldingCellListener = onFoldingCellListener;
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +176,7 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
             acceptService.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    acceptService(postServicesAL.get(getAdapterPosition()));
+                    acceptService(postServicesAL.get(getAdapterPosition()), "PostServices");
                     Intent intent = new Intent(context, MainActivity.class);
                     context.startActivity(intent);
                 }
@@ -184,7 +189,7 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         void onFoldingCellClick(int position);
     }
 
-    private void checkVisibility() {
+    private void checkVisibility(final Button removeService, final Button editService, final Button acceptService) {
         firebaseFirestore.collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -234,7 +239,19 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         context.startActivity(intent);
     }
 
-    private void acceptService(Service service) {
-
+    private void acceptService(Service service, String serviceType) {
+        final String acceptor = databaseHelper.getCurrentUserEmail();
+        documentReference = firebaseFirestore.collection(serviceType).document(service.getId());
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    Map<String, Object> map = documentSnapshot.getData();
+                    String originalPoster = map.get("publisherEmail").toString();
+                    String serviceTitle = map.get("serviceTitle").toString();
+                    System.out.println(acceptor + ", " + originalPoster + ", " + serviceTitle);
+                }
+            }
+        });
     }
 }
