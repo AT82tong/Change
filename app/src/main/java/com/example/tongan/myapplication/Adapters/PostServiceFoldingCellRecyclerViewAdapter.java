@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.EditServiceActivity;
 import com.example.tongan.myapplication.Activities.MainActivity;
 import com.example.tongan.myapplication.Classes.PostService;
+import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
@@ -166,6 +167,15 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
                     editService(getAdapterPosition(), postServicesAL);
                 }
             });
+
+            acceptService.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    acceptService(postServicesAL.get(getAdapterPosition()));
+                    Intent intent = new Intent(context, MainActivity.class);
+                    context.startActivity(intent);
+                }
+            });
         }
 
     }
@@ -222,5 +232,9 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         intent.putExtra("postService", postServicesAL.get(position));
         intent.putExtra("serviceType", "PostServices");
         context.startActivity(intent);
+    }
+
+    private void acceptService(Service service) {
+
     }
 }
