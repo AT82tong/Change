@@ -213,6 +213,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="Post Service"
+            android:clickable="true"
             android:drawableRight="@drawable/expand"
             android:textSize="20dp"
             android:visibility="visible" />
@@ -231,6 +232,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
+            android:clickable="true"
             android:text="Request Service"
             android:drawableRight="@drawable/expand"
             android:textSize="20dp"

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,12 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.EditServiceActivity;
 import com.example.tongan.myapplication.Activities.MainActivity;
+import com.example.tongan.myapplication.Classes.Order;
 import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -177,8 +180,6 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
                 @Override
                 public void onClick(View v) {
                     acceptService(postServicesAL.get(getAdapterPosition()), "PostServices");
-                    Intent intent = new Intent(context, MainActivity.class);
-                    context.startActivity(intent);
                 }
             });
         }
@@ -239,17 +240,33 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         context.startActivity(intent);
     }
 
-    private void acceptService(Service service, String serviceType) {
+    private void acceptService(Service service, final String serviceType) {
         final String acceptor = databaseHelper.getCurrentUserEmail();
+        final String serviceId = service.getId();
         documentReference = firebaseFirestore.collection(serviceType).document(service.getId());
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot != null) {
                     Map<String, Object> map = documentSnapshot.getData();
-                    String originalPoster = map.get("publisherEmail").toString();
-                    String serviceTitle = map.get("serviceTitle").toString();
-                    System.out.println(acceptor + ", " + originalPoster + ", " + serviceTitle);
+                    Order order = new Order(serviceId, serviceType, map.get("publisherEmail").toString(), acceptor, "Accepted");
+                    firebaseFirestore.collection("Orders").document(serviceId)
+                            .set(order)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(context, "Service Accepted.", Toast.LENGTH_LONG).show();
+                                    Log.d(TAG, "Service accept successful.");
+                                    Intent intent = new Intent(context, MainActivity.class);
+                                    context.startActivity(intent);
+                                }
+                            })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "Error accepting service " + serviceId, e);
+                        }
+                    });
                 }
             }
         });

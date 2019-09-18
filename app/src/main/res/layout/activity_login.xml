@@ -31,7 +31,8 @@
             android:layout_gravity="center"
             android:background="#11000000"
             android:drawableStart="@drawable/login_account"
-            android:hint="Username"
+            android:drawablePadding="3dp"
+            android:hint="Email"
             android:inputType="textEmailAddress"
             android:textSize="20sp" />
 
@@ -54,6 +55,7 @@
             android:drawableStart="@drawable/login_password"
             android:ems="10"
             android:hint="Password"
+            android:drawablePadding="3dp"
             android:inputType="textPassword"
             android:textSize="20sp" />
 

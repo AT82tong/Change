@@ -52,6 +52,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/serviceTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
@@ -60,6 +61,7 @@
                     android:text="Service Title Service Title Service Title Service Title Service Title Service Title Service Title Service Title"/>
 
                 <TextView
+                    android:id="@+id/serviceDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
@@ -84,10 +86,10 @@
                 android:layout_height="wrap_content"
                 android:hint="Total Amount: "
                 android:layout_centerInParent="true"
-                android:layout_toStartOf="@id/priceTextView" />
+                android:layout_toStartOf="@id/servicePrice" />
 
             <TextView
-                android:id="@+id/priceTextView"
+                android:id="@+id/servicePrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="$123.00"
@@ -118,6 +120,7 @@
                     android:background="@color/white"/>
 
                 <Button
+                    android:id="@+id/chatBtn"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:hint="Chat"
@@ -125,6 +128,7 @@
                     android:background="@drawable/round_black_border"/>
 
                 <Button
+                    android:id="@+id/cancelBtn"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:hint="Cancel"
@@ -134,6 +138,7 @@
                     android:background="@drawable/round_black_border"/>
 
                 <Button
+                    android:id="@+id/payNowBtn"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:hint="Pay Now"

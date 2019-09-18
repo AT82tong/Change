@@ -135,6 +135,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
             }
         });
 
+        // post service expand/collapse button
         postServiceText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,15 +150,16 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
             }
         });
 
+        // request service expand/collapse button
         requestServiceText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
-                    postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
+                if (requestServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
+                    requestServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                    requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
                 } else {
-                    postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
-                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+                    requestServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
+                    requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
                 }
                 ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             }

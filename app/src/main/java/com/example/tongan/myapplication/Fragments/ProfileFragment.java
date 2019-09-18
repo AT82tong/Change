@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.bumptech.glide.Glide;
+import com.example.tongan.myapplication.Activities.OrderActivity;
 import com.example.tongan.myapplication.Activities.SettingsPage.ProfileSettingsActivity;
 import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerViewAdapter;
@@ -115,6 +116,15 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                 }
             });
 
+            ordersBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), OrderActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+            // post service expand/collapse button
             postServiceText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -129,15 +139,16 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                 }
             });
 
+            // request service expand/collapse button
             requestServiceText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
-                        postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
+                    if (requestServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
+                        requestServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+                        requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
                     } else {
-                        postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
-                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+                        requestServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
+                        requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
                     }
                     ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                 }
