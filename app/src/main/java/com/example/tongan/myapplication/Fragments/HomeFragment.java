@@ -2,18 +2,12 @@ package com.example.tongan.myapplication.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,29 +24,17 @@ import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerV
 import com.example.tongan.myapplication.Adapters.RequestServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.RequestService;
-import com.example.tongan.myapplication.Classes.Service;
-import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Document;
-
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
@@ -265,24 +247,27 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
-                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                        final PostService postService = new PostService();
-                        Map<String, Object> map = queryDocumentSnapshot.getData();
-                        DecimalFormat df = new DecimalFormat("#.00");
+                    if (!task.getResult().isEmpty()) {
+                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                            final PostService postService = new PostService();
+                            Map<String, Object> map = queryDocumentSnapshot.getData();
+                            DecimalFormat df = new DecimalFormat("#.00");
 
-                        postService.setId(map.get("id").toString());
-//                        postService.setpublisherEmail(databaseHelper.getCurrentUserEmail());
-                        postService.setServiceTitle(map.get("serviceTitle").toString());
-                        postService.setAddress(map.get("address").toString());
-                        postService.setDescription(map.get("description").toString());
-                        postService.setPrice(Double.parseDouble(df.format(map.get("price"))));
-                        postService.setPublishTime(map.get("publishTime").toString());
-                        postService.setPublisherEmail(map.get("publisherEmail").toString());
+                            postService.setId(map.get("id").toString());
+//                          postService.setpublisherEmail(databaseHelper.getCurrentUserEmail());
+                            postService.setServiceTitle(map.get("serviceTitle").toString());
+                            postService.setAddress(map.get("address").toString());
+                            postService.setDescription(map.get("description").toString());
+                            postService.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                            postService.setPublishTime(map.get("publishTime").toString());
+                            postService.setPublisherEmail(map.get("publisherEmail").toString());
 
-                        postServicesAL.add(postService);
+                            postServicesAL.add(postService);
+                        }
+                        PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), postServicesAL);
+                        postServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
-                    PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), postServicesAL);
-                    postServiceFoldingCellRecyclerView.setAdapter(adapter);
                 }
             }
         });
@@ -293,24 +278,27 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
-                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                        RequestService requestService = new RequestService();
-                        Map<String, Object> map = queryDocumentSnapshot.getData();
-                        DecimalFormat df = new DecimalFormat("#.00");
+                    if (!task.getResult().isEmpty()) {
+                        requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                            RequestService requestService = new RequestService();
+                            Map<String, Object> map = queryDocumentSnapshot.getData();
+                            DecimalFormat df = new DecimalFormat("#.00");
 
-                        requestService.setId(map.get("id").toString());
-                        requestService.setServiceTitle(map.get("serviceTitle").toString());
-                        requestService.setAddress(map.get("address").toString());
-                        requestService.setDescription(map.get("description").toString());
-                        requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
-                        requestService.setPublishTime(map.get("publishTime").toString());
-                        requestService.setPublisherEmail(map.get("publisherEmail").toString());
+                            requestService.setId(map.get("id").toString());
+                            requestService.setServiceTitle(map.get("serviceTitle").toString());
+                            requestService.setAddress(map.get("address").toString());
+                            requestService.setDescription(map.get("description").toString());
+                            requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                            requestService.setPublishTime(map.get("publishTime").toString());
+                            requestService.setPublisherEmail(map.get("publisherEmail").toString());
 
-                        requestServicesAL.add(requestService);
+                            requestServicesAL.add(requestService);
 
+                        }
+                        RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
+                        requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
-                    RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
-                    requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                 }
             }
         });

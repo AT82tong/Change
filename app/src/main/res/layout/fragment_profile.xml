@@ -214,7 +214,7 @@
             android:fontFamily="sans-serif"
             android:text="Post Service"
             android:clickable="true"
-            android:drawableRight="@drawable/expand"
+            android:drawableRight="@drawable/collapse"
             android:textSize="20dp"
             android:visibility="visible" />
 
@@ -234,7 +234,7 @@
             android:fontFamily="sans-serif"
             android:clickable="true"
             android:text="Request Service"
-            android:drawableRight="@drawable/expand"
+            android:drawableRight="@drawable/collapse"
             android:textSize="20dp"
             android:visibility="visible" />
 

@@ -5,23 +5,30 @@ import java.util.ArrayList;
 
 public class Order {
 
-    private String id;
+    private String serviceId;
     private String serviceType;
     private String originalPoster;
     private String acceptor;
     private String status;
     private String paymentType;
+    private String acceptanceTime;
     private String completionTime;
     private ArrayList<String> chat;
-
-    public Order(String id, String serviceType, String originalPoster, String acceptor, String status) {
-        this.id = id;
+    public Order(String serviceId, String serviceType, String originalPoster, String acceptor, String status, String acceptanceTime) {
+        this.serviceId = serviceId;
         this.serviceType = serviceType;
         this.originalPoster = originalPoster;
         this.acceptor = acceptor;
         this.status = status;
-        this.paymentType = paymentType;
-        this.completionTime = completionTime;
+        this.acceptanceTime = acceptanceTime;
+    }
+
+    public String getAcceptanceTime() {
+        return acceptanceTime;
+    }
+
+    public void setAcceptanceTime(String acceptanceTime) {
+        this.acceptanceTime = acceptanceTime;
     }
 
     public String getCompletionTime() {
@@ -32,12 +39,12 @@ public class Order {
         this.completionTime = completionTime;
     }
 
-    public String getId() {
-        return id;
+    public String getServiceId() {
+        return serviceId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
     public String getServiceType() {

@@ -11,7 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tongan.myapplication.Classes.Order;
+import com.bumptech.glide.Glide;
+import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.R;
 
 import java.util.ArrayList;
@@ -21,11 +22,13 @@ public class OrdersRecyclerViewAdapter extends RecyclerView.Adapter<OrdersRecycl
     public static final String TAG = "OrdersRecyclerViewAdapter";
 
     private Context context;
-    private ArrayList<Order> ordersAL;
+    private User user;
+    private ArrayList<String> orderNumbers;
 
-    public OrdersRecyclerViewAdapter(Context context, ArrayList<Order> ordersAL) {
+    public OrdersRecyclerViewAdapter(Context context, User user, ArrayList<String> orderNumbers) {
         this.context = context;
-        this.ordersAL = ordersAL;
+        this.user = user;
+        this.orderNumbers = orderNumbers;
     }
 
     @NonNull
@@ -39,18 +42,28 @@ public class OrdersRecyclerViewAdapter extends RecyclerView.Adapter<OrdersRecycl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        holder.profileDisplayName.setText(user.getDisplayName());
+        if (user.getProfileImage() != null) {
+            Glide.with(context).asBitmap().load(user.getProfileImage()).into(holder.profileImage);
+        } else {
+            Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(holder.profileImage);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return ordersAL.size();
+        try {
+            return orderNumbers.size();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView profileImage;
-        TextView serviceDisplayName;
         ImageView serviceImage;
+        TextView profileDisplayName;
         TextView serviceTitle;
         TextView serviceDescription;
         TextView servicePrice;
@@ -62,7 +75,7 @@ public class OrdersRecyclerViewAdapter extends RecyclerView.Adapter<OrdersRecycl
             super(itemView);
 
             profileImage = itemView.findViewById(R.id.profileImage);
-            serviceDisplayName = itemView.findViewById(R.id.serviceDisplayName);
+            profileDisplayName = itemView.findViewById(R.id.profileDisplayName);
             serviceImage = itemView.findViewById(R.id.serviceImage);
             serviceTitle = itemView.findViewById(R.id.serviceTitle);
             serviceDescription = itemView.findViewById(R.id.serviceDescription);

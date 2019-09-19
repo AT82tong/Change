@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +21,11 @@ import com.example.tongan.myapplication.Activities.MainActivity;
 import com.example.tongan.myapplication.Classes.Order;
 import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.Service;
-import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,16 +33,15 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.ramotion.foldingcell.FoldingCell;
 
-
-import java.io.Serializable;
-import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
-
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -53,7 +51,9 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 
     public static final String TAG = "PostServiceFoldingCellRecyclerViewAdapter";
 
+    private String randomId;
     private DocumentReference documentReference;
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
 
     //private String image;
     private ArrayList<PostService> postServicesAL;
@@ -103,6 +103,12 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
                         } else {
                             Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(viewHolder.profileImage);
                         }
+
+                        if (databaseHelper.getCurrentUserEmail().equals(map.get("email").toString())) {
+                            viewHolder.removeService.setVisibility(View.VISIBLE);
+                            viewHolder.editService.setVisibility(View.VISIBLE);
+                            viewHolder.acceptService.setVisibility(View.GONE);
+                        }
                         //System.out.println(user.getDisplayName());
                     }
                 }
@@ -111,6 +117,7 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 //
         viewHolder.serviceTitle.setText(postServicesAL.get(i).getServiceTitle());
         viewHolder.servicePrice.setText(Double.toString(postServicesAL.get(i).getPrice()));
+
 ////      viewHolder.location.setText(location);
 //      viewHolder.completion.setText(completion);
     }
@@ -118,12 +125,17 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
 
     @Override
     public int getItemCount() {
-        return postServicesAL.size();
+        try {
+            return postServicesAL.size();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         //OnFoldingCellListener onFoldingCellListener;
+        private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
         private FoldingCell foldingCell;
         private CircleImageView profileImage;
@@ -148,8 +160,6 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
             acceptService = itemView.findViewById(R.id.serviceAccept);
 //            completion = itemView.findViewById(R.id.completionBefore);
 
-            // can be improve later (don't think passing buttons as arguments is correct way to do this)
-            checkVisibility(removeService, editService, acceptService);
 
             //this.onFoldingCellListener = onFoldingCellListener;
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -190,24 +200,6 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         void onFoldingCellClick(int position);
     }
 
-    private void checkVisibility(final Button removeService, final Button editService, final Button acceptService) {
-        firebaseFirestore.collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String email = document.get("publisherEmail").toString();
-                        if (email.equals(databaseHelper.getCurrentUserEmail())) {
-                            removeService.setVisibility(View.VISIBLE);
-                            editService.setVisibility(View.VISIBLE);
-                            acceptService.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-        });
-    }
-
     private AlertDialog removeService(final int position) {
         //Log.d(TAG, "pressed");
         AlertDialog alertDialog = new AlertDialog.Builder(context)
@@ -240,7 +232,8 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
         context.startActivity(intent);
     }
 
-    private void acceptService(Service service, final String serviceType) {
+    private void acceptService(final Service service, final String serviceType) {
+        randomId = UUID.randomUUID().toString();
         final String acceptor = databaseHelper.getCurrentUserEmail();
         final String serviceId = service.getId();
         documentReference = firebaseFirestore.collection(serviceType).document(service.getId());
@@ -249,24 +242,27 @@ public class PostServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adap
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot != null) {
                     Map<String, Object> map = documentSnapshot.getData();
-                    Order order = new Order(serviceId, serviceType, map.get("publisherEmail").toString(), acceptor, "Accepted");
-                    firebaseFirestore.collection("Orders").document(serviceId)
+                    Order order = new Order(serviceId, serviceType, map.get("publisherEmail").toString(), acceptor, "Accepted", dateFormat.format(new Date()));
+                    firebaseFirestore.collection("Orders").document(randomId)
                             .set(order)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                                public void onSuccess(Void aVoid) {
                                     Toast.makeText(context, "Service Accepted.", Toast.LENGTH_LONG).show();
                                     Log.d(TAG, "Service accept successful.");
+
+                                    firebaseFirestore.collection("Users").document(acceptor).update("orderNumbers", FieldValue.arrayUnion(randomId));
+                                    firebaseFirestore.collection("Users").document(service.getPublisherEmail()).update("orderNumbers", FieldValue.arrayUnion(randomId));
                                     Intent intent = new Intent(context, MainActivity.class);
                                     context.startActivity(intent);
                                 }
                             })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "Error accepting service " + serviceId, e);
-                        }
-                    });
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Error accepting service " + serviceId, e);
+                                }
+                            });
                 }
             }
         });

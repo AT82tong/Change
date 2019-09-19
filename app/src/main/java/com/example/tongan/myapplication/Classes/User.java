@@ -15,6 +15,7 @@ public class User {
     private ArrayList<String> postNumbers;
     private ArrayList<String> requestNumbers;
     private ArrayList<String> images;
+    private ArrayList<String> orderNumbers;
 
     public User(){}
 
@@ -29,6 +30,14 @@ public class User {
         this.password = password;
         this.followers = followers;
         this.rating = rating;
+    }
+
+    public ArrayList<String> getOrderNumbers() {
+        return orderNumbers;
+    }
+
+    public void setOrderNumbers(ArrayList<String> orderNumbers) {
+        this.orderNumbers = orderNumbers;
     }
 
     public String getProfileImage() {

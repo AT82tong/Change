@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.OrderActivity;
@@ -135,7 +134,6 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                         postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
                         postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
                     }
-                    ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                 }
             });
 
@@ -150,7 +148,6 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                         requestServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
                         requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
                     }
-                    ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
                 }
             });
         }
@@ -203,10 +200,22 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                         for (String postNumber : (ArrayList<String>) map.get("postNumbers")) {
                             postNumbers.add(postNumber);
                         }
+
+                        if (postNumbers.isEmpty()) {
+                            postServiceText.setVisibility(View.GONE);
+                        } else {
+                            postServiceText.setVisibility(View.VISIBLE);
+                        }
                     }
                     if (null != map.get("requestNumbers")) {
                         for (String requestNumber : (ArrayList<String>) map.get("requestNumbers")) {
                             requestNumbers.add(requestNumber);
+                        }
+
+                        if (requestNumbers.isEmpty()) {
+                            requestServiceText.setVisibility(View.GONE);
+                        } else {
+                            requestServiceText.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -248,39 +257,36 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
-                    if (task.getResult().size() == 0) {
-                        postServiceText.setVisibility(View.GONE);
-                        postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-                    } else {
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                            for (String postNumber : postNumbers) {
-                                if (queryDocumentSnapshot.getId().equals(postNumber)) {
-                                    PostService postService = new PostService();
-                                    Map<String, Object> map = queryDocumentSnapshot.getData();
-                                    DecimalFormat df = new DecimalFormat("#.00");
 
-                                    postService.setId(map.get("id").toString());
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                        for (String postNumber : postNumbers) {
+                            if (queryDocumentSnapshot.getId().equals(postNumber)) {
+                                PostService postService = new PostService();
+                                Map<String, Object> map = queryDocumentSnapshot.getData();
+                                DecimalFormat df = new DecimalFormat("#.00");
+
+                                postService.setId(map.get("id").toString());
 //                                    postService.setpublisherEmail(email);
-                                    postService.setServiceTitle(map.get("serviceTitle").toString());
-                                    postService.setAddress(map.get("address").toString());
-                                    postService.setDescription(map.get("description").toString());
-                                    postService.setPrice(Double.parseDouble(df.format(map.get("price"))));
-                                    postService.setPublishTime(map.get("publishTime").toString());
-                                    postService.setPublisherEmail(map.get("publisherEmail").toString());
+                                postService.setServiceTitle(map.get("serviceTitle").toString());
+                                postService.setAddress(map.get("address").toString());
+                                postService.setDescription(map.get("description").toString());
+                                postService.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                                postService.setPublishTime(map.get("publishTime").toString());
+                                postService.setPublisherEmail(map.get("publisherEmail").toString());
 
-                                    postServicesAL.add(postService);
-                                    //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
+                                postServicesAL.add(postService);
+                                //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
 
-                                    //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
-                                }
+                                //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
                             }
                         }
-                        // displaying service info
-                        //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
-                        PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), postServicesAL);
-                        postServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
+                    // displaying service info
+                    //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                    PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), postServicesAL);
+                    postServiceFoldingCellRecyclerView.setAdapter(adapter);
                 }
+
             }
         });
     }
@@ -292,39 +298,34 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    if (task.getResult().size() == 0) {
-                        requestServiceText.setVisibility(View.GONE);
-                        requestServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-                    } else {
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                            for (String requestNumber : requestNumbers) {
-                                if (queryDocumentSnapshot.getId().equals(requestNumber)) {
-                                    RequestService requestService = new RequestService();
-                                    Map<String, Object> map = queryDocumentSnapshot.getData();
-                                    DecimalFormat df = new DecimalFormat("#.00");
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+                        for (String requestNumber : requestNumbers) {
+                            if (queryDocumentSnapshot.getId().equals(requestNumber)) {
+                                RequestService requestService = new RequestService();
+                                Map<String, Object> map = queryDocumentSnapshot.getData();
+                                DecimalFormat df = new DecimalFormat("#.00");
 
-                                    requestService.setId(map.get("id").toString());
+                                requestService.setId(map.get("id").toString());
 //                                    requestService.setpublisherEmail(email);
-                                    requestService.setServiceTitle(map.get("serviceTitle").toString());
-                                    requestService.setAddress(map.get("address").toString());
-                                    requestService.setDescription(map.get("description").toString());
-                                    requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
-                                    requestService.setPublishTime(map.get("publishTime").toString());
-                                    requestService.setPublisherEmail(map.get("publisherEmail").toString());
+                                requestService.setServiceTitle(map.get("serviceTitle").toString());
+                                requestService.setAddress(map.get("address").toString());
+                                requestService.setDescription(map.get("description").toString());
+                                requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                                requestService.setPublishTime(map.get("publishTime").toString());
+                                requestService.setPublisherEmail(map.get("publisherEmail").toString());
 
 
-                                    requestServicesAL.add(requestService);
-                                    //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
+                                requestServicesAL.add(requestService);
+                                //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
 
-                                    //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
-                                }
+                                //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
                             }
                         }
-                        // displaying service info
-                        //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
-                        RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
-                        requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
+                    // displaying service info
+                    //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
+                    RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
+                    requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                 }
             }
         });

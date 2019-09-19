@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.example.tongan.myapplication.Adapters.OrdersRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.Order;
+import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.firebase.database.DataSnapshot;
@@ -27,9 +28,9 @@ public class OrderActivity extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper;
     private DocumentReference documentReference;
-    private FirebaseFirestore firebaseFirestore;
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private RecyclerView orderList;
-    private ArrayList<Order> ordersAL;
+    private ArrayList<String> ordersAL = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +43,11 @@ public class OrderActivity extends AppCompatActivity {
         orderList = findViewById(R.id.orderList);
 
         loadOrders();
-
-        OrdersRecyclerViewAdapter adapter = new OrdersRecyclerViewAdapter(this, ordersAL);
-        orderList.setAdapter(adapter);
-        orderList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     // NEEDS MORE WORK
     private void loadOrders() {
+        final User user = new User();
         final ArrayList<String> orderNumbers = new ArrayList<>();
         documentReference = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -57,10 +55,21 @@ public class OrderActivity extends AppCompatActivity {
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot != null) {
                     Map<String, Object> map = documentSnapshot.getData();
-                    for (String orderNumber : (ArrayList<String>) map.get("orderNumbers")) {
-                        orderNumbers.add(orderNumber);
+                    user.setDisplayName(map.get("displayName").toString());
+
+                    if (map.get("profileImage") != null) {
+                        user.setProfileImage(map.get("profileImage").toString());
+                    }
+
+                    if (null != map.get("orderNumbers")) {
+                        for (String orderNumber : (ArrayList<String>) map.get("orderNumbers")) {
+                            orderNumbers.add(orderNumber);
+                        }
                     }
                 }
+                OrdersRecyclerViewAdapter adapter = new OrdersRecyclerViewAdapter(OrderActivity.this, user, orderNumbers);
+                orderList.setAdapter(adapter);
+                orderList.setLayoutManager(new LinearLayoutManager(OrderActivity.this));
             }
         });
     }

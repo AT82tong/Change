@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.EditServiceActivity;
-import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.RequestService;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
@@ -26,8 +25,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
@@ -88,6 +85,12 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
                             Glide.with(context).asBitmap().load(R.drawable.settings_profile_picture).into(viewHolder.profileImage);
                         }
 
+                        if (databaseHelper.getCurrentUserEmail().equals(map.get("email").toString())) {
+                            viewHolder.removeService.setVisibility(View.VISIBLE);
+                            viewHolder.editService.setVisibility(View.VISIBLE);
+                            viewHolder.acceptService.setVisibility(View.GONE);
+                        }
+
                         //System.out.println(user.getDisplayName());
                     }
                 }
@@ -105,7 +108,11 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 
     @Override
     public int getItemCount() {
-        return requestServiceAL.size();
+        try {
+            return requestServiceAL.size();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -136,9 +143,6 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
             acceptService = itemView.findViewById(R.id.serviceAccept);
 //            completion = itemView.findViewById(R.id.completionBefore);
 
-            // can be improve later (don't think passing buttons as arguments is correct way to do this)
-            checkVisibility(removeService, editService, acceptService);
-
             this.onFoldingCellListener = onFoldingCellListener;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -166,24 +170,6 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 
     public interface OnFoldingCellListener {
         void onFoldingCellClick(int position);
-    }
-
-    private void checkVisibility(final Button removeService, final Button editService, final Button acceptService) {
-        firebaseFirestore.collection("RequestServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String email = document.get("publisherEmail").toString();
-                        if (email.equals(databaseHelper.getCurrentUserEmail())) {
-                            removeService.setVisibility(View.VISIBLE);
-                            editService.setVisibility(View.VISIBLE);
-                            acceptService.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-        });
     }
 
     public AlertDialog removeService(final int position) {
