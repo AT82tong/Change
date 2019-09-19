@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/round_input_text_white_bg"
+    android:layout_height="wrap_content"
     android:layout_margin="10dp">
 
     <RelativeLayout
         android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/setting_item_selector"
+        android:background="@drawable/round_input_text_white_bg"
+        android:padding="10dp"
         android:clickable="true">
-
 
         <ImageView
             android:id="@+id/profileImage"
@@ -117,7 +116,7 @@
                     android:layout_weight="1"
                     android:clickable="false"
                     android:layout_marginEnd="80dp"
-                    android:background="@color/white"/>
+                    android:background="#11000000"/>
 
                 <Button
                     android:id="@+id/chatBtn"

@@ -6,6 +6,7 @@
     <color name="solidCircle">#80FFFFFF</color>
     <color name="circleBorder">#50FFFFFF</color>
     <color name="followerBg">#65DCE5</color>
+    <color name="transparent">#11000000</color>
 
     <color name="black">#000000</color>
     <color name="black2">#ffeeeeee</color>
