@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -84,6 +85,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     private EditText servicePriceText;
     private EditText serviceDescriptionText;
     private EditText serviceStreetAddressText;
+    private EditText maxAcceptors;
     private Spinner serviceCategorySpinner;
     private FusedLocationProviderClient fusedLocationProviderClient;
     // editable inputbox
@@ -94,6 +96,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 
     // clickable buttons
     private ImageView backBtn;
+    private CheckBox maxAcceptorsCheckBox;
     private Button submitBtn;
     //private Button requestBtn;
     private Button addImageBtn;
@@ -104,6 +107,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     private String serviceDescription;
     private String serviceAddress;
     private String serviceCategory;
+    private int maxAcceptorsNumber;
 
     private String randomID;
     private ArrayList<String> serviceImagesStringAL = new ArrayList<>();
@@ -141,11 +145,13 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         servicePriceText.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(10, 2)});
         serviceDescriptionText = findViewById(R.id.service_description_input);
         serviceStreetAddressText = findViewById(R.id.service_street_address_input);
+        maxAcceptors = findViewById(R.id.maxAcceptors);
         serviceCategorySpinner = findViewById(R.id.service_category_spinner);
         backBtn = findViewById(R.id.backBtn);
         submitBtn = findViewById(R.id.submitBtn);
         //requestBtn = findViewById(R.id.requestBtn);
         addImageBtn = findViewById(R.id.addImageBtn);
+        maxAcceptorsCheckBox = findViewById(R.id.maxAcceptorsNoLimit);
 
         serviceTitleTextLayout = findViewById(R.id.service_title_inputLayout);
         servicePriceTextLayout = findViewById(R.id.service_price_inputLayout);
@@ -195,7 +201,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
-                    addRequestServiceToDatabase(databaseHelper.getCurrentUserEmail(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address);
+                    addRequestServiceToDatabase(databaseHelper.getCurrentUserEmail(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address, maxAcceptorsNumber);
                     if (!serviceImagesUriAL.isEmpty()) {
                         savePhotoToDatabase(serviceImagesUriAL);
                     }
@@ -203,7 +209,22 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
             }
         });
 
-
+        maxAcceptorsCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked()) {
+                    maxAcceptorsNumber = -1;
+                    maxAcceptors.setText("No Limit");
+                    maxAcceptors.setEnabled(false);
+                    maxAcceptors.setClickable(false);
+                } else {
+                    maxAcceptorsNumber = 0;
+                    maxAcceptors.setText("");
+                    maxAcceptors.setEnabled(true);
+                    maxAcceptors.setClickable(true);
+                }
+            }
+        });
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,6 +275,16 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         } else {
             serviceAddressTextLayout.setErrorEnabled(false);
         }
+
+        if (maxAcceptorsNumber != -1) {
+            if (TextUtils.isEmpty(maxAcceptors.getText().toString()) || Integer.parseInt(maxAcceptors.getText().toString()) == 0) {
+                Toast.makeText(AddPostActivity.this, "maxAcceptors error.", Toast.LENGTH_LONG).show();
+                isValidated = false;
+            } else {
+                maxAcceptorsNumber = Integer.parseInt(maxAcceptors.getText().toString());
+            }
+        }
+
         Log.d(TAG, "address: " + address);
 
         return isValidated;
@@ -305,9 +336,9 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 //    }
 
     // add request service to database
-    public void addRequestServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
+    public void addRequestServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress, int maxAcceptors) {
         date = new Date();
-        RequestService requestService = new RequestService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, false, null, null);
+        RequestService requestService = new RequestService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, false, null, maxAcceptors);
         firebaseFirestore.collection("RequestServices").document(randomID)
                 .set(requestService)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

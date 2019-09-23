@@ -1,25 +1,11 @@
 package com.example.tongan.myapplication.Helper;
 
-import android.app.Activity;
-import android.view.View;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class DatabaseHelper {
 

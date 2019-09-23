@@ -35,6 +35,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.ramotion.foldingcell.FoldingCell;
 
+import java.lang.reflect.Array;
+import java.nio.file.FileVisitOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -108,8 +110,35 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
                             viewHolder.editService.setVisibility(View.VISIBLE);
                             viewHolder.acceptService.setVisibility(View.GONE);
                         }
-
                         //System.out.println(user.getDisplayName());
+                    }
+                }
+            }
+        });
+
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("RequestServices").document(requestServiceAL.get(i).getId());
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        Map<String, Object> map = documentSnapshot.getData();
+
+                        try {
+                            if (map.get("acceptorList") != null) {
+                                ArrayList<String> acceptorAL = new ArrayList<>();
+                                for (String acceptorEmail : (ArrayList<String>) map.get("acceptorList")) {
+                                    acceptorAL.add(acceptorEmail);
+                                }
+                                if (acceptorAL.contains(databaseHelper.getCurrentUserEmail())) {
+                                    viewHolder.acceptService.setVisibility(View.GONE);
+                                    viewHolder.serviceAccepted.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.d(TAG, "acceptorList null");
+                        }
                     }
                 }
             }
@@ -142,6 +171,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
         private TextView generalLocation;
         private TextView servicePrice;
         private TextView completion;
+        private TextView serviceAccepted;
         private Button removeService;
         private Button editService;
         private Button acceptService;
@@ -154,6 +184,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
             profileImage = itemView.findViewById(R.id.requesterProfileImage);
             requesterName = itemView.findViewById(R.id.requesterName);
             serviceTitle = itemView.findViewById(R.id.serviceTitle);
+            serviceAccepted = itemView.findViewById(R.id.serviceAccepted);
 //            location = itemView.findViewById(R.id.serviceLocation);
             servicePrice = itemView.findViewById(R.id.servicePrice);
             removeService = itemView.findViewById(R.id.serviceRemove);
@@ -250,6 +281,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 
                                     firebaseFirestore.collection("Users").document(acceptor).update("orderNumbers", FieldValue.arrayUnion(randomId));
                                     firebaseFirestore.collection("Users").document(service.getPublisherEmail()).update("orderNumbers", FieldValue.arrayUnion(randomId));
+                                    firebaseFirestore.collection("RequestServices").document(serviceId).update("acceptorList", FieldValue.arrayUnion(acceptor));
                                     Intent intent = new Intent(context, MainActivity.class);
                                     context.startActivity(intent);
                                 }

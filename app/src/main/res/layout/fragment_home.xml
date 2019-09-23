@@ -131,8 +131,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/homepage_service_cleaning"
-                                android:layout_centerHorizontal="true"
-                                android:text="Lesson" />
+                                android:layout_marginTop="5dp"
+                                android:layout_centerInParent="true"
+                                android:text="Tutor" />
                         </RelativeLayout>
 
 
@@ -263,7 +264,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/homepage_service_all_day"
                                 android:layout_centerHorizontal="true"
-                                android:text="24/7" />
+                                android:text="Other" />
 
                         </RelativeLayout>
 

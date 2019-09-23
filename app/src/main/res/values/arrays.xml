@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="category">
-        <item>All</item>
-        <item>Vehicle</item>
-        <item>Moving</item>
-        <item>Cleaning</item>
-        <item>House</item>
+        <item>Maintenance</item>
+        <item>Automotive</item>
+        <item>Tutor</item>
+        <item>Household</item>
+        <item>Electronic</item>
+        <item>Lawn</item>
+        <item>Labor</item>
         <item>Other</item>
     </string-array>
 </resources>
