@@ -10,25 +10,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.EditServiceActivity;
+import com.example.tongan.myapplication.Activities.MainActivity;
+import com.example.tongan.myapplication.Classes.Order;
 import com.example.tongan.myapplication.Classes.RequestService;
+import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.ramotion.foldingcell.FoldingCell;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,11 +59,14 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 //    private String completion;
 
     private Context context;
+    private String randomId;
+
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
+    private DocumentReference documentReference;
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
 
     private OnFoldingCellListener onFoldingCellListener;
-
 
     public RequestServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<RequestService> requestServiceAL) {
         this.requestServiceAL = requestServiceAL;
@@ -165,6 +183,13 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
                     editService(getAdapterPosition(), requestServiceAL);
                 }
             });
+
+            acceptService.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    acceptService(requestServiceAL.get(getAdapterPosition()));
+                }
+            });
         }
     }
 
@@ -202,5 +227,41 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
         intent.putExtra("requestService", requestServiceAL.get(position));
         intent.putExtra("serviceType", "RequestServices");
         context.startActivity(intent);
+    }
+
+    private void acceptService(final Service service) {
+        randomId = UUID.randomUUID().toString();
+        final String acceptor = databaseHelper.getCurrentUserEmail();
+        final String serviceId = service.getId();
+        documentReference = firebaseFirestore.collection("RequestServices").document(service.getId());
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    Map<String, Object> map = documentSnapshot.getData();
+                    Order order = new Order(serviceId, "RequestServices", map.get("publisherEmail").toString(), acceptor, "Accepted", dateFormat.format(new Date()));
+                    firebaseFirestore.collection("Orders").document(randomId)
+                            .set(order)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(context, "Service Accepted.", Toast.LENGTH_LONG).show();
+                                    Log.d(TAG, "Service accept successful.");
+
+                                    firebaseFirestore.collection("Users").document(acceptor).update("orderNumbers", FieldValue.arrayUnion(randomId));
+                                    firebaseFirestore.collection("Users").document(service.getPublisherEmail()).update("orderNumbers", FieldValue.arrayUnion(randomId));
+                                    Intent intent = new Intent(context, MainActivity.class);
+                                    context.startActivity(intent);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Error accepting service " + serviceId, e);
+                                }
+                            });
+                }
+            }
+        });
     }
 }

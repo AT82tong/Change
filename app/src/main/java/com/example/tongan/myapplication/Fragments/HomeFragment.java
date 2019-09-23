@@ -98,15 +98,15 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
         searchBtn = view.findViewById(R.id.searchBtn);
 
-        postServiceText = view.findViewById(R.id.post_service);
+        //postServiceText = view.findViewById(R.id.post_service);
         requestServiceText = view.findViewById(R.id.request_service);
 
-        postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
-        postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        //postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
+        //postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         requestServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
         requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        loadPostServiceInfoFromDatabase();
+        //loadPostServiceInfoFromDatabase();
         loadRequestServiceInfoFromDatabase();
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -118,19 +118,20 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         });
 
         // post service expand/collapse button
-        postServiceText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
-                    postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
-                } else {
-                    postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
-                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
-                }
-                ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-            }
-        });
+//        NOT GOING TO IMPLEMENT FOR NOW
+//        postServiceText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
+//                    postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+//                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
+//                } else {
+//                    postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
+//                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+//                }
+//                ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+//            }
+//        });
 
         // request service expand/collapse button
         requestServiceText.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +253,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                         for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                             final PostService postService = new PostService();
                             Map<String, Object> map = queryDocumentSnapshot.getData();
-                            DecimalFormat df = new DecimalFormat("#.00");
+                            DecimalFormat df = new DecimalFormat("0.00");
 
                             postService.setId(map.get("id").toString());
 //                          postService.setpublisherEmail(databaseHelper.getCurrentUserEmail());
@@ -283,7 +284,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                         for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                             RequestService requestService = new RequestService();
                             Map<String, Object> map = queryDocumentSnapshot.getData();
-                            DecimalFormat df = new DecimalFormat("#.00");
+                            DecimalFormat df = new DecimalFormat("0.00");
 
                             requestService.setId(map.get("id").toString());
                             requestService.setServiceTitle(map.get("serviceTitle").toString());

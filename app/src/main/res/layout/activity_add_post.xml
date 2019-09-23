@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/post_service_banner"
+        android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
@@ -34,7 +34,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/post_service_banner"
+        android:layout_below="@id/banner"
         android:background="@android:color/darker_gray" />
 
 
@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/submitBtn"
-        android:layout_below="@id/post_service_banner"
+        android:layout_below="@id/banner"
         android:layout_marginTop="10dp">
 
         <RelativeLayout
@@ -205,16 +205,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/service_category_spinner"
-                android:layout_toLeftOf="@id/requestBtn"
+                android:layout_centerInParent="true"
                 android:text="Add Image" />
 
-            <Button
-                android:id="@+id/requestBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/service_category_spinner"
-                android:layout_centerHorizontal="true"
-                android:text="Submit Request" />
+<!--            <Button-->
+<!--                android:id="@+id/requestBtn"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@id/service_category_spinner"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:text="Submit Request" />-->
 
         </RelativeLayout>
 

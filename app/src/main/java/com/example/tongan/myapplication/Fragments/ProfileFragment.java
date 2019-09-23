@@ -85,7 +85,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         profileFollowers = view.findViewById(R.id.profile_followers);
         profileRating = view.findViewById(R.id.profile_rating);
         documentationText = view.findViewById(R.id.documentationsText);
-        postServiceText = view.findViewById(R.id.post_service);
+        //postServiceText = view.findViewById(R.id.post_service);
         requestServiceText = view.findViewById(R.id.request_service);
         ordersBtn = view.findViewById(R.id.ordersBtn);
 
@@ -94,9 +94,9 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         documentationsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
         // folding cell recycler view
-        postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
+        //postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
         requestServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
-        postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        //postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         Activity activity = getActivity();
@@ -104,7 +104,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         if (isAdded() && activity != null) {
             loadProfileInfoFromDatabase();
             loadDocumentationsFromDatabase();
-            loadPostServiceInfoFromDatabase();
+            //loadPostServiceInfoFromDatabase();
             loadRequestServiceInfoFromDatabase();
 
             settingsImage.setOnClickListener(new View.OnClickListener() {
@@ -124,18 +124,19 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
             });
 
             // post service expand/collapse button
-            postServiceText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
-                        postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
-                    } else {
-                        postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
-                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
-                    }
-                }
-            });
+//            NOT GOING TO IMPLEMENT FOR NOW
+//            postServiceText.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
+//                        postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+//                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
+//                    } else {
+//                        postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
+//                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+//                    }
+//                }
+//            });
 
             // request service expand/collapse button
             requestServiceText.setOnClickListener(new View.OnClickListener() {
@@ -196,17 +197,18 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                         Glide.with(getActivity()).load(userProfileImage).into(profileImage);
                     }
 
-                    if (null != map.get("postNumbers")) {
-                        for (String postNumber : (ArrayList<String>) map.get("postNumbers")) {
-                            postNumbers.add(postNumber);
-                        }
+//                    if (null != map.get("postNumbers")) {
+//                        for (String postNumber : (ArrayList<String>) map.get("postNumbers")) {
+//                            postNumbers.add(postNumber);
+//                        }
+//
+//                        if (postNumbers.isEmpty()) {
+//                            postServiceText.setVisibility(View.GONE);
+//                        } else {
+//                            postServiceText.setVisibility(View.VISIBLE);
+//                        }
+//                    }
 
-                        if (postNumbers.isEmpty()) {
-                            postServiceText.setVisibility(View.GONE);
-                        } else {
-                            postServiceText.setVisibility(View.VISIBLE);
-                        }
-                    }
                     if (null != map.get("requestNumbers")) {
                         for (String requestNumber : (ArrayList<String>) map.get("requestNumbers")) {
                             requestNumbers.add(requestNumber);

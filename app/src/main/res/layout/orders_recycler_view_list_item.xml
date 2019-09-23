@@ -50,15 +50,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="Service Title Service Title Service Title Service Title Service Title Service Title Service Title Service Title" />
+                    android:maxLines="2" />
 
                 <TextView
                     android:id="@+id/serviceDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:hint="Service Description Service Description Service Description Service Description Service Description Service Description"
                     android:maxLines="2" />
 
             </LinearLayout>
@@ -87,8 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="5dp"
-                android:text="$123.00"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
@@ -106,18 +103,18 @@
                 <Button
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="80dp"
                     android:layout_weight="1"
                     android:visibility="invisible"
                     android:clickable="false" />
 
-                <Button
-                    android:id="@+id/chatBtn"
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/round_black_border"
-                    android:hint="Chat" />
+<!--                NOT GOING TO IMPLEMENT FOR NOW-->
+<!--                <Button-->
+<!--                    android:id="@+id/chatBtn"-->
+<!--                    android:layout_width="0px"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:background="@drawable/round_black_border"-->
+<!--                    android:hint="Chat" />-->
 
                 <Button
                     android:id="@+id/cancelBtn"
@@ -147,19 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_toEndOf="@id/profileImage"
-            android:text="DisplayName"
             android:textSize="16sp" />
-
-        <!--        <TextView-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:drawableStart="@drawable/search"-->
-        <!--            android:gravity="start"-->
-        <!--            android:layout_centerInParent="true"-->
-        <!--            android:drawablePadding="3dp"-->
-        <!--            android:hint="Displayname"-->
-        <!--            android:textColor="@color/black"-->
-        <!--            android:textSize="16sp" />-->
 
     </RelativeLayout>
 
