@@ -176,12 +176,47 @@
                 android:layout_marginRight="15dp"
                 android:background="@color/grey" />
 
+            <TextView
+                android:id="@+id/numberOfAcceptors"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_below="@+id/service_address_inputLayout"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:text="Max Acceptors: "
+                android:textColor="#5b8abf"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/maxAcceptors"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@id/numberOfAcceptors"
+                android:layout_marginStart="10dp"
+                android:inputType="number"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/service_address_inputLayout"
+                android:background="@drawable/edit_text_style_transparent_bg"/>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/maxAcceptorsNoLimit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/service_address_inputLayout"
+                android:layout_marginStart="9dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@id/maxAcceptors"
+                android:text="No Limit" />
+
 
             <TextView
                 android:id="@+id/service_category_view"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_below="@+id/service_address_inputLayout"
+                android:layout_below="@+id/numberOfAcceptors"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
@@ -194,7 +229,7 @@
                 android:id="@+id/serviceCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_below="@id/service_address_inputLayout"
+                android:layout_below="@id/numberOfAcceptors"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@id/service_category_view"

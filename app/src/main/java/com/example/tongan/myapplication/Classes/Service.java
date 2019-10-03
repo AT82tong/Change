@@ -23,14 +23,6 @@ public class Service implements Serializable {
     private ArrayList<String> acceptorList;
     private int maxAcceptor;
 
-    public int getMaxAcceptor() {
-        return maxAcceptor;
-    }
-
-    public void setMaxAcceptor(int maxAcceptor) {
-        this.maxAcceptor = maxAcceptor;
-    }
-
     public Service() {
     }
 
@@ -46,6 +38,14 @@ public class Service implements Serializable {
         this.profileImage = profileImage;
         this.serviceImages = serviceImages;
         this.isAccepted = isAccepted;
+        this.maxAcceptor = maxAcceptor;
+    }
+
+    public int getMaxAcceptor() {
+        return maxAcceptor;
+    }
+
+    public void setMaxAcceptor(int maxAcceptor) {
         this.maxAcceptor = maxAcceptor;
     }
 

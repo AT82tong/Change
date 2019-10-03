@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class EditServiceActivity extends AppCompatActivity implements Serializab
     private EditText servicePriceText;
     private EditText serviceDescriptionText;
     private EditText serviceAddressText;
+    private EditText maxAcceptors;
     private Spinner serviceCategorySpinner;
     private FusedLocationProviderClient fusedLocationProviderClient;
     // editable inputbox
@@ -41,12 +43,15 @@ public class EditServiceActivity extends AppCompatActivity implements Serializab
     private TextInputLayout serviceDescriptionTextLayout;
     private TextInputLayout serviceAddressTextLayout;
 
+    private CheckBox maxAcceptorsCheckBox;
+
     private String serviceTitle;
     private String servicePrice;
     private String serviceDescription;
     private String serviceAddress;
 
     private Button submitBtn;
+    private int maxAcceptorsNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,8 @@ public class EditServiceActivity extends AppCompatActivity implements Serializab
         serviceDescriptionTextLayout = findViewById(R.id.service_description_inputLayout);
         serviceAddressTextLayout = findViewById(R.id.service_address_inputLayout);
 
+        maxAcceptors = findViewById(R.id.maxAcceptors);
+        maxAcceptorsCheckBox = findViewById(R.id.maxAcceptorsNoLimit);
         submitBtn = findViewById(R.id.submitBtn);
 
 
@@ -82,11 +89,40 @@ public class EditServiceActivity extends AppCompatActivity implements Serializab
         serviceDescriptionText.setText(service.getDescription());
         serviceAddressText.setText(service.getAddress());
 
+        if (service.getMaxAcceptor() == -1) {
+            maxAcceptorsCheckBox.setChecked(true);
+            maxAcceptors.setText("No Limit");
+            maxAcceptors.setEnabled(false);
+            maxAcceptors.setClickable(false);
+        } else {
+            maxAcceptorsCheckBox.setChecked(false);
+            maxAcceptors.setText("" + service.getMaxAcceptor());
+            maxAcceptors.setEnabled(true);
+            maxAcceptors.setClickable(true);
+        }
+
+        maxAcceptorsCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked()) {
+                    maxAcceptorsNumber = -1;
+                    maxAcceptors.setText("No Limit");
+                    maxAcceptors.setEnabled(false);
+                    maxAcceptors.setClickable(false);
+                } else {
+                    maxAcceptorsNumber = 0;
+                    maxAcceptors.setText("");
+                    maxAcceptors.setEnabled(true);
+                    maxAcceptors.setClickable(true);
+                }
+            }
+        });
+
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
-                    updateServiceInDatabase(serviceType, service.getId(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, serviceAddress);
+                    updateServiceInDatabase(serviceType, service.getId(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, serviceAddress, maxAcceptorsNumber);
                     onBackPressed();
                 }
             }
@@ -129,16 +165,26 @@ public class EditServiceActivity extends AppCompatActivity implements Serializab
             serviceAddressTextLayout.setErrorEnabled(false);
         }
 
+        if (maxAcceptorsNumber != -1) {
+            if (TextUtils.isEmpty(maxAcceptors.getText().toString()) || Integer.parseInt(maxAcceptors.getText().toString()) == 0) {
+                Toast.makeText(EditServiceActivity.this, "maxAcceptors error.", Toast.LENGTH_LONG).show();
+                isValidated = false;
+            } else {
+                maxAcceptorsNumber = Integer.parseInt(maxAcceptors.getText().toString());
+            }
+        }
+
         return isValidated;
     }
 
     // IMAGE NOT DONE, NEED TO COMPLETE IN FUTURE
-    public void updateServiceInDatabase(String serviceType, String serviceId, String serviceTitle, double servicePrice, String serviceCategory, String serviceDescription, String serviceAddress) {
+    public void updateServiceInDatabase(String serviceType, String serviceId, String serviceTitle, double servicePrice, String serviceCategory, String serviceDescription, String serviceAddress, int maxAcceptorsNumber) {
         DocumentReference ref = FirebaseFirestore.getInstance().collection(serviceType).document(serviceId);
         ref.update("serviceTitle", serviceTitle);
         ref.update("price", servicePrice);
         ref.update("category", serviceCategory);
         ref.update("description", serviceDescription);
         ref.update("address", serviceAddress);
+        ref.update("maxAcceptor", maxAcceptorsNumber);
     }
 }

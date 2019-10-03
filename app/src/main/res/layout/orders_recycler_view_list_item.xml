@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/profileImage"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="5dp">
 
             <ImageView
                 android:id="@+id/serviceImage"
@@ -124,7 +124,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/round_black_border"
-                    android:hint="Cancel" />
+                    android:hint="Cancel Order" />
 
                 <Button
                     android:id="@+id/payNowBtn"

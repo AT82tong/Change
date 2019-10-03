@@ -303,6 +303,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                                 requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
                                 requestService.setPublishTime(map.get("publishTime").toString());
                                 requestService.setPublisherEmail(map.get("publisherEmail").toString());
+                                requestService.setMaxAcceptor(Integer.parseInt(map.get("maxAcceptor").toString()));
 
                                 requestServicesAL.add(requestService);
 
