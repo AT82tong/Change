@@ -13,7 +13,7 @@ public class Order {
     private String paymentType;
     private String acceptanceTime;
     private String completionTime;
-    private ArrayList<String> chat;
+
     public Order(String serviceId, String serviceType, String originalPoster, String acceptor, String status, String acceptanceTime) {
         this.serviceId = serviceId;
         this.serviceType = serviceType;
@@ -85,14 +85,6 @@ public class Order {
 
     public void setPaymentType(String paymentType) {
         this.paymentType = paymentType;
-    }
-
-    public ArrayList<String> getChat() {
-        return chat;
-    }
-
-    public void setChat(ArrayList<String> chat) {
-        this.chat = chat;
     }
 
 }

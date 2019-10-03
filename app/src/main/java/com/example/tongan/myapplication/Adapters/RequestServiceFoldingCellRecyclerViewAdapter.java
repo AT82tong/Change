@@ -126,7 +126,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
                         Map<String, Object> map = documentSnapshot.getData();
 
                         try {
-                            if (map.get("acceptorList") != null) {
+                            if (null != map.get("acceptorList")) {
                                 ArrayList<String> acceptorAL = new ArrayList<>();
                                 for (String acceptorEmail : (ArrayList<String>) map.get("acceptorList")) {
                                     acceptorAL.add(acceptorEmail);
