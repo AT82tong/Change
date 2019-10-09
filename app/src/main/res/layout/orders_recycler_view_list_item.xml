@@ -35,6 +35,14 @@
 
             <ImageView
                 android:id="@+id/serviceImage"
+<<<<<<< HEAD
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/ic_launcher_background"
+                android:background="@drawable/circle"
+                android:layout_marginBottom="5dp"/>
+=======
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_alignParentStart="true"
@@ -42,6 +50,7 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/circle"
                 android:src="@drawable/ic_launcher_background" />
+>>>>>>> 78c671b02f779d21c5b9da4364212fde10dc37df
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -144,6 +153,8 @@
 
         </RelativeLayout>
 
+<<<<<<< HEAD
+=======
         <TextView
             android:id="@+id/profileDisplayName"
             android:layout_width="wrap_content"
@@ -152,6 +163,7 @@
             android:layout_toEndOf="@id/profileImage"
             android:textSize="16sp" />
 
+>>>>>>> 78c671b02f779d21c5b9da4364212fde10dc37df
     </RelativeLayout>
 
 </RelativeLayout>
