@@ -270,7 +270,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot != null) {
                     Map<String, Object> map = documentSnapshot.getData();
-                    Order order = new Order(serviceId, "RequestServices", map.get("publisherEmail").toString(), acceptor, "Accepted", dateFormat.format(new Date()));
+                    Order order = new Order(serviceId, "RequestServices", map.get("publisherEmail").toString(), acceptor, "Accepted", dateFormat.format(new Date()), Double.parseDouble(map.get("price").toString()));
                     firebaseFirestore.collection("Orders").document(randomId)
                             .set(order)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {

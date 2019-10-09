@@ -13,14 +13,24 @@ public class Order {
     private String paymentType;
     private String acceptanceTime;
     private String completionTime;
+    private double totalPrice;
 
-    public Order(String serviceId, String serviceType, String originalPoster, String acceptor, String status, String acceptanceTime) {
+    public Order(String serviceId, String serviceType, String originalPoster, String acceptor, String status, String acceptanceTime, double totalPrice) {
         this.serviceId = serviceId;
         this.serviceType = serviceType;
         this.originalPoster = originalPoster;
         this.acceptor = acceptor;
         this.status = status;
         this.acceptanceTime = acceptanceTime;
+        this.totalPrice = totalPrice;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getAcceptanceTime() {

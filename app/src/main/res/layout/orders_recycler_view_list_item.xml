@@ -20,6 +20,12 @@
             android:layout_alignParentStart="true"
             android:src="@drawable/ic_launcher_background" />
 
+        <TextView
+            android:id="@+id/serviceStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true" />
+
         <RelativeLayout
             android:id="@+id/summaryRL"
             android:layout_width="match_parent"

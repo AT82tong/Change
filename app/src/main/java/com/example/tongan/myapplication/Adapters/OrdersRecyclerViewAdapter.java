@@ -98,6 +98,7 @@ public class OrdersRecyclerViewAdapter extends RecyclerView.Adapter<OrdersRecycl
                                         holder.serviceTitle.setText(m.get("serviceTitle").toString());
                                         holder.serviceDescription.setText(m.get("description").toString());
                                         holder.servicePrice.setText("$: " + df.format(Double.parseDouble(m.get("price").toString())));
+                                        holder.serviceStatus.setText(m.get("status").toString());
                                     }
                                 }
                             }
@@ -129,6 +130,7 @@ public class OrdersRecyclerViewAdapter extends RecyclerView.Adapter<OrdersRecycl
         private TextView serviceTitle;
         private TextView serviceDescription;
         private TextView servicePrice;
+        private TextView serviceStatus;
         //private Button chatBtn;
         private Button cancelBtn;
         private Button payNowBtn;
@@ -146,6 +148,7 @@ public class OrdersRecyclerViewAdapter extends RecyclerView.Adapter<OrdersRecycl
             serviceTitle = itemView.findViewById(R.id.serviceTitle);
             serviceDescription = itemView.findViewById(R.id.serviceDescription);
             servicePrice = itemView.findViewById(R.id.servicePrice);
+            serviceStatus = itemView.findViewById(R.id.serviceStatus);
             //chatBtn = itemView.findViewById(R.id.chatBtn);
             cancelBtn = itemView.findViewById(R.id.cancelBtn);
             payNowBtn = itemView.findViewById(R.id.payNowBtn);
