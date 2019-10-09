@@ -206,24 +206,25 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"/>
 
-        <TextView
-            android:id="@+id/post_service"
-            style="@style/TxtTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="Post Service"
-            android:clickable="true"
-            android:drawableRight="@drawable/collapse"
-            android:textSize="20dp"
-            android:visibility="visible" />
+<!--        NOT GOING TO IMPLEMENT FOR NOW-->
+<!--        <TextView-->
+<!--            android:id="@+id/post_service"-->
+<!--            style="@style/TxtTitle"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fontFamily="sans-serif"-->
+<!--            android:text="Post Service"-->
+<!--            android:clickable="true"-->
+<!--            android:drawableRight="@drawable/collapse"-->
+<!--            android:textSize="20dp"-->
+<!--            android:visibility="visible" />-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/postServiceFoldingCellRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/linerlayout"
-            android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/postServiceFoldingCellRecyclerView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignStart="@+id/linerlayout"-->
+<!--            android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>-->
 
 
         <TextView

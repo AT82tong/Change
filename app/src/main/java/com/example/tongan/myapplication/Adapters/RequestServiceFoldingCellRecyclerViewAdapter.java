@@ -10,25 +10,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.EditServiceActivity;
+import com.example.tongan.myapplication.Activities.MainActivity;
+import com.example.tongan.myapplication.Classes.Order;
 import com.example.tongan.myapplication.Classes.RequestService;
+import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.ramotion.foldingcell.FoldingCell;
 
+import java.lang.reflect.Array;
+import java.nio.file.FileVisitOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,11 +61,14 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
 //    private String completion;
 
     private Context context;
+    private String randomId;
+
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
+    private DocumentReference documentReference;
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
 
     private OnFoldingCellListener onFoldingCellListener;
-
 
     public RequestServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<RequestService> requestServiceAL) {
         this.requestServiceAL = requestServiceAL;
@@ -90,8 +110,35 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
                             viewHolder.editService.setVisibility(View.VISIBLE);
                             viewHolder.acceptService.setVisibility(View.GONE);
                         }
-
                         //System.out.println(user.getDisplayName());
+                    }
+                }
+            }
+        });
+
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("RequestServices").document(requestServiceAL.get(i).getId());
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot.exists()) {
+                        Map<String, Object> map = documentSnapshot.getData();
+
+                        try {
+                            if (null != map.get("acceptorList")) {
+                                ArrayList<String> acceptorAL = new ArrayList<>();
+                                for (String acceptorEmail : (ArrayList<String>) map.get("acceptorList")) {
+                                    acceptorAL.add(acceptorEmail);
+                                }
+                                if (acceptorAL.contains(databaseHelper.getCurrentUserEmail())) {
+                                    viewHolder.acceptService.setVisibility(View.GONE);
+                                    viewHolder.serviceAccepted.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.d(TAG, "acceptorList null");
+                        }
                     }
                 }
             }
@@ -124,6 +171,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
         private TextView generalLocation;
         private TextView servicePrice;
         private TextView completion;
+        private TextView serviceAccepted;
         private Button removeService;
         private Button editService;
         private Button acceptService;
@@ -136,6 +184,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
             profileImage = itemView.findViewById(R.id.requesterProfileImage);
             requesterName = itemView.findViewById(R.id.requesterName);
             serviceTitle = itemView.findViewById(R.id.serviceTitle);
+            serviceAccepted = itemView.findViewById(R.id.serviceAccepted);
 //            location = itemView.findViewById(R.id.serviceLocation);
             servicePrice = itemView.findViewById(R.id.servicePrice);
             removeService = itemView.findViewById(R.id.serviceRemove);
@@ -163,6 +212,13 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
                 @Override
                 public void onClick(View v) {
                     editService(getAdapterPosition(), requestServiceAL);
+                }
+            });
+
+            acceptService.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    acceptService(requestServiceAL.get(getAdapterPosition()));
                 }
             });
         }
@@ -202,5 +258,42 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
         intent.putExtra("requestService", requestServiceAL.get(position));
         intent.putExtra("serviceType", "RequestServices");
         context.startActivity(intent);
+    }
+
+    private void acceptService(final Service service) {
+        randomId = UUID.randomUUID().toString();
+        final String acceptor = databaseHelper.getCurrentUserEmail();
+        final String serviceId = service.getId();
+        documentReference = firebaseFirestore.collection("RequestServices").document(service.getId());
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null) {
+                    Map<String, Object> map = documentSnapshot.getData();
+                    Order order = new Order(serviceId, "RequestServices", map.get("publisherEmail").toString(), acceptor, "Accepted", dateFormat.format(new Date()));
+                    firebaseFirestore.collection("Orders").document(randomId)
+                            .set(order)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(context, "Service Accepted.", Toast.LENGTH_LONG).show();
+                                    Log.d(TAG, "Service accept successful.");
+
+                                    firebaseFirestore.collection("Users").document(acceptor).update("orderNumbers", FieldValue.arrayUnion(randomId));
+                                    firebaseFirestore.collection("Users").document(service.getPublisherEmail()).update("orderNumbers", FieldValue.arrayUnion(randomId));
+                                    firebaseFirestore.collection("RequestServices").document(serviceId).update("acceptorList", FieldValue.arrayUnion(acceptor));
+                                    Intent intent = new Intent(context, MainActivity.class);
+                                    context.startActivity(intent);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "Error accepting service " + serviceId, e);
+                                }
+                            });
+                }
+            }
+        });
     }
 }

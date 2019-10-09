@@ -32,57 +32,58 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/orderType"
-        android:layout_below="@id/banner"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@drawable/setting_item_selector">
+<!--    NOT GOING TO IMPLEMENT FOR NOW-->
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/orderType"-->
+<!--        android:layout_below="@id/banner"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="80dp"-->
+<!--        android:background="@drawable/setting_item_selector">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal">-->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center">
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center">-->
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Post"/>
+<!--                <Button-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:hint="Post"/>-->
 
-            </RelativeLayout>
+<!--            </RelativeLayout>-->
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center">
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center">-->
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Request"/>
+<!--                <Button-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:hint="Request"/>-->
 
-            </RelativeLayout>
+<!--            </RelativeLayout>-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
-    </RelativeLayout>
+<!--    </RelativeLayout>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/orderList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_below="@id/orderType">
+        android:layout_below="@id/banner">
     </androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>

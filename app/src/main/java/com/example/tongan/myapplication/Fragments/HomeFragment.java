@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -98,15 +99,15 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
         searchBtn = view.findViewById(R.id.searchBtn);
 
-        postServiceText = view.findViewById(R.id.post_service);
+        //postServiceText = view.findViewById(R.id.post_service);
         requestServiceText = view.findViewById(R.id.request_service);
 
-        postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
-        postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        //postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
+        //postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         requestServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
         requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        loadPostServiceInfoFromDatabase();
+        //loadPostServiceInfoFromDatabase();
         loadRequestServiceInfoFromDatabase();
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -118,19 +119,20 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         });
 
         // post service expand/collapse button
-        postServiceText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
-                    postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
-                } else {
-                    postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
-                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
-                }
-                ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-            }
-        });
+//        NOT GOING TO IMPLEMENT FOR NOW
+//        postServiceText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
+//                    postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
+//                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
+//                } else {
+//                    postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
+//                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
+//                }
+//                ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+//            }
+//        });
 
         // request service expand/collapse button
         requestServiceText.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +254,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                         for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                             final PostService postService = new PostService();
                             Map<String, Object> map = queryDocumentSnapshot.getData();
-                            DecimalFormat df = new DecimalFormat("#.00");
+                            DecimalFormat df = new DecimalFormat("0.00");
 
                             postService.setId(map.get("id").toString());
 //                          postService.setpublisherEmail(databaseHelper.getCurrentUserEmail());
@@ -274,6 +276,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
     }
 
     private void loadRequestServiceInfoFromDatabase() {
+        final ArrayList<String> acceptorAL = new ArrayList<>();
         FirebaseFirestore.getInstance().collection("RequestServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -281,23 +284,33 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                     if (!task.getResult().isEmpty()) {
                         requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
                         for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                            RequestService requestService = new RequestService();
                             Map<String, Object> map = queryDocumentSnapshot.getData();
-                            DecimalFormat df = new DecimalFormat("#.00");
+                            acceptorAL.clear();
+                            if (null != map.get("acceptorList")) {
+                                for (String acceptorEmail : (ArrayList<String>) map.get("acceptorList")) {
+                                    acceptorAL.add(acceptorEmail);
+                                }
+                            }
 
-                            requestService.setId(map.get("id").toString());
-                            requestService.setServiceTitle(map.get("serviceTitle").toString());
-                            requestService.setAddress(map.get("address").toString());
-                            requestService.setDescription(map.get("description").toString());
-                            requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
-                            requestService.setPublishTime(map.get("publishTime").toString());
-                            requestService.setPublisherEmail(map.get("publisherEmail").toString());
+                            if ((Integer.parseInt(map.get("maxAcceptor").toString()) > acceptorAL.size()) || (Integer.parseInt(map.get("maxAcceptor").toString()) == -1)) {
+                                RequestService requestService = new RequestService();
+                                DecimalFormat df = new DecimalFormat("0.00");
 
-                            requestServicesAL.add(requestService);
+                                requestService.setId(map.get("id").toString());
+                                requestService.setServiceTitle(map.get("serviceTitle").toString());
+                                requestService.setAddress(map.get("address").toString());
+                                requestService.setDescription(map.get("description").toString());
+                                requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                                requestService.setPublishTime(map.get("publishTime").toString());
+                                requestService.setPublisherEmail(map.get("publisherEmail").toString());
+                                requestService.setMaxAcceptor(Integer.parseInt(map.get("maxAcceptor").toString()));
 
+                                requestServicesAL.add(requestService);
+
+                            }
+                            RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
+                            requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                         }
-                        RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
-                        requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                     }
                 }
             }

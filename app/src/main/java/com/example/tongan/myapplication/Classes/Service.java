@@ -21,11 +21,12 @@ public class Service implements Serializable {
     private ArrayList<String> serviceImages;
     private boolean isAccepted;
     private ArrayList<String> acceptorList;
+    private int maxAcceptor;
 
     public Service() {
     }
 
-    public Service(String id, String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, boolean isAccepted, ArrayList<String> serviceImages, ArrayList<String> acceptorList) {
+    public Service(String id, String publisherEmail, String serviceTitle, double price, String category, String description, String address, String publishTime, String profileImage, boolean isAccepted, ArrayList<String> serviceImages, int maxAcceptor) {
         this.id = id;
         this.publisherEmail = publisherEmail;
         this.serviceTitle = serviceTitle;
@@ -37,7 +38,15 @@ public class Service implements Serializable {
         this.profileImage = profileImage;
         this.serviceImages = serviceImages;
         this.isAccepted = isAccepted;
-        this.acceptorList = acceptorList;
+        this.maxAcceptor = maxAcceptor;
+    }
+
+    public int getMaxAcceptor() {
+        return maxAcceptor;
+    }
+
+    public void setMaxAcceptor(int maxAcceptor) {
+        this.maxAcceptor = maxAcceptor;
     }
 
     public String getId() {
