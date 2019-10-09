@@ -35,13 +35,13 @@
             android:layout_below="@id/profileImage">
 
             <ImageView
-                    android:id="@+id/serviceImage"
-                    android:layout_width="108dp"
-                    android:layout_height="108dp"
-                    android:layout_alignParentStart="true"
-                    android:src="@drawable/ic_launcher_background"
-                    android:background="@drawable/circle"
-                    android:layout_marginBottom="5dp"/>
+                android:id="@+id/serviceImage"
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/ic_launcher_background"
+                android:background="@drawable/circle"
+                android:layout_marginBottom="5dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -147,17 +147,6 @@
             </LinearLayout>
 
         </RelativeLayout>
-
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:drawableStart="@drawable/search"-->
-<!--            android:gravity="start"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:drawablePadding="3dp"-->
-<!--            android:hint="Displayname"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="16sp" />-->
 
     </RelativeLayout>
 
