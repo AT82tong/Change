@@ -13,9 +13,7 @@ public class Service implements Serializable {
     private String address;
     private int bought_times;
     private double rating;
-    private String[] buyers;
     private String service_image;
-    private String orderTime;
     private String publishTime;
     private String profileImage;
     private ArrayList<String> serviceImages;
@@ -169,21 +167,6 @@ public class Service implements Serializable {
         this.serviceTitle = serviceTitle;
     }
 
-    public String[] getBuyers() {
-        return buyers;
-    }
-
-    public void setBuyers(String[] buyers) {
-        this.buyers = buyers;
-    }
-
-    public String getOrderTime() {
-        return orderTime;
-    }
-
-    public void setOrderTime(String orderTime) {
-        this.orderTime = orderTime;
-    }
 }
 
 

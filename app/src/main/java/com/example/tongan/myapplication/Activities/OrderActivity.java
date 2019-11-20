@@ -1,23 +1,22 @@
 package com.example.tongan.myapplication.Activities;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-
 import com.example.tongan.myapplication.Adapters.OrdersRecyclerViewAdapter;
-import com.example.tongan.myapplication.Classes.Order;
 import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -30,7 +29,8 @@ public class OrderActivity extends AppCompatActivity {
     private DocumentReference documentReference;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private RecyclerView orderList;
-    private ArrayList<String> ordersAL = new ArrayList<String>();
+
+    private ImageView backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +40,21 @@ public class OrderActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         databaseHelper = new DatabaseHelper();
 
+        backBtn = findViewById(R.id.back_button);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                finish();
+            }
+        });
+
         orderList = findViewById(R.id.orderList);
 
         loadOrders();
     }
 
-    // NEEDS MORE WORK
     private void loadOrders() {
         final User user = new User();
         final ArrayList<String> orderNumbers = new ArrayList<>();

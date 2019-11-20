@@ -228,7 +228,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
         void onFoldingCellClick(int position);
     }
 
-    public AlertDialog removeService(final int position) {
+    private AlertDialog removeService(final int position) {
         //Log.d(TAG, "pressed");
         AlertDialog alertDialog = new AlertDialog.Builder(context)
                 .setTitle("Delete")

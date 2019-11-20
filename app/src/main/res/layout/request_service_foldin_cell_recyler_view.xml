@@ -160,7 +160,7 @@
                     android:id="@+id/serviceIndicator"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/RequestServiceTagColor">
+                    android:background="@color/ServiceTagColor">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/requesterProfileImage"

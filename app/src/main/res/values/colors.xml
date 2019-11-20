@@ -27,6 +27,6 @@
     <color name="noble">#999999</color>
     <color name="turbo">#F9C627</color>
 
-    <color name="PostServiceTagColor">#7F7FA1</color>
+    <color name="ServiceTagColor">#7F7FA1</color>
     <color name="RequestServiceTagColor">#FF7E47</color>
 </resources>
