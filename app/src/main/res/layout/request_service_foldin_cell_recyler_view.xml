@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone"> <!-- change visibility to "visible" to see unfolded cells -->
+            android:visibility="visible"> <!-- change visibility to "visible" to see unfolded cells -->
 
             <TextView
                 android:layout_width="match_parent"
@@ -124,6 +124,17 @@
                 android:layout_margin="20dp"
                 android:background="@color/turbo"
                 android:text="Accept"
+                android:textAllCaps="true"
+                android:visibility="visible"
+                android:textSize="24dp" />
+
+            <Button
+                android:id="@+id/serviceAcceptors"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_margin="20dp"
+                android:background="@color/turbo"
+                android:text="Acceptors"
                 android:textAllCaps="true"
                 android:visibility="visible"
                 android:textSize="24dp" />

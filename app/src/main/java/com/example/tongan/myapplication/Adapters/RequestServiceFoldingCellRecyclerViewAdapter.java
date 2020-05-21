@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tongan.myapplication.Activities.AcceptorsListActivity;
 import com.example.tongan.myapplication.Activities.EditServiceActivity;
 import com.example.tongan.myapplication.Activities.MainActivity;
 import com.example.tongan.myapplication.Classes.Order;
@@ -108,6 +109,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
                         if (databaseHelper.getCurrentUserEmail().equals(map.get("email").toString())) {
                             viewHolder.removeService.setVisibility(View.VISIBLE);
                             viewHolder.editService.setVisibility(View.VISIBLE);
+                            viewHolder.acceptorsList.setVisibility(View.VISIBLE);
                             viewHolder.acceptService.setVisibility(View.GONE);
                         }
                         //System.out.println(user.getDisplayName());
@@ -175,6 +177,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
         private Button removeService;
         private Button editService;
         private Button acceptService;
+        private Button acceptorsList;
 
         OnFoldingCellListener onFoldingCellListener;
 
@@ -190,6 +193,7 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
             removeService = itemView.findViewById(R.id.serviceRemove);
             editService = itemView.findViewById(R.id.serviceEdit);
             acceptService = itemView.findViewById(R.id.serviceAccept);
+            acceptorsList = itemView.findViewById(R.id.serviceAcceptors);
 //            completion = itemView.findViewById(R.id.completionBefore);
 
             this.onFoldingCellListener = onFoldingCellListener;
@@ -219,6 +223,14 @@ public class RequestServiceFoldingCellRecyclerViewAdapter extends RecyclerView.A
                 @Override
                 public void onClick(View v) {
                     acceptService(requestServiceAL.get(getAdapterPosition()));
+                }
+            });
+
+            acceptorsList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, AcceptorsListActivity.class);
+                    context.startActivity(intent);
                 }
             });
         }

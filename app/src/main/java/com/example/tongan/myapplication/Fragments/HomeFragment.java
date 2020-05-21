@@ -85,7 +85,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         homePageAds = (ViewPager) view.findViewById(R.id.homePage_ads);
@@ -145,7 +145,6 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                     requestServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
                     requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
                 }
-                ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             }
         });
         //initRecyclerView();
@@ -292,21 +291,22 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                                 }
                             }
 
-                            if ((Integer.parseInt(map.get("maxAcceptor").toString()) > acceptorAL.size()) || (Integer.parseInt(map.get("maxAcceptor").toString()) == -1)) {
-                                RequestService requestService = new RequestService();
-                                DecimalFormat df = new DecimalFormat("0.00");
+                            if (!map.get("publisherEmail").toString().equals(databaseHelper.getCurrentUserEmail())) {
+                                if ((Integer.parseInt(map.get("maxAcceptor").toString()) > acceptorAL.size()) || (Integer.parseInt(map.get("maxAcceptor").toString()) == -1)) {
+                                    RequestService requestService = new RequestService();
+                                    DecimalFormat df = new DecimalFormat("0.00");
 
-                                requestService.setId(map.get("id").toString());
-                                requestService.setServiceTitle(map.get("serviceTitle").toString());
-                                requestService.setAddress(map.get("address").toString());
-                                requestService.setDescription(map.get("description").toString());
-                                requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
-                                requestService.setPublishTime(map.get("publishTime").toString());
-                                requestService.setPublisherEmail(map.get("publisherEmail").toString());
-                                requestService.setMaxAcceptor(Integer.parseInt(map.get("maxAcceptor").toString()));
+                                    requestService.setId(map.get("id").toString());
+                                    requestService.setServiceTitle(map.get("serviceTitle").toString());
+                                    requestService.setAddress(map.get("address").toString());
+                                    requestService.setDescription(map.get("description").toString());
+                                    requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                                    requestService.setPublishTime(map.get("publishTime").toString());
+                                    requestService.setPublisherEmail(map.get("publisherEmail").toString());
+                                    requestService.setMaxAcceptor(Integer.parseInt(map.get("maxAcceptor").toString()));
 
-                                requestServicesAL.add(requestService);
-
+                                    requestServicesAL.add(requestService);
+                                }
                             }
                             RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
                             requestServiceFoldingCellRecyclerView.setAdapter(adapter);
