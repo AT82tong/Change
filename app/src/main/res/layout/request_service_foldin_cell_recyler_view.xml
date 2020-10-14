@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible"> <!-- change visibility to "visible" to see unfolded cells -->
+            android:visibility="gone"> <!-- change visibility to "visible" to see unfolded cells, 'gone' other wise -->
 
             <TextView
                 android:layout_width="match_parent"
@@ -157,7 +157,7 @@
             android:id="@+id/cell_title_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"> <!--change visibility to gone to hide folded section -->
+            android:visibility="visible"> <!--change visibility to `gone` to hide folded section -->
 
             <androidx.cardview.widget.CardView
                 android:layout_width="100dp"

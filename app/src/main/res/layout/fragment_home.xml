@@ -109,7 +109,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="30dp"
+                        android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
                         android:background="@color/white"
                         android:gravity="center"
@@ -131,7 +131,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/homepage_service_cleaning"
-                                android:layout_marginTop="5dp"
                                 android:layout_centerInParent="true"
                                 android:text="Tutor" />
                         </RelativeLayout>
@@ -146,6 +145,7 @@
                                 android:id="@+id/homepage_service_home"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
+                                android:layout_centerHorizontal="true"
                                 android:layout_margin="5dp"
                                 android:src="@drawable/service_household" />
 
@@ -264,7 +264,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/homepage_service_all_day"
                                 android:layout_centerHorizontal="true"
-                                android:text="Other" />
+                                android:text="Others" />
 
                         </RelativeLayout>
 
@@ -368,19 +368,10 @@
 <!--                    android:layout_marginTop="5dp">-->
 <!--                </androidx.recyclerview.widget.RecyclerView>-->
 
-                <TextView
-                    android:id="@+id/request_service"
-                    style="@style/TxtTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="sans-serif"
-                    android:text="Request Service"
-                    android:textSize="20sp"
-                    android:visibility="visible" />
+
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/requestServiceFoldingCellRecyclerView"
+                    android:id="@+id/ServiceFoldingCellRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>

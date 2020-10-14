@@ -15,13 +15,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.tongan.myapplication.Activities.SearchActivity;
 import com.example.tongan.myapplication.Adapters.HomePageAdsAdapter;
-import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerViewAdapter;
-import com.example.tongan.myapplication.Adapters.RequestServiceFoldingCellRecyclerViewAdapter;
+import com.example.tongan.myapplication.Adapters.ServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.RequestService;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
@@ -31,7 +29,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -41,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Timer;
 
-public class HomeFragment extends Fragment implements PostServiceFoldingCellRecyclerViewAdapter.OnFoldingCellListener {
+public class HomeFragment extends Fragment implements ServiceFoldingCellRecyclerViewAdapter.OnFoldingCellListener {
 
     private static final String TAG = "HomeFragment";
 
@@ -62,12 +59,10 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
     private ArrayList<PostService> postServicesAL = new ArrayList<>();
     private ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
-    private RecyclerView postServiceFoldingCellRecyclerView;
-    private RecyclerView requestServiceFoldingCellRecyclerView;
+    private RecyclerView ServiceFoldingCellRecyclerView;
 
     private DatabaseHelper databaseHelper = new DatabaseHelper();
 
-    private TextView requestServiceText;
 
     @Nullable
     @Override
@@ -84,10 +79,9 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         databaseReference = FirebaseDatabase.getInstance().getReference().child("PostServices");
 
         searchBtn = view.findViewById(R.id.searchBtn);
-        requestServiceText = view.findViewById(R.id.request_service);
 
-        requestServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
-        requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ServiceFoldingCellRecyclerView = view.findViewById(R.id.ServiceFoldingCellRecyclerView);
+        ServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         loadServiceInfoFromDatabase();
 
@@ -118,15 +112,6 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         Log.d(TAG, "HomeFragment Page");
     }
 
-//    private void initRecyclerView() {
-//        ArrayList<String> name = new ArrayList<>();
-//        name.add("a");
-//        name.add("b");
-//        name.add("c");
-//        //PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), name);
-//        //foldingCellRecyclerView.setAdapter(adapter);
-//    }
-
     @Override
     public void onFoldingCellClick(int position) {
         //Toast.makeText( getContext(), "onFoldingCellClick: Clicked at position " + position, Toast.LENGTH_LONG).show();
@@ -150,6 +135,8 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                                 }
                             }
 
+
+                            // only shows service that are not posted by the user
                             if (!map.get("publisherEmail").toString().equals(databaseHelper.getCurrentUserEmail())) {
                                 if ((Integer.parseInt(map.get("maxAcceptor").toString()) > acceptorAL.size()) || (Integer.parseInt(map.get("maxAcceptor").toString()) == -1)) {
                                     RequestService requestService = new RequestService();
@@ -167,8 +154,8 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                                     requestServicesAL.add(requestService);
                                 }
                             }
-                            RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
-                            requestServiceFoldingCellRecyclerView.setAdapter(adapter);
+                            ServiceFoldingCellRecyclerViewAdapter adapter = new ServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
+                            ServiceFoldingCellRecyclerView.setAdapter(adapter);
                         }
                     }
                 }
@@ -177,7 +164,6 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
     }
 
     public class imageAutoSlider extends java.util.TimerTask {
-
         @Override
         public void run() {
 

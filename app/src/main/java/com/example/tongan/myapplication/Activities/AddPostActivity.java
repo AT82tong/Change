@@ -32,8 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
-import com.example.tongan.myapplication.Classes.PostService;
-import com.example.tongan.myapplication.Classes.RequestService;
+import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.Helper.DecimalDigitsInputFilter;
@@ -306,18 +305,16 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 //    }
 
 
-    // add request service to database
+    // add service to database
     public void addServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress, int maxAcceptors) {
         date = new Date();
-        RequestService requestService = new RequestService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, false, null, maxAcceptors);
-        firebaseFirestore.collection("RequestServices").document(randomID)
-                .set(requestService)
+        Service serivce = new Service(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, false, null, maxAcceptors);
+        firebaseFirestore.collection("Services").document(randomID)
+                .set(serivce)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        ref.update("requestNumbers", FieldValue.arrayUnion(randomID));
-                        //requestNumbers.add(randomID);
-                        //ref.update("requestNumbers", requestNumbers);
+                        ref.update("serviceNumbers", FieldValue.arrayUnion(randomID));
                         Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
@@ -325,7 +322,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Error saving Request Service to database", e);
+                        Log.d(TAG, "Error saving Service to database", e);
                     }
                 });
     }

@@ -2,7 +2,6 @@ package com.example.tongan.myapplication.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,9 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.tongan.myapplication.Activities.OrderActivity;
 import com.example.tongan.myapplication.Activities.SettingsPage.ProfileSettingsActivity;
 import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
-import com.example.tongan.myapplication.Adapters.PostServiceFoldingCellRecyclerViewAdapter;
-import com.example.tongan.myapplication.Adapters.RequestServiceFoldingCellRecyclerViewAdapter;
-import com.example.tongan.myapplication.Classes.PostService;
+import com.example.tongan.myapplication.Adapters.ServiceFoldingCellRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.RequestService;
 import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
@@ -47,7 +44,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileFragment extends Fragment implements PostServiceFoldingCellRecyclerViewAdapter.OnFoldingCellListener {
+public class ProfileFragment extends Fragment implements ServiceFoldingCellRecyclerViewAdapter.OnFoldingCellListener {
 
     private static final String TAG = "ProfileFragment";
     final User user = new User();
@@ -61,10 +58,9 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
     private TextView profileFollowers;
     private TextView profileRating;
     private TextView documentationText;
-    private TextView requestServiceText;
     private Button ordersBtn;
     private String email = databaseHelper.getCurrentUserEmail();
-    private ArrayList<String> requestNumbers = new ArrayList<>();
+    private ArrayList<String> serviceNumbers = new ArrayList<>();
     private RecyclerView documentationsRecyclerView;
     private RecyclerView requestServiceFoldingCellRecyclerView;
     private String userDisplayName;
@@ -82,7 +78,6 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         profileFollowers = view.findViewById(R.id.profile_followers);
         profileRating = view.findViewById(R.id.profile_rating);
         documentationText = view.findViewById(R.id.documentationsText);
-        requestServiceText = view.findViewById(R.id.request_service);
         ordersBtn = view.findViewById(R.id.ordersBtn);
 
         // documentations recycler view
@@ -173,17 +168,6 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
 //                        }
 //                    }
 
-                    if (null != map.get("requestNumbers")) {
-                        for (String requestNumber : (ArrayList<String>) map.get("requestNumbers")) {
-                            requestNumbers.add(requestNumber);
-                        }
-
-                        if (requestNumbers.isEmpty()) {
-                            requestServiceText.setVisibility(View.GONE);
-                        } else {
-                            requestServiceText.setVisibility(View.VISIBLE);
-                        }
-                    }
 
                     user.setDisplayName(userDisplayName);
                     user.setFollower(Integer.parseInt(userFollowers));
@@ -223,8 +207,8 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                        for (String requestNumber : requestNumbers) {
-                            if (queryDocumentSnapshot.getId().equals(requestNumber)) {
+                        for (String serviceNumber : serviceNumbers) {
+                            if (queryDocumentSnapshot.getId().equals(serviceNumber)) {
                                 RequestService requestService = new RequestService();
                                 Map<String, Object> map = queryDocumentSnapshot.getData();
                                 DecimalFormat df = new DecimalFormat("#.00");
@@ -248,7 +232,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                     }
                     // displaying service info
                     //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
-                    RequestServiceFoldingCellRecyclerViewAdapter adapter = new RequestServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
+                    ServiceFoldingCellRecyclerViewAdapter adapter = new ServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);
                     requestServiceFoldingCellRecyclerView.setAdapter(adapter);
                 }
             }

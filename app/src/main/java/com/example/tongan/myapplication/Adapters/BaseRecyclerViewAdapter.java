@@ -29,7 +29,7 @@ public class BaseRecyclerViewAdapter extends RecyclerView.Adapter<BaseRecyclerVi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_service_foldin_cell_recyler_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.request_service_foldin_cell_recyler_view, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }

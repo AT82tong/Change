@@ -203,8 +203,8 @@
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:background="@color/black2"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
 
 <!--        NOT GOING TO IMPLEMENT FOR NOW-->
 <!--        <TextView-->
@@ -227,15 +227,6 @@
 <!--            android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>-->
 
 
-        <TextView
-            android:id="@+id/request_service"
-            style="@style/TxtTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="Request Service"
-            android:textSize="20dp"
-            android:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/requestServiceFoldingCellRecyclerView"

@@ -12,10 +12,9 @@ public class User {
     private int followers;
     private double rating;
     private String profileImage;
-    private ArrayList<String> postNumbers;
-    private ArrayList<String> requestNumbers;
+    private ArrayList<String> serviceNumbers;
     private ArrayList<String> images;
-    private ArrayList<String> orderNumbers;
+    private ArrayList<String> acceptNumbers;
 
     public User(){}
 
@@ -32,12 +31,12 @@ public class User {
         this.rating = rating;
     }
 
-    public ArrayList<String> getOrderNumbers() {
-        return orderNumbers;
+    public ArrayList<String> getAcceptNumbers() {
+        return acceptNumbers;
     }
 
-    public void setOrderNumbers(ArrayList<String> orderNumbers) {
-        this.orderNumbers = orderNumbers;
+    public void setAcceptNumbers(ArrayList<String> acceptNumbers) {
+        this.acceptNumbers = acceptNumbers;
     }
 
     public String getProfileImage() {
@@ -56,20 +55,14 @@ public class User {
         this.images = images;
     }
 
-    public ArrayList<String> getPostNumbers() {
-        return postNumbers;
+
+
+    public ArrayList<String> getServiceNumbers() {
+        return serviceNumbers;
     }
 
-    public void setPostNumbers(ArrayList<String> postNumbers) {
-        this.postNumbers = postNumbers;
-    }
-
-    public ArrayList<String> getRequestNumbers() {
-        return requestNumbers;
-    }
-
-    public void setRequestNumbers(ArrayList<String> requestNumbers) {
-        this.requestNumbers = requestNumbers;
+    public void setServiceNumbers(ArrayList<String> serviceNumbers) {
+        this.serviceNumbers = serviceNumbers;
     }
 
     public String getDisplayName() {
