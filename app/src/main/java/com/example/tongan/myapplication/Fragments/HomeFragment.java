@@ -67,21 +67,7 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
     private DatabaseHelper databaseHelper = new DatabaseHelper();
 
-    private TextView postServiceText;
     private TextView requestServiceText;
-
-//    private int dotsCount;
-//    private ImageView[] dots;
-//
-//    private FirebaseAuth fireBaseAuth;
-//    private FirebaseUser fireBaseUser;
-//
-//    private DatabaseHelper db = new DatabaseHelper();
-//
-//    private FoldingCell foldingCell;
-
-//    RecyclerView documentationsRecyclerView;
-//    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
     @Nullable
     @Override
@@ -98,17 +84,12 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         databaseReference = FirebaseDatabase.getInstance().getReference().child("PostServices");
 
         searchBtn = view.findViewById(R.id.searchBtn);
-
-        //postServiceText = view.findViewById(R.id.post_service);
         requestServiceText = view.findViewById(R.id.request_service);
 
-        //postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
-        //postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         requestServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
         requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //loadPostServiceInfoFromDatabase();
-        loadRequestServiceInfoFromDatabase();
+        loadServiceInfoFromDatabase();
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,97 +98,6 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
                 startActivity(intent);
             }
         });
-
-        // post service expand/collapse button
-//        NOT GOING TO IMPLEMENT FOR NOW
-//        postServiceText.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
-//                    postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-//                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
-//                } else {
-//                    postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
-//                    postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
-//                }
-//                ((SimpleItemAnimator) postServiceFoldingCellRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-//            }
-//        });
-
-        // request service expand/collapse button
-        requestServiceText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (requestServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
-                    requestServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-                    requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
-                } else {
-                    requestServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
-                    requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
-                }
-            }
-        });
-        //initRecyclerView();
-
-        // foldingCell example
-//        foldingCell = view.findViewById(R.id.folding_cell2);
-//
-//        foldingCell.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                foldingCell.toggle(false);
-//            }
-//        });
-
-//        Log.d(TAG, "getCurrentUser: " + FirebaseAuth.getInstance().getCurrentUser());
-//        Log.d(TAG, "getEmail: " + db.getCurrentUserEmail());
-//        Log.d(TAG, "getCurrentUser: " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-//        Log.d(TAG, "getUid: " + FirebaseAuth.getInstance().getUid());
-
-        //User user = db.getUserData(db.getCurrentUserEmail());
-//        Log.d(TAG, "firstName: " + user.getFirstName());
-//        Log.d(TAG, "lastName: " + user.getLastName());
-//        Log.d(TAG, "email: " + user.getEmail());
-//        db.getUserData(db.getCurrentUserEmail());
-        //Log.d(TAG, "password: " + db.user.getPassword());
-
-
-//-----        DOTS         ----- (CURRENTLY NOT USING)
-//        sliderDot = (LinearLayout) v.findViewById(R.id.sliderDots);
-//        dotsCount = homePageAdsAdapter.getCount();
-//        dots = new ImageView[dotsCount];
-//        for (int i = 0; i < dotsCount; i++) {
-//            dots[i] = new ImageView(this.getActivity());
-//            dots[i].setImageDrawable(ContextCompat.getDrawable(this.getActivity(), R.drawable.dots));
-//
-//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//            params.setMargins(8, 0, 8, 0);
-//            sliderDot.addView(dots[i], params);
-//        }
-//
-//        dots[0].setImageDrawable(ContextCompat.getDrawable(this.getActivity(), R.drawable.selected_dots));
-//
-//        homePageAds.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//                                                @Override
-//                                                public void onPageScrolled(int i, float v, int i1) {
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onPageSelected(int i) {
-//
-//                                                    for (int position = 0; position < dotsCount; position++) {
-//                                                        dots[position].setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.dots));
-//                                                    }
-//                                                    dots[i].setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.selected_dots));
-//                                                }
-//
-//                                                @Override
-//                                                public void onPageScrollStateChanged(int i) {
-//
-//                                                }
-//                                            }
-//        );
 
         return view;
     }
@@ -243,45 +133,14 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
         //Log.d(TAG, "onFoldingCellClick: Clicked");
     }
 
-    private void loadPostServiceInfoFromDatabase() {
-        FirebaseFirestore.getInstance().collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    if (!task.getResult().isEmpty()) {
-                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                            final PostService postService = new PostService();
-                            Map<String, Object> map = queryDocumentSnapshot.getData();
-                            DecimalFormat df = new DecimalFormat("0.00");
 
-                            postService.setId(map.get("id").toString());
-//                          postService.setpublisherEmail(databaseHelper.getCurrentUserEmail());
-                            postService.setServiceTitle(map.get("serviceTitle").toString());
-                            postService.setAddress(map.get("address").toString());
-                            postService.setDescription(map.get("description").toString());
-                            postService.setPrice(Double.parseDouble(df.format(map.get("price"))));
-                            postService.setPublishTime(map.get("publishTime").toString());
-                            postService.setPublisherEmail(map.get("publisherEmail").toString());
-
-                            postServicesAL.add(postService);
-                        }
-                        PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), postServicesAL);
-                        postServiceFoldingCellRecyclerView.setAdapter(adapter);
-                    }
-                }
-            }
-        });
-    }
-
-    private void loadRequestServiceInfoFromDatabase() {
+    private void loadServiceInfoFromDatabase() {
         final ArrayList<String> acceptorAL = new ArrayList<>();
         FirebaseFirestore.getInstance().collection("RequestServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
                     if (!task.getResult().isEmpty()) {
-                        requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
                         for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                             Map<String, Object> map = queryDocumentSnapshot.getData();
                             acceptorAL.clear();
@@ -324,13 +183,8 @@ public class HomeFragment extends Fragment implements PostServiceFoldingCellRecy
 
             if (homePageAds.getCurrentItem() != homePageAdsAdapter.getCount() - 1) {
                 homePageAds.setCurrentItem(homePageAds.getCurrentItem() + 1);
-                //dots[homePageAds.getCurrentItem()].setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.selected_dots));
-                //dots[homePageAds.getCurrentItem() - 1].setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.dots));
             } else {
                 homePageAds.setCurrentItem(0);
-                //dots[0].setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.selected_dots));
-                //dots[homePageAdsAdapter.getCount() - 1].setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.dots));
-
             }
         }
     }

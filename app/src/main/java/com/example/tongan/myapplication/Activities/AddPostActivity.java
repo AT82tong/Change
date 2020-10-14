@@ -201,7 +201,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
-                    addRequestServiceToDatabase(databaseHelper.getCurrentUserEmail(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address, maxAcceptorsNumber);
+                    addServiceToDatabase(databaseHelper.getCurrentUserEmail(), serviceTitle, Double.valueOf(servicePrice), "Test Category", serviceDescription, address, maxAcceptorsNumber);
                     if (!serviceImagesUriAL.isEmpty()) {
                         savePhotoToDatabase(serviceImagesUriAL);
                     }
@@ -306,37 +306,8 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 //    }
 
 
-    // add post service to database
-//    public void addPostServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress) {
-//        date = new Date();
-//        PostService postService = new PostService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, false, null, null);
-//        // add post service information to PostService database
-//        // get the randomID and update postNumbers in User database
-//        firebaseFirestore.collection("PostServices").document(randomID)
-//                .set(postService)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        ref.update("postNumbers", FieldValue.arrayUnion(randomID));
-//
-//                        //postNumbers.add(randomID);
-//                        //ref.update("postNumbers", postNumbers);
-//                        Toast.makeText(AddPostActivity.this, "Post Service Successful.", Toast.LENGTH_SHORT).show();
-//                        Log.d(TAG, "Post Service Successful.");
-//                        Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
-//                        startActivity(intent);
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.d(TAG, "Error saving Post Service to database", e);
-//                    }
-//                });
-//    }
-
     // add request service to database
-    public void addRequestServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress, int maxAcceptors) {
+    public void addServiceToDatabase(final String publisherEmail, String serviceTitle, double servicePrice, String category, String serviceDescription, String serviceAddress, int maxAcceptors) {
         date = new Date();
         RequestService requestService = new RequestService(randomID, publisherEmail, serviceTitle, servicePrice, category, serviceDescription, serviceAddress, dateFormat.format(date), null, false, null, maxAcceptors);
         firebaseFirestore.collection("RequestServices").document(randomID)

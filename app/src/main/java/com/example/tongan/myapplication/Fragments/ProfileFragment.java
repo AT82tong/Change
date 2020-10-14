@@ -51,7 +51,6 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
 
     private static final String TAG = "ProfileFragment";
     final User user = new User();
-    private ArrayList<PostService> postServicesAL = new ArrayList<PostService>();
     private ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
@@ -62,14 +61,11 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
     private TextView profileFollowers;
     private TextView profileRating;
     private TextView documentationText;
-    private TextView postServiceText;
     private TextView requestServiceText;
     private Button ordersBtn;
     private String email = databaseHelper.getCurrentUserEmail();
-    private ArrayList<String> postNumbers = new ArrayList<>();
     private ArrayList<String> requestNumbers = new ArrayList<>();
     private RecyclerView documentationsRecyclerView;
-    private RecyclerView postServiceFoldingCellRecyclerView;
     private RecyclerView requestServiceFoldingCellRecyclerView;
     private String userDisplayName;
     private String userFollowers;
@@ -86,7 +82,6 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         profileFollowers = view.findViewById(R.id.profile_followers);
         profileRating = view.findViewById(R.id.profile_rating);
         documentationText = view.findViewById(R.id.documentationsText);
-        //postServiceText = view.findViewById(R.id.post_service);
         requestServiceText = view.findViewById(R.id.request_service);
         ordersBtn = view.findViewById(R.id.ordersBtn);
 
@@ -95,9 +90,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         documentationsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
         // folding cell recycler view
-        //postServiceFoldingCellRecyclerView = view.findViewById(R.id.postServiceFoldingCellRecyclerView);
         requestServiceFoldingCellRecyclerView = view.findViewById(R.id.requestServiceFoldingCellRecyclerView);
-        //postServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         requestServiceFoldingCellRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         Activity activity = getActivity();
@@ -105,8 +98,7 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         if (isAdded() && activity != null) {
             loadProfileInfoFromDatabase();
             loadDocumentationsFromDatabase();
-            //loadPostServiceInfoFromDatabase();
-            loadRequestServiceInfoFromDatabase();
+            loadServiceInfoFromDatabase();
 
             settingsImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -121,35 +113,6 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), OrderActivity.class);
                     startActivity(intent);
-                }
-            });
-
-            // post service expand/collapse button
-//            NOT GOING TO IMPLEMENT FOR NOW
-//            postServiceText.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (postServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
-//                        postServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-//                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
-//                    } else {
-//                        postServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
-//                        postServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
-//                    }
-//                }
-//            });
-
-            // request service expand/collapse button
-            requestServiceText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (requestServiceFoldingCellRecyclerView.getVisibility() == View.VISIBLE) {
-                        requestServiceFoldingCellRecyclerView.setVisibility(View.GONE);
-                        requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.expand, 0);
-                    } else {
-                        requestServiceFoldingCellRecyclerView.setVisibility(View.VISIBLE);
-                        requestServiceText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.collapse, 0);
-                    }
                 }
             });
         }
@@ -252,50 +215,8 @@ public class ProfileFragment extends Fragment implements PostServiceFoldingCellR
         });
     }
 
-    // display Post Services if have any
-    private void loadPostServiceInfoFromDatabase() {
-        //databaseHelper.loadPostServiceInfoFromDatabase(postServiceText, postServiceFoldingCellRecyclerView, postNumbers, getActivity());
-        //final ArrayList<User> userAl = new ArrayList<>();
-        FirebaseFirestore.getInstance().collection("PostServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-
-                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                        for (String postNumber : postNumbers) {
-                            if (queryDocumentSnapshot.getId().equals(postNumber)) {
-                                PostService postService = new PostService();
-                                Map<String, Object> map = queryDocumentSnapshot.getData();
-                                DecimalFormat df = new DecimalFormat("#.00");
-
-                                postService.setId(map.get("id").toString());
-//                                    postService.setpublisherEmail(email);
-                                postService.setServiceTitle(map.get("serviceTitle").toString());
-                                postService.setAddress(map.get("address").toString());
-                                postService.setDescription(map.get("description").toString());
-                                postService.setPrice(Double.parseDouble(df.format(map.get("price"))));
-                                postService.setPublishTime(map.get("publishTime").toString());
-                                postService.setPublisherEmail(map.get("publisherEmail").toString());
-
-                                postServicesAL.add(postService);
-                                //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
-
-                                //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    }
-                    // displaying service info
-                    //serviceIndicator.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red));
-                    PostServiceFoldingCellRecyclerViewAdapter adapter = new PostServiceFoldingCellRecyclerViewAdapter(getActivity(), postServicesAL);
-                    postServiceFoldingCellRecyclerView.setAdapter(adapter);
-                }
-
-            }
-        });
-    }
-
     // display Requested Services if have any
-    private void loadRequestServiceInfoFromDatabase() {
+    private void loadServiceInfoFromDatabase() {
         //final ArrayList<User> userAl = new ArrayList<>();
         FirebaseFirestore.getInstance().collection("RequestServices").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
