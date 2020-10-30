@@ -20,7 +20,6 @@
         <activity android:name=".Activities.OrderActivity" />
         <activity android:name=".Activities.SearchActivity" />
         <activity android:name=".Activities.EditServiceActivity" />
-        <activity android:name=".Activities.AddRequestActivity" />
         <activity android:name=".profile_setProfilePhoto" />
         <activity android:name=".Activities.SettingsPage.MyProfile.profile_setPublicName" />
         <activity android:name=".Activities.SettingsPage.AccountSecurityActivity" />
@@ -40,7 +39,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.SignUpActivity" />
-        <activity android:name=".Activities.AddPostActivity" />
+        <activity android:name=".Activities.AddServiceActivity" />
     </application>
 
 </manifest>

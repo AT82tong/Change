@@ -20,7 +20,6 @@ import com.example.tongan.myapplication.Activities.AcceptorsListActivity;
 import com.example.tongan.myapplication.Activities.EditServiceActivity;
 import com.example.tongan.myapplication.Activities.MainActivity;
 import com.example.tongan.myapplication.Classes.Order;
-import com.example.tongan.myapplication.Classes.RequestService;
 import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
@@ -36,8 +35,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.ramotion.foldingcell.FoldingCell;
 
-import java.lang.reflect.Array;
-import java.nio.file.FileVisitOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,7 +52,7 @@ public class ServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<
     public static final String TAG = "ServiceFoldingCellRecyclerViewAdapter";
 
     //private String image;
-    private ArrayList<RequestService> requestServiceAL;
+    private ArrayList<Service> ServiceAL;
 //    private String title;
 //    private String location;
 //    private String price;
@@ -71,8 +68,8 @@ public class ServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<
 
     private OnFoldingCellListener onFoldingCellListener;
 
-    public ServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<RequestService> requestServiceAL) {
-        this.requestServiceAL = requestServiceAL;
+    public ServiceFoldingCellRecyclerViewAdapter(Context context, ArrayList<Service> ServiceAL) {
+        this.ServiceAL = ServiceAL;
         this.context = context;
     }
 
@@ -86,7 +83,7 @@ public class ServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
 
-        DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(requestServiceAL.get(i).getPublisherEmail());
+        DocumentReference doc = FirebaseFirestore.getInstance().collection("Users").document(ServiceAL.get(i).getPublisherEmail());
         doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -118,7 +115,7 @@ public class ServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<
             }
         });
 
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("RequestServices").document(requestServiceAL.get(i).getId());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("RequestServices").document(ServiceAL.get(i).getId());
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -148,8 +145,8 @@ public class ServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<
 
 //        viewHolder.name.setText(user.getDisplayName());
 //
-        viewHolder.serviceTitle.setText(requestServiceAL.get(i).getServiceTitle());
-        viewHolder.servicePrice.setText(Double.toString(requestServiceAL.get(i).getPrice()));
+        viewHolder.serviceTitle.setText(ServiceAL.get(i).getServiceTitle());
+        viewHolder.servicePrice.setText(Double.toString(ServiceAL.get(i).getPrice()));
 ////      viewHolder.location.setText(location);
 //      viewHolder.completion.setText(completion);
     }
@@ -158,7 +155,7 @@ public class ServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<
     @Override
     public int getItemCount() {
         try {
-            return requestServiceAL.size();
+            return ServiceAL.size();
         } catch (Exception e) {
             return 0;
         }
@@ -215,14 +212,14 @@ public class ServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<
             editService.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    editService(getAdapterPosition(), requestServiceAL);
+                    editService(getAdapterPosition(), ServiceAL);
                 }
             });
 
             acceptService.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    acceptService(requestServiceAL.get(getAdapterPosition()));
+                    acceptService(ServiceAL.get(getAdapterPosition()));
                 }
             });
 
@@ -248,15 +245,15 @@ public class ServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        firebaseFirestore.collection("RequestServices").document(requestServiceAL.get(position).getId()).delete();
+                        firebaseFirestore.collection("RequestServices").document(ServiceAL.get(position).getId()).delete();
                         final DocumentReference ref = firebaseFirestore.collection("Users").document(databaseHelper.getCurrentUserEmail());
-                        ref.update("serviceNumbers", FieldValue.arrayRemove(requestServiceAL.get(position).getId()));
+                        ref.update("serviceNumbers", FieldValue.arrayRemove(ServiceAL.get(position).getId()));
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.d(TAG, "Cancel: " + requestServiceAL.get(position).getId());
+                        Log.d(TAG, "Cancel: " + ServiceAL.get(position).getId());
                     }
                 })
                 .create();
@@ -265,7 +262,7 @@ public class ServiceFoldingCellRecyclerViewAdapter extends RecyclerView.Adapter<
         return alertDialog;
     }
 
-    private void editService(final int position, ArrayList<RequestService> requestServiceAL) {
+    private void editService(final int position, ArrayList<Service> requestServiceAL) {
         Intent intent = new Intent(context, EditServiceActivity.class);
         intent.putExtra("requestService", requestServiceAL.get(position));
         intent.putExtra("serviceType", "RequestServices");

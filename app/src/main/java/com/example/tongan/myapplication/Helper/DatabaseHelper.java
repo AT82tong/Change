@@ -1,6 +1,6 @@
 package com.example.tongan.myapplication.Helper;
 
-import com.example.tongan.myapplication.Classes.PostService;
+import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.Classes.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -12,7 +12,6 @@ public class DatabaseHelper {
     private FirebaseAuth fireBaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     final User user = new User();
-    final ArrayList<PostService> postServicesAL = new ArrayList<PostService>();
 
 
     public String getCurrentUserEmail() {

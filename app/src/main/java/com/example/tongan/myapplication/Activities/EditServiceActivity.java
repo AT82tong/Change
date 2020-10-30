@@ -1,13 +1,9 @@
 package com.example.tongan.myapplication.Activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.tongan.myapplication.Classes.PostService;
 import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.location.FusedLocationProviderClient;

@@ -33,7 +33,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Classes.Service;
-import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.Helper.DecimalDigitsInputFilter;
 import com.example.tongan.myapplication.R;
@@ -62,11 +61,10 @@ import java.util.UUID;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-// NOT GOING TO IMPLEMENT FOR NOW
-public class AddPostActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class AddServiceActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     public static final int RequestPermissionCode = 1;
-    private static final String TAG = "AddPostActivity";
+    private static final String TAG = "AddServiceActivity";
     protected GoogleApiClient googleApiClient;
     // user location
     double longitude;
@@ -124,7 +122,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_post);
+        setContentView(R.layout.activity_add_service);
 
         // Initialize Places
         // Places.initialize(getApplicationContext(), apiK)
@@ -172,7 +170,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (event.getRawX() >= (serviceStreetAddressText.getRight() - serviceStreetAddressText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         googleApiClient.connect();
-                        //Toast.makeText(AddPostActivity.this, "HERE.",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(AddServiceActivity.this, "HERE.",Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 }
@@ -277,7 +275,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
 
         if (maxAcceptorsNumber != -1) {
             if (TextUtils.isEmpty(maxAcceptors.getText().toString()) || Integer.parseInt(maxAcceptors.getText().toString()) == 0) {
-                Toast.makeText(AddPostActivity.this, "maxAcceptors error.", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddServiceActivity.this, "maxAcceptors error.", Toast.LENGTH_LONG).show();
                 isValidated = false;
             } else {
                 maxAcceptorsNumber = Integer.parseInt(maxAcceptors.getText().toString());
@@ -315,7 +313,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                     @Override
                     public void onSuccess(Void aVoid) {
                         ref.update("serviceNumbers", FieldValue.arrayUnion(randomID));
-                        Intent intent = new Intent(AddPostActivity.this, MainActivity.class);
+                        Intent intent = new Intent(AddServiceActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
                 })
@@ -371,7 +369,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
                                 knownName = addresses.get(0).getFeatureName();
 
 //                                Log.d(TAG, "address: " + addresses.get(0).getThoroughfare());
-                                Toast.makeText(AddPostActivity.this, "" + addresses.get(0).getThoroughfare(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddServiceActivity.this, "" + addresses.get(0).getThoroughfare(), Toast.LENGTH_SHORT).show();
 
 //                                Log.d(TAG, "city: " + city);
 //                                Log.d(TAG, "state: " + state);
@@ -394,7 +392,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
     }
 
     private void requestPermission() {
-        ActivityCompat.requestPermissions(AddPostActivity.this, new
+        ActivityCompat.requestPermissions(AddServiceActivity.this, new
                 String[]{ACCESS_FINE_LOCATION}, RequestPermissionCode);
     }
 
@@ -473,7 +471,7 @@ public class AddPostActivity extends AppCompatActivity implements GoogleApiClien
         RecyclerView recyclerView = findViewById(R.id.postServiceImages);
         HorizontalDocumentationsRecyclerViewAdapter adapter = new HorizontalDocumentationsRecyclerViewAdapter(this, images);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(AddPostActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(AddServiceActivity.this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     // extension

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,8 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.tongan.myapplication.Activities.SearchActivity;
 import com.example.tongan.myapplication.Adapters.HomePageAdsAdapter;
 import com.example.tongan.myapplication.Adapters.ServiceFoldingCellRecyclerViewAdapter;
-import com.example.tongan.myapplication.Classes.PostService;
-import com.example.tongan.myapplication.Classes.RequestService;
+import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,8 +55,7 @@ public class HomeFragment extends Fragment implements ServiceFoldingCellRecycler
     private RecyclerView foldingCellRecyclerView;
     private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
-    private ArrayList<PostService> postServicesAL = new ArrayList<>();
-    private ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
+    private ArrayList<Service> requestServicesAL = new ArrayList<Service>();
     private RecyclerView ServiceFoldingCellRecyclerView;
 
     private DatabaseHelper databaseHelper = new DatabaseHelper();
@@ -139,19 +136,19 @@ public class HomeFragment extends Fragment implements ServiceFoldingCellRecycler
                             // only shows service that are not posted by the user
                             if (!map.get("publisherEmail").toString().equals(databaseHelper.getCurrentUserEmail())) {
                                 if ((Integer.parseInt(map.get("maxAcceptor").toString()) > acceptorAL.size()) || (Integer.parseInt(map.get("maxAcceptor").toString()) == -1)) {
-                                    RequestService requestService = new RequestService();
+                                    Service Service = new Service();
                                     DecimalFormat df = new DecimalFormat("0.00");
 
-                                    requestService.setId(map.get("id").toString());
-                                    requestService.setServiceTitle(map.get("serviceTitle").toString());
-                                    requestService.setAddress(map.get("address").toString());
-                                    requestService.setDescription(map.get("description").toString());
-                                    requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
-                                    requestService.setPublishTime(map.get("publishTime").toString());
-                                    requestService.setPublisherEmail(map.get("publisherEmail").toString());
-                                    requestService.setMaxAcceptor(Integer.parseInt(map.get("maxAcceptor").toString()));
+                                    Service.setId(map.get("id").toString());
+                                    Service.setServiceTitle(map.get("serviceTitle").toString());
+                                    Service.setAddress(map.get("address").toString());
+                                    Service.setDescription(map.get("description").toString());
+                                    Service.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                                    Service.setPublishTime(map.get("publishTime").toString());
+                                    Service.setPublisherEmail(map.get("publisherEmail").toString());
+                                    Service.setMaxAcceptor(Integer.parseInt(map.get("maxAcceptor").toString()));
 
-                                    requestServicesAL.add(requestService);
+                                    requestServicesAL.add(Service);
                                 }
                             }
                             ServiceFoldingCellRecyclerViewAdapter adapter = new ServiceFoldingCellRecyclerViewAdapter(getActivity(), requestServicesAL);

@@ -22,7 +22,7 @@ import com.example.tongan.myapplication.Activities.OrderActivity;
 import com.example.tongan.myapplication.Activities.SettingsPage.ProfileSettingsActivity;
 import com.example.tongan.myapplication.Adapters.HorizontalDocumentationsRecyclerViewAdapter;
 import com.example.tongan.myapplication.Adapters.ServiceFoldingCellRecyclerViewAdapter;
-import com.example.tongan.myapplication.Classes.RequestService;
+import com.example.tongan.myapplication.Classes.Service;
 import com.example.tongan.myapplication.Classes.User;
 import com.example.tongan.myapplication.Helper.DatabaseHelper;
 import com.example.tongan.myapplication.R;
@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment implements ServiceFoldingCellRecyc
 
     private static final String TAG = "ProfileFragment";
     final User user = new User();
-    private ArrayList<RequestService> requestServicesAL = new ArrayList<RequestService>();
+    private ArrayList<Service> requestServicesAL = new ArrayList<Service>();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private DatabaseHelper databaseHelper = new DatabaseHelper();
     private DocumentReference documentReference;
@@ -209,21 +209,21 @@ public class ProfileFragment extends Fragment implements ServiceFoldingCellRecyc
                     for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
                         for (String serviceNumber : serviceNumbers) {
                             if (queryDocumentSnapshot.getId().equals(serviceNumber)) {
-                                RequestService requestService = new RequestService();
+                                Service Service = new Service();
                                 Map<String, Object> map = queryDocumentSnapshot.getData();
                                 DecimalFormat df = new DecimalFormat("#.00");
 
-                                requestService.setId(map.get("id").toString());
+                                Service.setId(map.get("id").toString());
 //                                    requestService.setpublisherEmail(email);
-                                requestService.setServiceTitle(map.get("serviceTitle").toString());
-                                requestService.setAddress(map.get("address").toString());
-                                requestService.setDescription(map.get("description").toString());
-                                requestService.setPrice(Double.parseDouble(df.format(map.get("price"))));
-                                requestService.setPublishTime(map.get("publishTime").toString());
-                                requestService.setPublisherEmail(map.get("publisherEmail").toString());
-                                requestService.setMaxAcceptor(Integer.parseInt(map.get("maxAcceptor").toString()));
+                                Service.setServiceTitle(map.get("serviceTitle").toString());
+                                Service.setAddress(map.get("address").toString());
+                                Service.setDescription(map.get("description").toString());
+                                Service.setPrice(Double.parseDouble(df.format(map.get("price"))));
+                                Service.setPublishTime(map.get("publishTime").toString());
+                                Service.setPublisherEmail(map.get("publisherEmail").toString());
+                                Service.setMaxAcceptor(Integer.parseInt(map.get("maxAcceptor").toString()));
 
-                                requestServicesAL.add(requestService);
+                                requestServicesAL.add(Service);
                                 //userAl.add(user); // make sure we have enough user object for each service, or else FoldingCellRecylerViewAdapter will fail. Will need to remodify later.
 
                                 //Toast.makeText( getContext(), "PostNumber Found: " + queryDocumentSnapshot.getId(), Toast.LENGTH_LONG).show();

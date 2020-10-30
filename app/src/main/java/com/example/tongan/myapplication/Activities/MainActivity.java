@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.bottom_navigation_add:
-                    intent = new Intent(MainActivity.this, AddPostActivity.class);
+                    intent = new Intent(MainActivity.this, AddServiceActivity.class);
                     startActivity(intent);
                     break;
 
